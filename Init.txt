@@ -1,1 +1,3 @@
 Adding this file so the github page doesn't show the dumb quick setup stuff
+
+Testing the channel in slack
