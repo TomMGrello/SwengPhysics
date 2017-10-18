@@ -1,6 +1,7 @@
+USE permissions;
 DELIMITER $$
 CREATE PROCEDURE `sp_add_user` (
-  IN p_user_id VARCHAR(36),
+  IN p_user_id int(36),
   IN p_first_name VARCHAR(45),
   IN p_middle_name VARCHAR(45),
   IN p_last_name VARCHAR(45),
@@ -12,7 +13,7 @@ BEGIN
   if (select exists (select 1 from user where username = p_username)) THEN
     select 'Username already exists';
   ELSE
-    insert into user (
+    REPLACE into user (
       user_id,
       first_name,
       middle_name,
