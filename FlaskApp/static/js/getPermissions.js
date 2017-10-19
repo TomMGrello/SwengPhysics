@@ -1,16 +1,11 @@
   $(function() {
+	var username = $('#usernameInput').val();
     $('#signin').click(function() {
-        $.ajax({
-            url: '/permissions',
-            data: $('form').serialize(),
-            type: 'POST',
-            success: function(response) {
-                console.log(response);
-                alert(response);
-            },
-            error: function(error) {
-                console.log(error);
-            }
-        });
+		$.getJSON('/storeUsername',{user:$('#usernameInput').val()},
+		function(data){
+			alert(data.result);
+			window.location='/showPermissions';
+		});
+		return false;
     });
 });
