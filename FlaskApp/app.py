@@ -34,8 +34,11 @@ def storeUsername():
 @app.route("/permissions",methods=['GET'])
 def permissions():
 	username = session['username']
+	print 'USERNAME FOR RETREIVAL: ' + username
 	if username:
-		perms = cursor.callproc('sp_get_permissions',username)
+		cursor.callproc('sp_get_permissions',[username])
+		perms = cursor.fetchall()
+		print perms
 		return jsonify(result=perms)
 	else:
 		return "NO USERNAME"
