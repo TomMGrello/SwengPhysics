@@ -3,7 +3,7 @@
     $('#signin').click(function() {
 		$.getJSON('/storeUsername',{user:$('#usernameInput').val()},
 		function(data){
-			alert(data.result);
+			//alert(data.result);
 			window.location='/showPermissions';
 		});
 		return false;
