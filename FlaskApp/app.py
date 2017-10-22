@@ -1,5 +1,5 @@
-from flask import Flask, render_template, json, request, session, redirect, url_for,jsonify
-from flask.ext.mysql import MySQL
+from flask import Flask, render_template, json, request, session, redirect, url_for, jsonify
+from flaskext.mysql import MySQL
 import os
 
 app = Flask(__name__)
@@ -30,7 +30,7 @@ def storeUsername():
 		print username
 		return jsonify(result='Username is: ' + username)
 	return 'No user found'
-		
+
 @app.route("/permissions",methods=['GET'])
 def permissions():
 	username = session['username']
