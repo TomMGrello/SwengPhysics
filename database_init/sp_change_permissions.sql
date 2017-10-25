@@ -1,8 +1,7 @@
 USE permissions;
 DELIMITER $$
 CREATE PROCEDURE `sp_change_permissions` (
-  IN p_user_id int(36),
-  IN p_username VARCHAR(45),
+  IN p_banner_id INT(9),
   IN p_can_add_user BOOLEAN,
   IN p_can_remove_user BOOLEAN,
   IN p_can_modify_permissions BOOLEAN,
@@ -14,10 +13,11 @@ CREATE PROCEDURE `sp_change_permissions` (
   IN p_can_restore_database BOOLEAN
 )
 BEGIN
-  if (select exists (select 1 from user where username = p_username)) THEN
+
+
+if (select exists (select 1 from banner_ids where banner_id = p_banner_id)) THEN
     REPLACE into user_permissions (
-      user_id,
-      username,
+      banner_id,
       can_add_user,
       can_remove_user,
       can_modify_permissions,
@@ -28,8 +28,7 @@ BEGIN
       can_backup_database,
       can_restore_database
     ) values (
-      p_user_id,
-      p_username,
+      p_banner_id,
       p_can_add_user,
       p_can_remove_user,
       p_can_modify_permissions,
