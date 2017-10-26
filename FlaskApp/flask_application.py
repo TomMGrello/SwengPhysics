@@ -6,7 +6,7 @@ flask_application = Flask(__name__)
 mysql = MySQL()
 
 flask_application.config['MYSQL_DATABASE_USER'] = 'root'
-flask_application.config['MYSQL_DATABASE_PASSWORD'] = '0924'
+flask_application.config['MYSQL_DATABASE_PASSWORD'] = 'rowanphysicssweng'
 flask_application.config['MYSQL_DATABASE_DB'] = 'permissions'
 flask_application.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(flask_application)
@@ -24,6 +24,10 @@ def showPermissions():
 @flask_application.route("/adminPage",methods=['GET'])
 def adminPage():
 	return render_template("UpdatedAdminPage.html");
+
+@flask_application.route("/PermissionsForAdminPage",methods=['GET'])
+def PermissionsForAdminPage():
+	return render_template("PermissionsForAdminPage.html");
 
 @flask_application.route("/storeUsername")
 def storeUsername():
