@@ -6,7 +6,7 @@ flask_application = Flask(__name__)
 mysql = MySQL()
 
 flask_application.config['MYSQL_DATABASE_USER'] = 'root'
-flask_application.config['MYSQL_DATABASE_PASSWORD'] = 'qdj4ay'
+flask_application.config['MYSQL_DATABASE_PASSWORD'] = '0924'
 flask_application.config['MYSQL_DATABASE_DB'] = 'permissions'
 flask_application.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(flask_application)
@@ -21,23 +21,27 @@ def main():
 def showPermissions():
 	return render_template("showPermissions.html");
 
+@flask_application.route("/adminPage",methods=['GET'])
+def adminPage():
+	return render_template("UpdatedAdminPage.html");
+
 @flask_application.route("/storeUsername")
 def storeUsername():
 	result = "No user found"
 	cursor = conn.cursor()
-	
+
 	username = request.args.get('user','N/A')
 	session['username'] = username
 	cursor.callproc('sp_get_banner_id',[username])
-	
+
 	banner_id = cursor.fetchall()[0][0] #data is returned as ((<banner_id>,),) for some reason. So this extracts it.
 	print banner_id
 	session['banner_id'] = banner_id
-	
+
 	if username:
 		print username
 		result = jsonify(result='Username is: ' + username)
-		
+
 	cursor.close()
 	return result
 
@@ -46,15 +50,15 @@ def permissions():
 	cursor = conn.cursor()
 	result = "No banner id"
 	banner_id = session['banner_id']
-	
+
 	print 'BANNER FOR RETREIVAL: ' + str(banner_id)
-	
+
 	if banner_id:
 		cursor.callproc('sp_get_permissions',[banner_id])
 		perms = cursor.fetchall()
 		print perms
 		result = jsonify(result=perms)
-	
+
 	cursor.close()
 	return result
 
