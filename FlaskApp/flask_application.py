@@ -6,7 +6,9 @@ flask_application = Flask(__name__)
 mysql = MySQL()
 
 flask_application.config['MYSQL_DATABASE_USER'] = 'root'
-flask_application.config['MYSQL_DATABASE_PASSWORD'] = '0924'
+
+flask_application.config['MYSQL_DATABASE_PASSWORD'] = 'rowanphysicssweng'   # todo, change back to rowanphysicssweng for push, change to personal password for dev work
+
 flask_application.config['MYSQL_DATABASE_DB'] = 'permissions'
 flask_application.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(flask_application)
@@ -65,5 +67,6 @@ def permissions():
 if __name__ == "__main__":
 	flask_application.debug = True
 	flask_application.secret_key = 'rowanphysicssweng'
-	#flask_application.run(host=os.getenv('LISTEN', '0.0.0.0'),threaded=True)
+	flask_application.run(host=os.getenv('LISTEN', '0.0.0.0'),threaded=True) # todo uncomment this line before push, comment before dev work
+
 	flask_application.run(threaded=True)
