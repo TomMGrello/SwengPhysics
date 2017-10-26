@@ -1,23 +1,32 @@
+###########################################################################################
+########################################  IMPORTS  ########################################
+###########################################################################################
+
 from flask import Flask, render_template, json, request, session, redirect, url_for, jsonify
 from flaskext.mysql import MySQL
 import os
+
+###########################################################################################
+########################################   INITS   ########################################
+###########################################################################################
 
 flask_application = Flask(__name__)
 mysql = MySQL()
 
 flask_application.config['MYSQL_DATABASE_USER'] = 'root'
-<<<<<<< HEAD
-flask_application.config['MYSQL_DATABASE_PASSWORD'] = 'rowanphysicssweng'
-=======
 
-flask_application.config['MYSQL_DATABASE_PASSWORD'] = 'rowanphysicssweng'   # todo, change back to rowanphysicssweng for push, change to personal password for dev work
+flask_application.config['MYSQL_DATABASE_PASSWORD'] = '0924'   # todo, change back to rowanphysicssweng for push, change to personal password for dev work
 
->>>>>>> 690be8ae311b4f6d731699293449274ad00e8225
 flask_application.config['MYSQL_DATABASE_DB'] = 'permissions'
 flask_application.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(flask_application)
 
 conn = mysql.connect()
+
+
+###########################################################################################
+############################   WEBPAGE ENDPOINTS   ########################################
+###########################################################################################
 
 @flask_application.route("/")
 def main():
@@ -34,6 +43,10 @@ def adminPage():
 @flask_application.route("/PermissionsForAdminPage",methods=['GET'])
 def PermissionsForAdminPage():
 	return render_template("PermissionsForAdminPage.html");
+
+###########################################################################################
+##############################   QUERY ENDPOINTS   ########################################
+###########################################################################################
 
 @flask_application.route("/storeUsername")
 def storeUsername():

@@ -1,5 +1,4 @@
   $(function() {
-	var username = $('#usernameInput').val();
     $('#signin').click(function() {
 		$.getJSON('/storeUsername',{user:$('#usernameInput').val()},
 		function(data){
