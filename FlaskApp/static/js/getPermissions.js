@@ -4,7 +4,7 @@
 		$.getJSON('/storeUsername',{user:$('#usernameInput').val()},
 		function(data){
 			//alert(data.result);
-			window.location='/showPermissions';
+			window.location='/adminPage';
 		});
 		return false;
     });
