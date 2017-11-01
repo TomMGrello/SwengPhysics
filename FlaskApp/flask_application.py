@@ -180,6 +180,11 @@ def userRequests():
 	cursor.close()
 	return result
 
+@flask_application.route("/allUserPermissions",methods=['GET'])
+def allUserPermissions():
+	cursor = conn.cursor()
+	
+
 if __name__ == "__main__":
 	flask_application.debug = True
 	flask_application.secret_key = 'rowanphysicssweng'
