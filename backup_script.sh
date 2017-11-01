@@ -31,4 +31,6 @@ cp -R "$BACKUP_DEST/daily/$DATE_TIME/" "$BACKUP_DEST/monthly/"
 fi
 
 #delete old backup files, if applicable
-find $BACKUP_DEST -mindepth 1 -mtime +$DAYS_TO_SAVE -delete
+find $BACKUP_DEST/daily -mindepth 1 -mtime +$DAYS_TO_SAVE -delete
+find $BACKUP_DEST/monthly -mindepth 1 -mtime +60 -delete
+
