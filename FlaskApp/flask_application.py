@@ -79,7 +79,7 @@ def login():
 	return result
 
 @flask_application.route("/addUserRequest",methods=['GET'])
-def addUserRequest:
+def addUserRequest():
 	result = MISSING_INPUT
 	banner_id = request.args.get('banner_id','N/A')
 	username = request.args.get('user','N/A')
@@ -94,7 +94,7 @@ def addUserRequest:
 	return result
 
 @flask_application.route("/addUser",methods=['GET'])
-def addUser:
+def addUser():
 	result = MISSING_INPUT
 	banner_id = request.args.get('banner_id','N/A')
 	first_name = request.args.get('first_name','N/A')
@@ -113,7 +113,7 @@ def addUser:
 	return result
 
 @flask_application.route("/changePermissions",methods=['GET'])
-def changePermissions:
+def changePermissions():
 	cursor - conn.cursor()
 	result = 'FAIL'
 
