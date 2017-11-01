@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<title>W3.CSS</title>
+<title>Permissions Object</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -12,7 +12,7 @@
   height: 34px;
   margin-left: 100px;
   margin-bottom: -10px;
-  
+
 }
 
 .switch input {display:none;}
@@ -67,12 +67,12 @@ input:checked + .slider:before {
 <body>
 
 
-  
+
   <button class="w3-button w3-block w3-left-align w3-border-red w3-border-bottom" onclick="myAccFunc()">
   Student 1 <i class="fa fa-caret-down"></i>
   </button>
   <div id="demoAcc" class="w3-hide w3-white w3-card">
-    <p><a href="#" class="w3-bar-item w3-button">Add user: </a>         
+    <p><a href="#" class="w3-bar-item w3-button">Add user: </a>
 		<label class="switch">
 			<input type="checkbox">
 			<span class="slider"></span>
@@ -114,7 +114,7 @@ input:checked + .slider:before {
 			<span class="slider"></span>
 		</label>
 	</p>
-    <p><a href="#" class="w3-bar-item w3-button">Backup database: 
+    <p><a href="#" class="w3-bar-item w3-button">Backup database:
 	<label class="switch">
 			<input type="checkbox">
 			<span class="slider"></span>
@@ -139,9 +139,9 @@ function myAccFunc() {
     if (x.className.indexOf("w3-show") == -1) {
         x.className += " w3-show";
         x.previousElementSibling.className += " w3-green";
-    } else { 
+    } else {
         x.className = x.className.replace(" w3-show", "");
-        x.previousElementSibling.className = 
+        x.previousElementSibling.className =
         x.previousElementSibling.className.replace(" w3-green", "");
     }
 }

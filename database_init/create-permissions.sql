@@ -39,6 +39,7 @@ source sp_change_permissions.sql;
 source sp_get_permissions.sql;
 source sp_get_user.sql;
 source sp_get_banner_id.sql;
+source create_backup_user.sql;
 
 /*Following lines are for development purposes only
 They add 4 basic users for the 4 different pre-defined roles. Can be used for testing permissions.*/
