@@ -33,6 +33,13 @@ CREATE TABLE `permissions`.`user_permissions`(
     `banner_id` int(9) NULL,
     PRIMARY KEY(`banner_index`),
     UNIQUE KEY(`username`));
+    
+ -- create user requests table
+  CREATE TABLE `permissions`.`user_requests`(
+     `user_request_id` int(36) auto_increment,
+     `banner_id` int(9),
+     `role` VARCHAR(45) NULL,
+     PRIMARY KEY(`user_request_id`));
 
 source sp_add_user.sql;
 source sp_change_permissions.sql;
@@ -40,6 +47,9 @@ source sp_get_permissions.sql;
 source sp_get_user.sql;
 source sp_get_banner_id.sql;
 source create_backup_user.sql;
+source sp_get_all_permissions.sql;
+source sp_add_user_request.sql;
+source sp_delete_user_request.sql;
 
 /*Following lines are for development purposes only
 They add 4 basic users for the 4 different pre-defined roles. Can be used for testing permissions.*/
