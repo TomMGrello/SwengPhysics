@@ -1,7 +1,7 @@
   $(function() {
 	$.getJSON('/permissions',{},
 	function(data){
-    var split_string = data.result.toString().split(",");
+    /*var split_string = data.result.toString().split(",");
     document.getElementById('usernameLabel').innerHTML = split_string[1];
     document.getElementById('addUserLabel').innerHTML = split_string[2];
     document.getElementById('removeUserLabel').innerHTML = split_string[3];
@@ -11,7 +11,10 @@
     document.getElementById('removeRecordLabel').innerHTML = split_string[7];
     document.getElementById('modifyRecordLabel').innerHTML = split_string[8];
     document.getElementById('backupDatabaseLabel').innerHTML = split_string[9];
-    document.getElementById('restoreDatabaseLabel').innerHTML = split_string[10];
+    document.getElementById('restoreDatabaseLabel').innerHTML = split_string[10];*/
+    var banner_id = data.result[1];
+    console.log(data.result);
+    console.log("BANNER ID: " + banner_id);
 		//window.location='/showPermissions';
 	});
 	return false;
