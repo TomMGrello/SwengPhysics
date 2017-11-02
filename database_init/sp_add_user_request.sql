@@ -1,5 +1,5 @@
-USE permissions;     
--- add user request stored procedure 
+USE permissions;
+-- add user request stored procedure
 DELIMITER $$
 CREATE PROCEDURE `sp_add_user_request`(
     IN p_first_name VARCHAR(45),
@@ -8,7 +8,7 @@ CREATE PROCEDURE `sp_add_user_request`(
     IN p_role VARCHAR(45)
 )
 
-BEGIN 
+BEGIN
 
 	IF (select exists (select 1 from user where banner_id = p_banner_id)) THEN
 		select 'User already exists';
@@ -17,14 +17,15 @@ BEGIN
 	REPLACE into user_requests (
         first_name,
         last_name,
-	banner_id,
-	role
+	       banner_id,
+	        role
 	) values (
-	p_first_name,
+	     p_first_name,
         p_last_name,
         p_banner_id,
-	p_role
+	       p_role
 	);
+  commit;
 	END IF;
 
 END $$

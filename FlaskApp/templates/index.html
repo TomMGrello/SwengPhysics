@@ -3,9 +3,12 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Login</title>
-		<meta name="viewport" content="width=device-width"">
+		<meta name="viewport" content="width=device-width">
 		<script src="{{url_for('static', filename='js/jquery.js')}}"></script>
-		<script src="{{url_for('static', filename='js/getPermissions.js')}}"></script>
+		<script type=text/javascript>
+  		$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+		</script>
+		<script src="{{url_for('static', filename='js/login.js')}}"></script>
 
 		<link rel="stylesheet" href="{{ url_for('static',filename='styles/style.css') }}">
 	</head>

@@ -33,10 +33,12 @@ CREATE TABLE `permissions`.`user_permissions`(
     `banner_id` int(9) NULL,
     PRIMARY KEY(`banner_index`),
     UNIQUE KEY(`username`));
-    
+
  -- create user requests table
   CREATE TABLE `permissions`.`user_requests`(
      `user_request_id` int(36) auto_increment,
+     `first_name` varchar(45) NULL,
+     `last_name` varchar(45) NULL,
      `banner_id` int(9),
      `role` VARCHAR(45) NULL,
      PRIMARY KEY(`user_request_id`));
@@ -50,6 +52,7 @@ source create_backup_user.sql;
 source sp_get_all_permissions.sql;
 source sp_add_user_request.sql;
 source sp_delete_user_request.sql;
+source sp_get_all_user_requests.sql;
 
 /*Following lines are for development purposes only
 They add 4 basic users for the 4 different pre-defined roles. Can be used for testing permissions.*/
@@ -62,3 +65,7 @@ call sp_change_permissions(111111111,0,0,0,1,1,1,1,0,0);
 call sp_change_permissions(222222222,0,0,0,1,0,0,0,0,0);
 call sp_change_permissions(333333333,0,0,0,0,0,0,0,1,1);
 call sp_change_permissions(444444444,1,1,1,1,1,1,1,1,1);
+call sp_add_user_request('Tom','Grello',555555555,'student');
+call sp_add_user_request('Ryan','Bell',666666666,'professor');
+call sp_add_user_request('Connor','Snee',777777777,'lab_admin');
+call sp_add_user_request('Dharmik','Pandya',888888888,'student');

@@ -1,5 +1,5 @@
 $(function() {
-  $.getJSON('/userRequests',{},
+  $.getJSON('/getAllUserRequests',{},
   function(data){
     data_array = data.result;
     for(var curr_user = 0; curr_user < data_array.length; curr_user++){
@@ -9,7 +9,7 @@ $(function() {
       var last_name = curr_user_data[2];
       var banner_id = curr_user_data[3];
       var role  = curr_user_data[4];
-      
+      alert(first_name + " " + last_name + " " + banner_id + " " + role);
     }
 
   });
