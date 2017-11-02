@@ -126,7 +126,7 @@ def acceptUserRequest():
 
 
 
-	options = {'student':(0,0,0,1,1,1,1,0,0),
+	options = { 'student':(0,0,0,1,1,1,1,0,0),
 				'professor':(0,0,0,1,0,0,0,0,0),
 				'lab_admin':(1,1,1,1,1,1,1,1,1),
 				'sys_admin':(0,0,0,0,0,0,0,1,1)}
