@@ -9,6 +9,7 @@
   		$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
 		</script>
 		<script src="{{url_for('static', filename='js/login.js')}}"></script>
+		<script src="{{url_for('static', filename='js/acceptUserRequest.js')}}"></script>
 
 		<link rel="stylesheet" href="{{ url_for('static',filename='styles/style.css') }}">
 	</head>

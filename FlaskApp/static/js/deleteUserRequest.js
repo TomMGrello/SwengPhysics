@@ -1,9 +1,9 @@
-$(document).ready(function() {
+function deleteUserRequest(banner_id,role) {
   $.getJSON('/deleteUserRequest',{
-    banner_id:"123123123",
-    role:"student"
+    banner_id:banner_id,
+    role:role
   },
   function(data){
-    alert(data.result);
+    alert("DELETED");
   });
-});
+}

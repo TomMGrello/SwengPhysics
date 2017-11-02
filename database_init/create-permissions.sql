@@ -37,10 +37,13 @@ CREATE TABLE `permissions`.`user_permissions`(
  -- create user requests table
   CREATE TABLE `permissions`.`user_requests`(
      `user_request_id` int(36) auto_increment,
-     `first_name` varchar(45) NULL,
-     `last_name` varchar(45) NULL,
      `banner_id` int(9),
+     `first_name` varchar(45) NULL,
+     `middle_name` VARCHAR(45) NULL,
+     `last_name` varchar(45) NULL,
+     `username` VARCHAR(45) NULL,
      `role` VARCHAR(45) NULL,
+     `email` VARCHAR(60) NULL,
      PRIMARY KEY(`user_request_id`));
 
 source sp_add_user.sql;
@@ -65,7 +68,7 @@ call sp_change_permissions(111111111,0,0,0,1,1,1,1,0,0);
 call sp_change_permissions(222222222,0,0,0,1,0,0,0,0,0);
 call sp_change_permissions(333333333,0,0,0,0,0,0,0,1,1);
 call sp_change_permissions(444444444,1,1,1,1,1,1,1,1,1);
-call sp_add_user_request('Tom','Grello',555555555,'student');
-call sp_add_user_request('Ryan','Bell',666666666,'professor');
-call sp_add_user_request('Connor','Snee',777777777,'lab_admin');
-call sp_add_user_request('Dharmik','Pandya',888888888,'student');
+call sp_add_user_request(555555555,'Tom','M','Grello','tomgrello','student','test@test.com');
+call sp_add_user_request(666666666,'Ryan',' ','Bell','ryanbell','professor','test@test.com');
+call sp_add_user_request(777777777,'Connor', ' ', 'Snee','connorsnee','lab_admin','test@test.com');
+call sp_add_user_request(888888888,'Dharmik',' ','Pandya','dharmikpandya','sys_admin','test@test.com');
