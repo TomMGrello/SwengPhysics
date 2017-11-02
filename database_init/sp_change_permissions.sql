@@ -39,6 +39,7 @@ if (select exists (select 1 from banner_ids where banner_id = p_banner_id)) THEN
       p_can_backup_database,
       p_can_restore_database
     );
+    commit;
   ELSE
     select 'Username not found';
   END IF;

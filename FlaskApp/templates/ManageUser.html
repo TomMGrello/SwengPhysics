@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ManageUsers</title>
+    <script src="{{url_for('static', filename='js/jquery.js')}}"></script>
+    <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/acceptUserRequest.js')}}"></script>
+    <script src="{{url_for('static', filename='js/deleteUserRequest.js')}}"></script>
+    <script src="{{url_for('static', filename='js/getAllUserRequests.js')}}"></script>
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/bootstrap.min.css')}}" >
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cookie">
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/manageUsersStyle.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/Mockup-iPhone-6.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/Pretty-Footer.css')}}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <div id="imageHeader">
+        <div class="imageOnly"><img src="static/images/RULogo.png"></div>
+    </div>
+    <div id="menuBar" class="menu">
+        <div class="container">
+            <nav class="navbar navbar-default navbar-static-top">
+    <div class="container-fluid">
+            <button data-toggle="collapse" data-target="#navcol-1" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+        </div>
+        <div class="collapse navbar-collapse" id="navcol-1">
+            <ul class="nav navbar-nav navbar-left">
+                <li role="presentation"><a href="#">View Inventory</a></li>
+                <li role="presentation"><a href="#">Manage</a></li>
+                <li role="presentation"><a href="#"></a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">Logout</a></li>
+            </ul>
+        </div>
+
+</nav>
+        </div>
+    </div>
+    <div id="inventoryView">
+        <div class="container">
+<div id="mySidenav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <a href="#">Add Item</a>
+</div>
+
+<div id="main">
+  <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; Menu</span>
+</div>
+</div>
+
+
+<script>
+function openNav() {
+    document.getElementById("mySidenav").style.width = "225px";
+}
+
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+}
+</script>
+        <div class="container-fluid">
+    <table id="requestsTable" class="table table-striped custab">
+    <thead>
+
+        <tr>
+            <th>#</th>
+            <th>First name</th>
+            <th>Middle name</th>
+            <th>Last name</th>
+            <th>Email</th>
+            <th>Username</th>
+            <th>Banner ID</th>
+            <th>Requested as</th>
+            <th class="text-center">Action</th>
+        </tr>
+    </thead>
+
+    </table>
+    </div>
+
+    </div>
+</body>
+
+</html>

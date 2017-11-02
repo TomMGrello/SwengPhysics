@@ -39,6 +39,8 @@ BEGIN
       p_username
     );
 
+    select 'SUCCESS';
+    commit;
   END IF;
 END$$
 DELIMITER ;

@@ -47,17 +47,21 @@ def showPermissions():
 
 @flask_application.route("/adminPage",methods=['GET'])
 def adminPage():
-	return render_template("UpdatedAdminPage.html");
+	return render_template("AdminPage.html");
 
 @flask_application.route("/PermissionsForAdminPage",methods=['GET'])
 def PermissionsForAdminPage():
 	return render_template("PermissionsForAdminPage.html");
 
+@flask_application.route("/manageUser",methods=['GET'])
+def ManageUser():
+	return render_template("ManageUser.html");
+
 ###########################################################################################
 ##############################   QUERY ENDPOINTS   ########################################
 ###########################################################################################
 
-@flask_application.route("/login")
+@flask_application.route("/login",methods=['GET'])
 def login():
 	result = MISSING_INPUT
 	cursor = conn.cursor()
@@ -69,48 +73,97 @@ def login():
 		cursor.callproc('sp_get_banner_id',[username])
 
 		banner_id = cursor.fetchall()[0][0] #data is returned as ((<banner_id>,),). The [0][0] extracts it.
-
 		if banner_id:
 			session['banner_id'] = banner_id
 		else:
 			result = NO_BANNER_ID_ERROR
 
 	cursor.close()
-	return result
+	return jsonify(result=result)
 
-@flask_application.route("/addUserRequest",methods=['GET'])
+@flask_application.route("/addUserRequest",methods=['GET','POST'])
 def addUserRequest():
 	result = MISSING_INPUT
-	banner_id = request.args.get('banner_id','N/A')
-	username = request.args.get('user','N/A')
-	role = request.args.get('role','N/A')
+	first_name = request.args.get('first_name')
+	last_name = request.args.get('last_name')
+	banner_id = request.args.get('banner_id')
+	role = request.args.get('role')
 	cursor = conn.cursor()
+	print "RUNNING ADD USER REQUEST"
 
-	if banner_id and username and role:
+	if banner_id and first_name and last_name and role:
 		result = SUCCESS
-		cursor.callproc('sp_add_user_request',[banner_id,username,role])
+		cursor.callproc('sp_add_user_request',[first_name,last_name,banner_id,role])
 
 	cursor.close()
-	return result
+	return jsonify(result=result)
 
-@flask_application.route("/addUser",methods=['GET'])
+@flask_application.route("/deleteUserRequest",methods=['GET'])
+def deleteUserRequest():
+	result = MISSING_INPUT
+	banner_id = request.args.get('banner_id')
+	role = request.args.get('role')
+	cursor = conn.cursor()
+
+	if banner_id and role:
+		result = SUCCESS
+		cursor.callproc('sp_delete_user_request',[banner_id, role])
+
+	cursor.close()
+	return jsonify(result=result)
+
+@flask_application.route("/acceptUserRequest",methods=['GET'])
+def acceptUserRequest():
+	cursor = conn.cursor()
+	result = "FAIL"
+	banner_id = request.args.get('banner_id')
+	first_name = request.args.get('first_name')
+	middle_name = request.args.get('middle_name')
+	last_name = request.args.get('last_name')
+	username = request.args.get('user')
+	role = request.args.get('role')
+	email = request.args.get('email')
+
+
+
+	options = { 'student':(0,0,0,1,1,1,1,0,0),
+				'professor':(0,0,0,1,0,0,0,0,0),
+				'lab_admin':(1,1,1,1,1,1,1,1,1),
+				'sys_admin':(0,0,0,0,0,0,0,1,1)}
+
+	perms = options[role]
+
+	cursor.callproc('sp_add_user',[banner_id, first_name, middle_name, last_name, username, role, email])
+	cursor.callproc('sp_change_permissions',[banner_id,perms[0],perms[1],perms[2],perms[3],perms[4],perms[5],perms[6],perms[7],perms[8]])
+	cursor.callproc('sp_delete_user_request',[banner_id,role])
+	result = SUCCESS
+	return jsonify(result=result)
+
+@flask_application.route("/addUser",methods=['GET','POST'])
 def addUser():
 	result = MISSING_INPUT
-	banner_id = request.args.get('banner_id','N/A')
-	first_name = request.args.get('first_name','N/A')
-	middle_name = request.args.get('middle_name','N/A')
-	last_name = request.args.get('last_name','N/A')
-	username = request.args.get('user','N/A')
-	role = request.args.get('role','N/A')
-	email = request.args.get('email','N/A')
+	banner_id = int(request.args.get('banner_id'))
+	first_name = request.args.get('first_name')
+	middle_name = request.args.get('middle_name')
+	last_name = request.args.get('last_name')
+	username = request.args.get('user')
+	role = request.args.get('role')
+	email = request.args.get('email')
 	cursor = conn.cursor()
 
-	if banner_id and username and role and first_name and middle_name and last_name and email:
-		result = SUCCESS
-		cursor.callproc('sp_add_user',[banner_id, first_name, middle_name, last_name, username, role, email])
+	print str(banner_id)
+	print str(first_name)
+	print str(last_name)
+	print str(middle_name)
+	print str(username)
+	print str(role)
+	print str(email)
 
+	result = SUCCESS
+	cursor.callproc('sp_add_user',[banner_id, first_name, middle_name, last_name, username, role, email])
+	result = cursor.fetchall()
 	cursor.close()
-	return result
+	return jsonify(result=result)
 
 @flask_application.route("/changePermissions",methods=['GET'])
 def changePermissions():
@@ -138,10 +191,10 @@ def changePermissions():
 
 	if banner_id and can_add_user and can_remove_user and can_modify_permissions and can_request_record and can_add_record and can_modify_record and can_remove_record and can_backup_database and can_restore_database:
 		result = SUCCESS
-		cursor.callproc('sp_add_user',[banner_id, can_add_user, can_remove_user, can_modify_permissions, can_request_record, can_add_record, can_modify_record, can_remove_record, can_backup_database, can_restore_database])
+		cursor.callproc('sp_change_permissions',[banner_id, can_add_user, can_remove_user, can_modify_permissions, can_request_record, can_add_record, can_modify_record, can_remove_record, can_backup_database, can_restore_database])
 
 	cursor.close()
-	return result
+	return jsonify(result=result)
 
 @flask_application.route("/permissions",methods=['GET'])
 def permissions():
@@ -155,13 +208,13 @@ def permissions():
 		cursor.callproc('sp_get_permissions',[banner_id])
 		perms = cursor.fetchall()[0]
 		print perms
-		result = jsonify(result=perms)
+		result = perms
 
 	cursor.close()
-	return result
+	return jsonify(result=result)
 
-@flask_application.route("/userRequests",methods=['GET'])
-def userRequests():
+@flask_application.route("/getAllUserRequests",methods=['GET'])
+def getAllUserRequests():
 	cursor = conn.cursor()
 	result = NO_REQUESTS
 
@@ -172,13 +225,13 @@ def userRequests():
 	can_add_user = user_permissions[2]
 
 	if can_add_user == 1:
-		cursor.callproc('sp_get_user_requests',[])
+		cursor.callproc('sp_get_all_user_requests',[])
 		requests = cursor.fetchall()
 		print requests
-		result = jsonify(result=requests)
+		result = requests
 
 	cursor.close()
-	return result
+	return jsonify(result=result)
 
 @flask_application.route("/allUserPermissions",methods=['GET'])
 def allUserPermissions():
@@ -188,4 +241,4 @@ def allUserPermissions():
 if __name__ == "__main__":
 	flask_application.debug = True
 	flask_application.secret_key = 'rowanphysicssweng'
-	flask_application.run(host=os.getenv('LISTEN', '0.0.0.0'),threaded=True)
+	flask_application.run(host=os.getenv('LISTEN', '0.0.0.0'))
