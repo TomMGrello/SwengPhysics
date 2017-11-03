@@ -57,6 +57,10 @@ def PermissionsForAdminPage():
 def ManageUser():
 	return render_template("ManageUser.html");
 
+@flask_application.route("/requestAccess",methods=['GET'])
+def RequestAccess():
+	return render_template("RequestAccess.html");
+
 ###########################################################################################
 ##############################   QUERY ENDPOINTS   ########################################
 ###########################################################################################
@@ -73,7 +77,8 @@ def login():
 		cursor.callproc('sp_get_banner_id',[username])
 
 		banner_id = cursor.fetchall()[0][0] #data is returned as ((<banner_id>,),). The [0][0] extracts it.
-		if banner_id:
+
+		if banner_id != "Username not found":
 			session['banner_id'] = banner_id
 		else:
 			result = NO_BANNER_ID_ERROR
@@ -85,15 +90,18 @@ def login():
 def addUserRequest():
 	result = MISSING_INPUT
 	first_name = request.args.get('first_name')
+	middle_name = request.args.get('middle_name')
 	last_name = request.args.get('last_name')
+	username = request.args.get('username')
 	banner_id = request.args.get('banner_id')
 	role = request.args.get('role')
+	email = request.args.get('email')
 	cursor = conn.cursor()
 	print "RUNNING ADD USER REQUEST"
 
 	if banner_id and first_name and last_name and role:
 		result = SUCCESS
-		cursor.callproc('sp_add_user_request',[first_name,last_name,banner_id,role])
+		cursor.callproc('sp_add_user_request',[banner_id,first_name,middle_name,last_name,username,role,email])
 
 	cursor.close()
 	return jsonify(result=result)

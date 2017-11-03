@@ -2,7 +2,12 @@
     $('#signin').click(function() {
   		$.getJSON('/login',{user:$('#usernameInput').val()},
     		function(data){
-    			window.location='/adminPage';
+          if(data.result === "DB_BANNER_ERROR"){
+            window.location = "/requestAccess";
+          }
+          else {
+            window.location = "/adminPage"
+          }
     		});
   		return false;
     });

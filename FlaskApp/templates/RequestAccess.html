@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>SignUp!</title>
+		<link rel="stylesheet" href="{{url_for('static', filename='styles/requestaccess.css')}}">
+	</head>
+	<body>
+		<div class="signUpBox">
+			<img src="static/images/user.png" class="user">
+			<h2>Request Access</h2>
+			<form>
+				<p>Username</p>
+				<input id="inputUsername" type="text" name="" placeholder="username">
+				<p>First name</p>
+				<input id="inputFirstName" type="text" name="" placeholder="first name">
+				<p>Middle name</p>
+				<input id="inputMiddleName" type="text" name="" placeholder="middle name">
+				<p>Last name</p>
+				<input id="inputLastName" type="text" name="" placeholder="last name">
+				<p>Banner ID</p>
+				<input id="inputBannerId" type="text" name="" placeholder="91XXXXXXX">
+				<p>Email: </p>
+				<input id="inputEmail" type="text" name="" placeholder="email">
+				<div class="maxl">
+					<p> Request as:
+				    <label class="radio inline">
+					  <input id="radStudent" type="radio" name="studentOrProfessor" value="student" checked>
+					  <span>Student </span>
+				    </label>
+				    <label class="radio inline">
+					  <input id="radProfessor" type="radio" name="studentOrProfessor" value="professor">
+					  <span>Professor </span>
+				    </label>
+					<label class="radio inline">
+					  <input id="radLabManager" type="radio" name="studentOrProfessor" value="labManager">
+					  <span>Lab Manager</span>
+				    </label>
+					<label class="radio inline">
+					  <input id="radSysAdmin" type="radio" name="studentOrProfessor" value="sysAdmin">
+					  <span>System Admin</span>
+					  </label>
+					</p>
+                </div>
+				<input id="signup" type="submit" name="" value="Submit">
+			</form>
+		</div>
+	</body>
+</html>
