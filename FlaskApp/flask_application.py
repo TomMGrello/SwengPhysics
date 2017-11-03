@@ -17,6 +17,20 @@ NO_REQUESTS = 'NO_REQUESTS'
 INCORRECT_PERMISSIONS = 'INCORRECT_PERMISSIONS'
 
 ###########################################################################################
+##################################### PERMS INDECES #######################################
+###########################################################################################
+
+CAN_ADD_USER_INDEX = 2
+CAN_REMOVE_USER_INDEX = CAN_ADD_USER_INDEX + 1
+CAN_MODIFY_PERMISSIONS_INDEX = CAN_REMOVE_USER_INDEX + 1
+CAN_REQUEST_RECORD_INDEX = CAN_MODIFY_PERMISSIONS_INDEX + 1
+CAN_ADD_RECORD_INDEX = CAN_REQUEST_RECORD_INDEX + 1
+CAN_REMOVE_RECORD_INDEX = CAN_ADD_RECORD_INDEX + 1
+CAN_MODIFY_RECORD_INDEX = CAN_REMOVE_RECORD_INDEX + 1
+CAN_BACKUP_DATABASE_INDEX = CAN_MODIFY_RECORD_INDEX + 1
+CAN_RESTORE_DATABASE_INDEX = CAN_BACKUP_DATABASE_INDEX + 1
+
+###########################################################################################
 ########################################   INITS   ########################################
 ###########################################################################################
 
@@ -46,9 +60,20 @@ def main():
 def showPermissions():
 	return render_template("showPermissions.html");
 
-@flask_application.route("/adminPage",methods=['GET'])
-def adminPage():
-	return render_template("AdminPage.html");
+@flask_application.route("/inventory",methods=['GET'])
+def mainInventoryView():
+	cursor = conn.cursor()
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_modify_record = user_permissions[CAN_MODIFY_RECORD_INDEX];
+
+	if int(can_modify_record) == 1:
+		return render_template("AdminPage.html")
+	else:
+		return render_template("inventoryView.html")
+
 
 @flask_application.route("/PermissionsForAdminPage",methods=['GET'])
 def PermissionsForAdminPage():
@@ -115,7 +140,7 @@ def deleteUserRequest():
 	cursor.callproc('sp_get_permissions',[banner_id])
 
 	user_permissions = cursor.fetchall()[0]
-	can_add_user = user_permissions[2];
+	can_add_user = user_permissions[CAN_ADD_USER_INDEX];
 
 	if int(can_add_user) == 1:
 		result = MISSING_INPUT
@@ -138,7 +163,7 @@ def acceptUserRequest():
 	cursor.callproc('sp_get_permissions',[banner_id])
 
 	user_permissions = cursor.fetchall()[0]
-	can_add_user = user_permissions[2];
+	can_add_user = user_permissions[CAN_ADD_USER_INDEX];
 
 	if int(can_add_user) == 1:
 		banner_id = request.args.get('banner_id')
@@ -173,7 +198,7 @@ def addUser():
 	cursor.callproc('sp_get_permissions',[banner_id])
 
 	user_permissions = cursor.fetchall()[0]
-	can_add_user = user_permissions[2];
+	can_add_user = user_permissions[CAN_ADD_USER_INDEX];
 
 	if int(can_add_user) == 1:
 		banner_id = int(request.args.get('banner_id'))
@@ -200,7 +225,7 @@ def changePermissions():
 	cursor.callproc('sp_get_permissions',[banner_id])
 
 	user_permissions = cursor.fetchall()[0]
-	can_modify_permissions = user_permissions[4]
+	can_modify_permissions = user_permissions[CAN_MODIFY_PERMISSIONS_INDEX]
 
 	if can_modify_permissions == 1:
 		result = MISSING_INPUT
@@ -253,7 +278,7 @@ def getAllUserRequests():
 	cursor.callproc('sp_get_permissions',[banner_id])
 
 	user_permissions = cursor.fetchall()[0]
-	can_add_user = user_permissions[2]
+	can_add_user = user_permissions[CAN_ADD_USER_INDEX]
 
 	if int(can_add_user) == 1:
 		print "allowed"

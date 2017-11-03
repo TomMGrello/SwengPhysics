@@ -6,7 +6,7 @@
             window.location = "/requestAccess";
           }
           else {
-            window.location = "/adminPage"
+            window.location = "/inventory";
           }
     		});
   		return false;
