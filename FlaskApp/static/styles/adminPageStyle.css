@@ -1,0 +1,180 @@
+div#imageHeader{
+  margin-left:13%;
+  margin-top:1%;
+}
+
+pull-right:hover{
+  color:maroon;
+}
+
+.dropdown .a{
+  font-size:20px;
+  color:white;
+}
+
+.stylish-input-group .input-group-addon{
+  background:white !important;
+}
+
+.stylish-input-group .form-control{
+  border-right:0;
+  box-shadow:0 0 0;
+  border-color:#ccc;
+}
+
+.stylish-input-group button{
+  border:0;
+  background:transparent;
+}
+
+div#menuBar.menu{
+  margin-top:1%;
+  margin-left:-3%;
+}
+
+div.container{
+  width:70%;
+  margin-left:18%;
+}
+
+ul.nav.navbar-nav.navbar-right{
+  margin-right:1%;
+}
+
+nav.navbar.navbar-default.navbar-static-top{
+  font-size:20px;
+  margin-left:-6%;
+  background:maroon;
+}
+
+hr{
+  margin-top:-1%;
+  background:black;
+  height:2px;
+}
+
+ul.nav.navbar-nav.navbar-left li a{
+  color:white;
+}
+
+ul.nav.navbar-nav.navbar-right li a{
+  color:white;
+}
+
+div#inventoryView{
+  border:2px solid #cecece;
+  width:74.75%;
+  margin-left:12%;
+}
+
+@media (min-width:1200px) {
+  div#inventoryView .container{
+    margin-left:0%;
+    width:71.15%;
+  }
+}
+
+#custom-search-input{
+  padding:0px;
+  border:solid 1px #E4E4E4;
+  border-radius:6px;
+  background-color:#fff;
+  margin-top:10%;
+}
+
+#custom-search-input input{
+  border:0;
+  box-shadow:none;
+}
+
+#custom-search-input button{
+  margin:2px 0 0 0;
+  background:none;
+  box-shadow:none;
+  border:0;
+  color:#666666;
+  padding:0 8px 0 15px;
+  border-left:solid 1px #ccc;
+}
+
+#custom-search-input button:hover{
+  border:0;
+  box-shadow:none;
+  border-left:solid 1px #ccc;
+}
+
+#custom-search-input .glyphicon-search{
+  font-size:15px;
+}
+
+@media (max-width:1199px) {
+  div#inventoryView .container{
+    margin-left:0%;
+    width:73%;
+  }
+}
+
+.sidenav{
+  height:50%;
+  width:0;
+  position:fixed;
+  z-index:1;
+  top:17.75%;
+  left:0;
+  background-color:maroon;
+  overflow-x:hidden;
+  transition:0.5s;
+  padding-top:60px;
+}
+
+.sidenav button{
+  padding:8px 8px 8px 8px;
+  text-decoration:none;
+  font-size:25px;
+  color:white;
+  display:block;
+  transition:0.3s;
+  margin-left:21%;
+}
+
+.sidenav a:hover{
+  color:grey;
+}
+
+.sidenav .closebtn{
+  position:absolute;
+  top:0;
+  right:25px;
+  font-size:36px;
+  margin-left:50px;
+}
+
+input.input-sm{
+  float:right;
+  margin-top:-4.25%;
+}
+
+#main{
+  transition:margin-left .5s;
+  padding:16px;
+  margin-left:-15px;
+  width:145%;
+  border-bottom:1px solid black;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav{
+    padding-top:15px;
+  }
+}
+
+div.table-responsive{
+  margin-left:4px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav a{
+    font-size:18px;
+  }
+}
+
