@@ -14,6 +14,7 @@ NO_BANNER_ID_ERROR = 'DB_BANNER_ERROR'
 SUCCESS = 'SUCCESS'
 MISSING_INPUT = 'INPUT_NOT_SUPPLIED'
 NO_REQUESTS = 'NO_REQUESTS'
+NO_PERMISSIONS = 'NO_PERMISSIONS'
 
 ###########################################################################################
 ########################################   INITS   ########################################
@@ -56,6 +57,10 @@ def PermissionsForAdminPage():
 @flask_application.route("/manageUser",methods=['GET'])
 def ManageUser():
 	return render_template("ManageUser.html");
+
+@flask_application.route("/test",methods=['GET'])
+def test():
+	return render_template("test.html");
 
 ###########################################################################################
 ##############################   QUERY ENDPOINTS   ########################################
@@ -236,7 +241,15 @@ def getAllUserRequests():
 @flask_application.route("/allUserPermissions",methods=['GET'])
 def allUserPermissions():
 	cursor = conn.cursor()
-	
+	result = NO_PERMISSIONS
+
+	cursor.callproc('sp_get_all_permissions')
+	all_permissions = cursor.fetchall()
+
+	result = jsonify(result=all_permissions)
+	cursor.close()
+	return result
+
 
 if __name__ == "__main__":
 	flask_application.debug = True
