@@ -14,6 +14,7 @@ NO_BANNER_ID_ERROR = 'DB_BANNER_ERROR'
 SUCCESS = 'SUCCESS'
 MISSING_INPUT = 'INPUT_NOT_SUPPLIED'
 NO_REQUESTS = 'NO_REQUESTS'
+INCORRECT_PERMISSIONS = 'INCORRECT_PERMISSIONS'
 
 ###########################################################################################
 ########################################   INITS   ########################################
@@ -108,14 +109,23 @@ def addUserRequest():
 
 @flask_application.route("/deleteUserRequest",methods=['GET'])
 def deleteUserRequest():
-	result = MISSING_INPUT
-	banner_id = request.args.get('banner_id')
-	role = request.args.get('role')
+	result = INCORRECT_PERMISSIONS
 	cursor = conn.cursor()
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
 
-	if banner_id and role:
-		result = SUCCESS
-		cursor.callproc('sp_delete_user_request',[banner_id, role])
+	user_permissions = cursor.fetchall()[0]
+	can_add_user = user_permissions[2];
+
+	if int(can_add_user) == 1:
+		result = MISSING_INPUT
+		banner_id = request.args.get('banner_id')
+		role = request.args.get('role')
+
+
+		if banner_id and role:
+			result = SUCCESS
+			cursor.callproc('sp_delete_user_request',[banner_id, role])
 
 	cursor.close()
 	return jsonify(result=result)
@@ -123,53 +133,61 @@ def deleteUserRequest():
 @flask_application.route("/acceptUserRequest",methods=['GET'])
 def acceptUserRequest():
 	cursor = conn.cursor()
-	result = "FAIL"
-	banner_id = request.args.get('banner_id')
-	first_name = request.args.get('first_name')
-	middle_name = request.args.get('middle_name')
-	last_name = request.args.get('last_name')
-	username = request.args.get('user')
-	role = request.args.get('role')
-	email = request.args.get('email')
+	result = INCORRECT_PERMISSIONS
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_add_user = user_permissions[2];
+
+	if int(can_add_user) == 1:
+		banner_id = request.args.get('banner_id')
+		first_name = request.args.get('first_name')
+		middle_name = request.args.get('middle_name')
+		last_name = request.args.get('last_name')
+		username = request.args.get('user')
+		role = request.args.get('role')
+		email = request.args.get('email')
 
 
 
-	options = { 'student':(0,0,0,1,1,1,1,0,0),
-				'professor':(0,0,0,1,0,0,0,0,0),
-				'lab_admin':(1,1,1,1,1,1,1,1,1),
-				'sys_admin':(0,0,0,0,0,0,0,1,1)}
+		options = { 'student':(0,0,0,1,1,1,1,0,0),
+					'professor':(0,0,0,1,0,0,0,0,0),
+					'lab_admin':(1,1,1,1,1,1,1,1,1),
+					'sys_admin':(0,0,0,0,0,0,0,1,1)}
 
-	perms = options[role]
+		perms = options[role]
 
-	cursor.callproc('sp_add_user',[banner_id, first_name, middle_name, last_name, username, role, email])
-	cursor.callproc('sp_change_permissions',[banner_id,perms[0],perms[1],perms[2],perms[3],perms[4],perms[5],perms[6],perms[7],perms[8]])
-	cursor.callproc('sp_delete_user_request',[banner_id,role])
-	result = SUCCESS
+		cursor.callproc('sp_add_user',[banner_id, first_name, middle_name, last_name, username, role, email])
+		cursor.callproc('sp_change_permissions',[banner_id,perms[0],perms[1],perms[2],perms[3],perms[4],perms[5],perms[6],perms[7],perms[8]])
+		cursor.callproc('sp_delete_user_request',[banner_id,role])
+		result = SUCCESS
 	return jsonify(result=result)
 
 @flask_application.route("/addUser",methods=['GET','POST'])
 def addUser():
 	result = MISSING_INPUT
-	banner_id = int(request.args.get('banner_id'))
-	first_name = request.args.get('first_name')
-	middle_name = request.args.get('middle_name')
-	last_name = request.args.get('last_name')
-	username = request.args.get('user')
-	role = request.args.get('role')
-	email = request.args.get('email')
+	result = INCORRECT_PERMISSIONS
 	cursor = conn.cursor()
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
 
-	print str(banner_id)
-	print str(first_name)
-	print str(last_name)
-	print str(middle_name)
-	print str(username)
-	print str(role)
-	print str(email)
+	user_permissions = cursor.fetchall()[0]
+	can_add_user = user_permissions[2];
 
-	result = SUCCESS
-	cursor.callproc('sp_add_user',[banner_id, first_name, middle_name, last_name, username, role, email])
-	result = cursor.fetchall()
+	if int(can_add_user) == 1:
+		banner_id = int(request.args.get('banner_id'))
+		first_name = request.args.get('first_name')
+		middle_name = request.args.get('middle_name')
+		last_name = request.args.get('last_name')
+		username = request.args.get('user')
+		role = request.args.get('role')
+		email = request.args.get('email')
+		cursor = conn.cursor()
+
+		result = SUCCESS
+		cursor.callproc('sp_add_user',[banner_id, first_name, middle_name, last_name, username, role, email])
+		result = cursor.fetchall()
 	cursor.close()
 	return jsonify(result=result)
 
@@ -186,16 +204,16 @@ def changePermissions():
 
 	if can_modify_permissions == 1:
 		result = MISSING_INPUT
-		banner_id = request.args.get('banner_id','N/A')
-		can_add_user = request.args.get('can_add_user','N/A')
-		can_remove_user = request.args.get('can_remove_user','N/A')
-		can_modify_permissions = request.args.get('can_modify_permissions','N/A')
-		can_request_record = request.args.get('can_request_record','N/A')
-		can_add_record = request.args.get('can_add_record','N/A')
-		can_modify_record = requests.args.get('can_modify_record','N/A')
-		can_remove_record = requests.args.get('can_remove_record','N/A')
-		can_backup_database = requests.args.get('can_backup_database','N/A')
-		can_restore_database = requests.args.get('can_restore_database','N/A')
+		banner_id = request.args.get('banner_id')
+		can_add_user = request.args.get('can_add_user')
+		can_remove_user = request.args.get('can_remove_user')
+		can_modify_permissions = request.args.get('can_modify_permissions')
+		can_request_record = request.args.get('can_request_record')
+		can_add_record = request.args.get('can_add_record')
+		can_modify_record = requests.args.get('can_modify_record')
+		can_remove_record = requests.args.get('can_remove_record')
+		can_backup_database = requests.args.get('can_backup_database')
+		can_restore_database = requests.args.get('can_restore_database')
 
 	if banner_id and can_add_user and can_remove_user and can_modify_permissions and can_request_record and can_add_record and can_modify_record and can_remove_record and can_backup_database and can_restore_database:
 		result = SUCCESS
@@ -221,10 +239,15 @@ def permissions():
 	cursor.close()
 	return jsonify(result=result)
 
+@flask_application.route("/signout",methods=['GET'])
+def signout():
+	session.clear();
+	return jsonify(result="CLEARED");
+
 @flask_application.route("/getAllUserRequests",methods=['GET'])
 def getAllUserRequests():
 	cursor = conn.cursor()
-	result = NO_REQUESTS
+	result = INCORRECT_PERMISSIONS
 
 	banner_id = session['banner_id']
 	cursor.callproc('sp_get_permissions',[banner_id])
@@ -232,7 +255,8 @@ def getAllUserRequests():
 	user_permissions = cursor.fetchall()[0]
 	can_add_user = user_permissions[2]
 
-	if can_add_user == 1:
+	if int(can_add_user) == 1:
+		print "allowed"
 		cursor.callproc('sp_get_all_user_requests',[])
 		requests = cursor.fetchall()
 		print requests

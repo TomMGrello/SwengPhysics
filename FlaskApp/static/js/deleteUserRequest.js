@@ -4,6 +4,6 @@ function deleteUserRequest(banner_id,role) {
     role:role
   },
   function(data){
-    alert("DELETED");
+    location.reload();
   });
 }

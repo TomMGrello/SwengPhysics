@@ -9,6 +9,6 @@ function acceptUserRequest(banner_id, first_name, middle_name, last_name, userna
     email:email
   },
   function(data){
-    alert("ACCEPTED");
+    location.reload();
   });
 }

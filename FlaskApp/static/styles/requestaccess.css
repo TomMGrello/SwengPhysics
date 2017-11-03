@@ -18,10 +18,10 @@ body
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%,-50%);
-	width: 450px;
+	width: 500px;
 	padding: 80px 40px;
 	box-sizing: border-box;
-	height: 900px;
+	height: 725px;
 	background: rgba(0,0,0,.6);
 }
 h2
@@ -82,7 +82,7 @@ h2
 	height: 40px;
 	color: #fff;
 	font-size: 16px;
-	background: #ff267e;
+	background: #3F1A0A;
 	cursor: pointer;
 	border-radius: 20px;
 }
@@ -202,3 +202,35 @@ li a:hover:not(.active) {
     background-color: #4CAF50;
 }
 /* Menu bar css code ends here */
+
+/* dropdown css starts here */
+.styled-select {
+   background: url(http://i62.tinypic.com/15xvbd5.png) no-repeat 96% 0;
+   height: 29px;
+   overflow: hidden;
+   width: 240px;
+}
+
+.styled-select select {
+   background: transparent;
+   border: none;
+   font-size: 14px;
+   height: 29px;
+   padding: 5px; /* If you add too much padding here, the options won't show in IE */
+   width: 268px;
+}
+
+.styled-select.slate {
+   background: url(http://i62.tinypic.com/2e3ybe1.jpg) no-repeat right center;
+   height: 34px;
+   width: 240px;
+}
+
+.styled-select.slate select {
+   border: 1px solid #ccc;
+   font-size: 16px;
+   height: 34px;
+   width: 268px;
+}
+
+/* dropdown css ends here */

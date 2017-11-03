@@ -4,6 +4,8 @@
 		<meta charset="utf-8">
 		<title>SignUp!</title>
 		<link rel="stylesheet" href="{{url_for('static', filename='styles/requestaccess.css')}}">
+		<script src="{{url_for('static', filename='js/jquery.js')}}"></script>
+		<script src="{{url_for('static', filename='js/signup.js')}}"></script>
 	</head>
 	<body>
 		<div class="signUpBox">
@@ -11,35 +13,25 @@
 			<h2>Request Access</h2>
 			<form>
 				<p>Username</p>
-				<input id="inputUsername" type="text" name="" placeholder="username">
+				<input id="inputUsername" type="text" name="" placeholder="Username">
 				<p>First name</p>
-				<input id="inputFirstName" type="text" name="" placeholder="first name">
+				<input id="inputFirstName" type="text" name="" placeholder="First Name">
 				<p>Middle name</p>
-				<input id="inputMiddleName" type="text" name="" placeholder="middle name">
+				<input id="inputMiddleName" type="text" name="" placeholder="Middle Name">
 				<p>Last name</p>
-				<input id="inputLastName" type="text" name="" placeholder="last name">
+				<input id="inputLastName" type="text" name="" placeholder="Last Name">
 				<p>Banner ID</p>
 				<input id="inputBannerId" type="text" name="" placeholder="91XXXXXXX">
 				<p>Email: </p>
-				<input id="inputEmail" type="text" name="" placeholder="email">
+				<input id="inputEmail" type="text" name="" placeholder="example@example.com">
 				<div class="maxl">
 					<p> Request as:
-				    <label class="radio inline">
-					  <input id="radStudent" type="radio" name="studentOrProfessor" value="student" checked>
-					  <span>Student </span>
-				    </label>
-				    <label class="radio inline">
-					  <input id="radProfessor" type="radio" name="studentOrProfessor" value="professor">
-					  <span>Professor </span>
-				    </label>
-					<label class="radio inline">
-					  <input id="radLabManager" type="radio" name="studentOrProfessor" value="labManager">
-					  <span>Lab Manager</span>
-				    </label>
-					<label class="radio inline">
-					  <input id="radSysAdmin" type="radio" name="studentOrProfessor" value="sysAdmin">
-					  <span>System Admin</span>
-					  </label>
+				    <select id="inputRole">
+					  <option value="student">Student</option>
+					  <option value="professor">Professor</option>
+					  <option value="lab_admin">Lab Manager</option>
+					  <option value="sys_admin">System Admin</option>
+					</select>
 					</p>
                 </div>
 				<input id="signup" type="submit" name="" value="Submit">
