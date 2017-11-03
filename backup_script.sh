@@ -10,7 +10,7 @@ MYSQLDUMP_APP=/usr/bin/mysqldump
 #Variables for monthly backup
 FIRST_OF_MONTH=`date '+%d'`
 #Variables for deleting old backups
-DAYS_TO_SAVE="3"
+DAYS_TO_SAVE=3
 
 #Make daily backup directory
 mkdir -p "$BACKUP_DEST/daily/$DATE_TIME"
