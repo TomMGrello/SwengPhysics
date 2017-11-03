@@ -63,6 +63,11 @@ def showPermissions():
 @flask_application.route("/inventory",methods=['GET'])
 def mainInventoryView():
 	cursor = conn.cursor()
+
+
+	if session.has_key('banner_id') == False:
+		return render_template("index.html")
+
 	banner_id = session['banner_id']
 	cursor.callproc('sp_get_permissions',[banner_id])
 
