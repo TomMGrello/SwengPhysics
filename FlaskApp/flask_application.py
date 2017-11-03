@@ -15,6 +15,7 @@ SUCCESS = 'SUCCESS'
 MISSING_INPUT = 'INPUT_NOT_SUPPLIED'
 NO_REQUESTS = 'NO_REQUESTS'
 INCORRECT_PERMISSIONS = 'INCORRECT_PERMISSIONS'
+NO_PERMISSIONS = 'NO_PERMISSIONS'
 
 ###########################################################################################
 ##################################### PERMS INDECES #######################################
