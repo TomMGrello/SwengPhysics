@@ -4,10 +4,6 @@ function deleteUserRequest(banner_id,role) {
     role:role
   },
   function(data){
-<<<<<<< HEAD
     location.reload();
-=======
-    alert("DELETED");
->>>>>>> origin/hamlinj9
   });
 }
