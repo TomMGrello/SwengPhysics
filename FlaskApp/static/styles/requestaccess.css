@@ -18,10 +18,17 @@ body
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%,-50%);
+<<<<<<< HEAD
 	width: 500px;
 	padding: 80px 40px;
 	box-sizing: border-box;
 	height: 725px;
+=======
+	width: 450px;
+	padding: 80px 40px;
+	box-sizing: border-box;
+	height: 900px;
+>>>>>>> origin/hamlinj9
 	background: rgba(0,0,0,.6);
 }
 h2
@@ -82,7 +89,11 @@ h2
 	height: 40px;
 	color: #fff;
 	font-size: 16px;
+<<<<<<< HEAD
 	background: #3F1A0A;
+=======
+	background: #ff267e;
+>>>>>>> origin/hamlinj9
 	cursor: pointer;
 	border-radius: 20px;
 }
@@ -202,6 +213,7 @@ li a:hover:not(.active) {
     background-color: #4CAF50;
 }
 /* Menu bar css code ends here */
+<<<<<<< HEAD
 
 /* dropdown css starts here */
 .styled-select {
@@ -234,3 +246,5 @@ li a:hover:not(.active) {
 }
 
 /* dropdown css ends here */
+=======
+>>>>>>> origin/hamlinj9

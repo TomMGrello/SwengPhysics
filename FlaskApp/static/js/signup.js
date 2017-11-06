@@ -1,5 +1,6 @@
 $(function() {
   $('#signup').click(function() {
+<<<<<<< HEAD
     var first_name = document.getElementById("inputFirstName").value;
     var middle_name = document.getElementById("inputMiddleName").value;
     var last_name = document.getElementById("inputLastName").value;
@@ -29,6 +30,18 @@ $(function() {
     },
       function(data){
         window.location='/';
+=======
+    var first_name;
+    var middle_name;
+    var last_name;
+    var username;
+    var role;
+    var banner_id;
+    var email;
+    $.getJSON('/login',{},
+      function(data){
+        window.location='/adminPage';
+>>>>>>> origin/hamlinj9
       });
     return false;
   });
