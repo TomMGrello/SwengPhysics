@@ -5,6 +5,7 @@
 from flask import Flask, render_template, json, request, session, redirect, url_for, jsonify
 from flaskext.mysql import MySQL
 import os
+import platform
 
 ###########################################################################################
 ##################################### ERROR CONSTANTS #####################################
@@ -75,18 +76,18 @@ def mainInventoryView():
 	can_modify_record = user_permissions[CAN_MODIFY_RECORD_INDEX];
 
 	if int(can_modify_record) == 1:
-		return render_template("AdminPage.html")
+		return render_template("inventoryViewAdmin.html")
 	else:
-		return render_template("inventoryView.html")
+		return render_template("inventoryViewNonAdmin.html")
 
 
 @flask_application.route("/PermissionsForAdminPage",methods=['GET'])
 def PermissionsForAdminPage():
 	return render_template("PermissionsForAdminPage.html");
 
-@flask_application.route("/manageUser",methods=['GET'])
+@flask_application.route("/manageUserRequests",methods=['GET'])
 def ManageUser():
-	return render_template("ManageUser.html");
+	return render_template("manageUserRequests.html");
 
 @flask_application.route("/requestAccess",methods=['GET'])
 def RequestAccess():
@@ -105,7 +106,7 @@ def login():
 	result = MISSING_INPUT
 	cursor = conn.cursor()
 
-	username = request.args.get('user','N/A')
+	username = request.args.get('user')
 	if username:
 		result = SUCCESS
 		session['username'] = username
@@ -217,11 +218,12 @@ def addUser():
 		username = request.args.get('user')
 		role = request.args.get('role')
 		email = request.args.get('email')
-		cursor = conn.cursor()
 
-		result = SUCCESS
+		cursor = conn.cursor()
 		cursor.callproc('sp_add_user',[banner_id, first_name, middle_name, last_name, username, role, email])
+		result = SUCCESS
 		result = cursor.fetchall()
+
 	cursor.close()
 	return jsonify(result=result)
 
@@ -311,6 +313,8 @@ def allUserPermissions():
 	cursor.close()
 	return result
 
+
+print("Python version is: " + platform.python_version())
 
 if __name__ == "__main__":
 	flask_application.debug = True
