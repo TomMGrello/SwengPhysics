@@ -43,3 +43,7 @@ ALTER TABLE `permissions`.`item_locations`
   ADD CONSTRAINT uq_item_locations UNIQUE(serial_num,location_id);
 
 source sp_add_inventory_item.sql;
+source sp_get_all_inventory_items.sql;
+--                          name            serial invoice date      price  vendor        building   room shelf quantity
+call sp_add_inventory_item("TEST OBJECT 1", 123456,555888,"09/24/95",106.35,"TEST VENDOR","SCIENCE","223","A-1",5);
+call sp_add_inventory_item("TEST OBJECT 2", 638854,555888,"09/24/95",56.87,"TEST VENDOR","SCIENCE","223","A-1",8);

@@ -1,7 +1,7 @@
 USE permissions;
 -- add user request stored procedure
 DELIMITER $$
-CREATE PROCEDURE `sp_add_item_to_inventory`(
+CREATE PROCEDURE `sp_add_inventory_item`(
     IN p_name VARCHAR(60),
     IN p_serial int(45),
     IN p_invoice_id int(25),
