@@ -1,4 +1,4 @@
-USE permissions;
+USE physics;
 -- This procedure returns all the data from the items table that match
 -- a set of filters.
 -- Filters may be left as null, and that filter will be ignored.

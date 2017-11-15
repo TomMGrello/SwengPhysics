@@ -1,4 +1,4 @@
-USE permissions;
+USE physics;
 -- add user request stored procedure
 DELIMITER $$
 CREATE PROCEDURE `sp_add_item_to_lab_demo`(

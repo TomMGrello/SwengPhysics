@@ -1,4 +1,4 @@
-USE permissions;
+USE physics;
 -- delete user request stored procedure
 DELIMITER $$
 CREATE PROCEDURE `sp_delete_user_request`(
