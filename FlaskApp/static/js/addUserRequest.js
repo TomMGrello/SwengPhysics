@@ -9,6 +9,6 @@ function addUserRequest(first_name,middle_name,last_name,banner_id,username,role
     email:email
   },
   function(data){
-    alert("ADDED REQUEST");
+    window.location = "/";
   });
 }

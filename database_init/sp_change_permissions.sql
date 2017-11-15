@@ -1,4 +1,4 @@
-USE permissions;
+USE physics;
 DELIMITER $$
 CREATE PROCEDURE `sp_change_permissions` (
   IN p_banner_id INT(9),

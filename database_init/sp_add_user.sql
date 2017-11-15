@@ -1,4 +1,4 @@
-USE permissions;
+USE physics;
 DELIMITER $$
 CREATE PROCEDURE `sp_add_user` (
   IN p_banner_id int(9),
