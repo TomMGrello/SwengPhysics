@@ -28,6 +28,25 @@ CREATE TABLE `permissions`.`object_invoice`(
     FOREIGN KEY(`serial_num`) REFERENCES object(`serial_num`),
     PRIMARY KEY(`object_invoice_id`));
 
+CREATE TABLE `permissions`.`lab_demo`(
+  `lab_id` int(36) auto_increment,
+  `type` VARCHAR(10) NULL,
+  `name` VARCHAR(60) NULL,
+  `topic` VARCHAR(30) NULL,
+  `concept` VARCHAR(30) NULL,
+  `subconcept` VARCHAR(30) NULL,
+  PRIMARY KEY(`lab_id`),
+  UNIQUE KEY(`lab_id`));
+
+CREATE TABLE `permissions`.`object_lab_demo`(
+  `object_lab_demo_id` int(36) auto_increment,
+  `serial_num` int(45) NULL,
+  `lab_id` int(36) NULL,
+  `quantity` int(20) NULL,
+  FOREIGN KEY(`serial_num`) REFERENCES object(`serial_num`),
+  FOREIGN KEY(`lab_id`) REFERENCES lab_demo(`lab_id`),
+  PRIMARY KEY(`object_lab_demo_id`));
+
 CREATE TABLE `permissions`.`item_locations`(
     `item_locations_id` int(36) auto_increment,
     `location_id` int(36) NULL,
@@ -43,7 +62,14 @@ ALTER TABLE `permissions`.`item_locations`
   ADD CONSTRAINT uq_item_locations UNIQUE(serial_num,location_id);
 
 source sp_add_inventory_item.sql;
-source sp_get_all_inventory_items.sql;
+source sp_get_filtered_inventory_items.sql;
+source sp_add_lab.sql;
+source sp_add_item_to_lab_demo.sql;
+source sp_get_filtered_labs_demos.sql;
 --                          name            serial invoice date      price  vendor        building   room shelf quantity
-call sp_add_inventory_item("TEST OBJECT 1", 123456,555888,"09/24/95",106.35,"TEST VENDOR","SCIENCE","223","A-1",5);
+call sp_add_inventory_item("TEST OBJECT 1", 123456,555888,"09/24/95",106.35,"TEST VENDOR","ROBINSON","223","A-1",5);
 call sp_add_inventory_item("TEST OBJECT 2", 638854,555888,"09/24/95",56.87,"TEST VENDOR","SCIENCE","223","A-1",8);
+call sp_add_lab("LAB", "LAB1", "TOPIC1", "CONCEPT1", "SUBCONCEPT1");
+call sp_add_lab("LAB", "LAB2", "TOPIC2", "CONCEPT1", "SUBCONCEPT2");
+call sp_add_lab("DEMO", "DEMO1", "TOPIC2", "CONCEPT2", "SUBCONCEPT1");
+call sp_add_lab("DEMO", "DEMO2", "TOPIC1", "CONCEPT2", "SUBCONCEPT2");
