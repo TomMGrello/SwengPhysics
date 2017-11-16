@@ -21,7 +21,7 @@ BEGIN
   INNER JOIN object_invoice on object.serial_num = object_invoice.serial_num
   INNER JOIN invoice on object_invoice.invoice_id = invoice.invoice_id
   WHERE 1=1
-  AND (p_name IS NULL OR object.name Like p_name)
+  AND (p_name IS NULL OR object.name Like CONCAT('%',p_name,'%'))
   AND (p_vendor_name IS NULL OR invoice.vendor_name Like p_vendor_name)
   AND (p_building IS NULL OR location.building Like p_building)
   AND (p_room_num IS NULL OR location.room_num Like p_room_num)

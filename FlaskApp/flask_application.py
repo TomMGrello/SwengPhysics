@@ -42,7 +42,7 @@ flask_application.config['MYSQL_DATABASE_USER'] = 'root'
 
 flask_application.config['MYSQL_DATABASE_PASSWORD'] = 'rowanphysicssweng'   # todo, change back to rowanphysicssweng for push, change to personal password for dev work
 
-flask_application.config['MYSQL_DATABASE_DB'] = 'permissions'
+flask_application.config['MYSQL_DATABASE_DB'] = 'physics'
 flask_application.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(flask_application)
 
@@ -246,10 +246,10 @@ def changePermissions():
 		can_modify_permissions = request.args.get('can_modify_permissions')
 		can_request_record = request.args.get('can_request_record')
 		can_add_record = request.args.get('can_add_record')
-		can_modify_record = requests.args.get('can_modify_record')
-		can_remove_record = requests.args.get('can_remove_record')
-		can_backup_database = requests.args.get('can_backup_database')
-		can_restore_database = requests.args.get('can_restore_database')
+		can_modify_record = request.args.get('can_modify_record')
+		can_remove_record = request.args.get('can_remove_record')
+		can_backup_database = request.args.get('can_backup_database')
+		can_restore_database = request.args.get('can_restore_database')
 
 	if banner_id and can_add_user and can_remove_user and can_modify_permissions and can_request_record and can_add_record and can_modify_record and can_remove_record and can_backup_database and can_restore_database:
 		result = SUCCESS
@@ -313,6 +313,31 @@ def allUserPermissions():
 	cursor.close()
 	return result
 
+@flask_application.route("/getFilteredInventory",methods=['GET'])
+def getFilteredInventory():
+	cursor = conn.cursor()
+	result = SUCCESS
+
+	name = request.args.get('name')
+	if name == "":
+		name = None
+	vendor_name = request.args.get('vendor_name')
+	if vendor_name == "":
+		vendor_name = None
+	building = request.args.get('building')
+	if building == "":
+		building = None
+	room_num = request.args.get('room_num')
+	if room_num == "":
+		room_num = None
+	shelf = request.args.get('shelf')
+	if shelf == "":
+		shelf = None
+	cursor.callproc('sp_get_filtered_inventory_items',[name,None,vendor_name,building,room_num,shelf])
+
+	result = cursor.fetchall()
+	cursor.close()
+	return jsonify(result=result)
 
 print("Python version is: " + platform.python_version())
 

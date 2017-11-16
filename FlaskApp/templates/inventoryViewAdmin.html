@@ -4,64 +4,76 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Page</title>
-    <script src="static/js/jquery.js"></script>
-    <script src="static/js/signout.js"></script>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cookie">
-    <link rel="stylesheet" href="static/styles/adminPageStyle.css">
-    <link rel="stylesheet" href="static/styles/Mockup-iPhone-6.css">
-    <link rel="stylesheet" href="static/styles/Pretty-Footer.css">
-    <link rel="icon" href="static/images/favicon.ico" type="image/x-icon"/>
-    <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon"/>
+    <title>redesigned-inventory page ADMIN</title>
+    <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/styles/updatedAdminPage.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
 </head>
 
-<body>
-    <div id="imageHeader">
-        <div class="imageOnly"><img src="static/images/RULogo.png"></div>
-    </div>
-    <div id="menuBar" class="menu">
-        <div class="container">
-            <nav class="navbar navbar-default navbar-static-top">
-    <div class="container-fluid">
-            <button data-toggle="collapse" data-target="#navcol-1" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
-        </div>
-        <div class="collapse navbar-collapse" id="navcol-1">
-            <ul class="nav navbar-nav navbar-left">
-                <li role="presentation"><a href="/inventory">View Inventory</a></li>
-                <li role="presentation"><a href="/manageUserRequests">Manage Users</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                    <li><a id="signout">Logout</a></li>
-            </ul>
-        </div>
-
-</nav>
-        </div>
-    </div>
-    <div id="inventoryView">
-        <div class="container">
-<div id="mySidenav" class="sidenav">
-  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-  <button type="button" class="btn btn-success" href="#myModal" data-toggle="modal" >Add Item</button>
-
-    <div class="col">
-        <div class="col-md-12">
-            <div id="custom-search-input">
-                <div class="input-group col-md-12">
-                    <input type="text" class="form-control input-lg" placeholder="Search" />
-                    <span class="input-group-btn">
-                        <button class="btn btn-info btn-lg" type="button">
-                            <i class="glyphicon glyphicon-search"></i>
-                        </button>
-                        </span>
-                </div>
+<body><img src="static/images/RULogo.png">
+    <p class="lead text-right text-success"></p>
+    <nav class="navbar navbar-default" id="mainnavbar">
+        <div class="container-fluid">
+            <div class="navbar-header"><a class="navbar-brand visible-xs-block navbar-link" href="#">Menu </a>
+                <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+            </div>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="nav navbar-nav navbar-left">
+                    <li role="presentation"><a href="/inventory">View Inventory</a></li>
+                    <li role="presentation"><a href="/manageUserRequests">Manage Users</a></li>
+                    <li role="presentation"><a id='signout' >Log out</a></li>
+                </ul>
             </div>
         </div>
-    </div>
-    </div>
+    </nav>
+    <div class="col-lg-2 col-lg-offset-0 col-md-3 col-sm-4">
+        <nav class="navbar navbar-default" id="sidenavbar">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button data-toggle="collapse" data-target="#navcol-2" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+        </div>
+        <div class="collapse navbar-collapse" id="navcol-2">
+            <button class="btn btn-success navbar-btn" type="button"  href="#myModal" data-toggle="modal">Add Item</button>
+             <!--Search Code starts here-->
+        <div class="input-group">
+			<input type="text" class="form-control" placeholder="Search" name="srch-term" id="search_input">
+			<div class="input-group-btn">
+				<button id="btn_search" class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+			</div>
+		</div>
 
-    <!-- Modal -->
+        <!--Search Code Ends here-->
+        <!--FILTER CODE starts here-->
+        <h2 style = "text-align: center;"> Filter </h2>
+            <hr>
+        <div id = "filtercont" class="container">
+            <div class="row">
+                <form class="form">
+                    <div class="form-group">
+                        <label class="" for="building_input">Building</label>
+                        <input type="email" class="form-control" id="building_input" placeholder="Building...">
+                    <div class="form-group">
+                        <label class="" for="room_num_input">Room Number</label>
+                        <input type="email" class="form-control" id="room_num_input" placeholder="Room number...">
+                    </div>
+                    <div class="form-group">
+                        <label class="" for="shelf_input">Shelf</label>
+                        <input type="email" class="form-control" id="shelf_input" placeholder="Shelf...">
+                    </div>
+                    <div class="form-group">
+                        <label class="" for="vendor_input">Vendor</label>
+                        <input type="email" class="form-control" id="vendor_input" placeholder="Vendor...">
+                    </div>
+                    </div>
+                    <button id="btn_filter" type="submit" class="btn btn-default">Filter</button>
+                </form>
+            </div>
+        </div>
+        <!--FILTER CODE ends here-->
+        </div>
+
+    </div>
+     <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
 
@@ -116,26 +128,17 @@
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
       </div>
-
     </div>
   </div>
 
-<div id="main">
-  <span class="btn btn-secondary" style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; Inventory</span>
-</div>
-</div>
-
-
-<script>
-function openNav() {
-    document.getElementById("mySidenav").style.width = "225px";
-}
-
-function closeNav() {
-    document.getElementById("mySidenav").style.width = "0";
-}
-</script>
-        <div class="table-responsive">
+</nav>
+    </div>
+    <div class="col-lg-10 col-lg-offset-0 col-md-9 col-sm-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="text-center text-primary panel-title"><strong>Inventory</strong></h3></div>
+            <div class="panel-body">
+                <div class="table-responsive">
     <div class="row">
 
 
@@ -147,89 +150,19 @@ function closeNav() {
 
                    <thead>
 
-                   <th><input type="checkbox" id="checkall" /></th>
                    <th>#</th>
-                    <th>Item Code</th>
-                     <th>Item Name</th>
+                    <th>Serial</th>
+                     <th>Name</th>
                      <th>Quantity</th>
                      <th>Location</th>
-                       <th> Available </th>
+                     <th>Shelf</th>
+                     <th>Vendor</th>
                       <th>Edit</th>
                       <th>Delete</th>
                    </thead>
-    <tbody>
+    <tbody id = 'tablebody'>
 
-    <tr>
-    <td><input type="checkbox" class="checkthis" /></td>
-    <td>01</td>
-    <td>1x2z3y</td>
-    <td>Dura Cell</td>
-    <td>25</td>
-    <td>Room 225</td>
-        <td>Yes</td>
-    <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
-    <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
-    </tr>
 
-    <tr>
-    <td><input type="checkbox" class="checkthis" /></td>
-    <td>02</td>
-    <td>1x2z3d</td>
-    <td>Normal Cell</td>
-    <td>10</td>
-    <td>Room 322</td>
-        <td>Yes</td>
-    <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
-    <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
-    </tr>
-
-    <tr>
-    <td><input type="checkbox" class="checkthis" /></td>
-    <td>03</td>
-    <td>1x2zzd</td>
-    <td>Rubric Cell</td>
-    <td>2</td>
-    <td>Room 225</td>
-        <td>No</td>
-    <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
-    <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
-    </tr>
-
-    <tr>
-    <td><input type="checkbox" class="checkthis" /></td>
-    <td>01</td>
-    <td>1x2cdd</td>
-    <td>No Cell</td>
-    <td>250</td>
-    <td>Room 234</td>
-        <td>Yes</td>
-    <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
-    <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
-    </tr>
-
-    <tr>
-    <td><input type="checkbox" class="checkthis" /></td>
-    <td>01</td>
-    <td>1x2z3y</td>
-    <td>Dura Cell</td>
-    <td>25</td>
-    <td>Room 225</td>
-        <td>Yes</td>
-    <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
-    <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
-    </tr>
-
-    <tr>
-    <td><input type="checkbox" class="checkthis" /></td>
-    <td>01</td>
-    <td>1x2z3y</td>
-    <td>Dura Cell</td>
-    <td>25</td>
-    <td>Room 225</td>
-        <td>Yes</td>
-    <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
-    <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
-    </tr>
 
 
 
@@ -309,9 +242,14 @@ function closeNav() {
     <!-- /.modal-content -->
   </div>
 </div>
+            </div>
+        </div>
     </div>
-    <script src="{{url_for('static', filename='js/jquery.js')}}"></script>
-    <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+    <script src="static/js/jQuery.js"></script>
+    <script src="static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="static/js/getFilteredInventoryAdmin.js"></script>
+    <script src="static/js/signout.js"></script>
+
 </body>
 
 </html>
