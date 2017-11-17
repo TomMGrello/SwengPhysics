@@ -12,8 +12,14 @@ FIRST_OF_MONTH=`date '+%d'`
 #Variables for deleting old backups
 DAYS_TO_SAVE=3
 
+#make backup dest directory
+mkdir -p "$BACKUP_DEST"
+
 #Make daily backup directory
 mkdir -p "$BACKUP_DEST/daily/$DATE_TIME"
+
+#make monthly backup directory
+mkdir -p "$BACKUP_DEST/monthly"
 
 #Inspired by: https://mensfeld.pl/2013/04/backup-mysql-dump-all-your-mysql-databases-in-separate-files/
 #Daily Backup
