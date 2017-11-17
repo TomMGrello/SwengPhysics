@@ -76,14 +76,18 @@ def mainInventoryView():
 	can_modify_record = user_permissions[CAN_MODIFY_RECORD_INDEX];
 
 	if int(can_modify_record) == 1:
-		return render_template("inventoryViewAdmin.html")
+		return render_template("new_admin_inventory.html")
 	else:
-		return render_template("inventoryViewNonAdmin.html")
+		return render_template("new_nonadmin_inventory.html")
 
 
 @flask_application.route("/PermissionsForAdminPage",methods=['GET'])
 def PermissionsForAdminPage():
 	return render_template("PermissionsForAdminPage.html");
+
+@flask_application.route("/labsAndDemos",methods=['GET'])
+def labsAndDemos():
+	return render_template("viewLabsAndDemos.html");
 
 @flask_application.route("/manageUserRequests",methods=['GET'])
 def ManageUser():
@@ -313,6 +317,36 @@ def allUserPermissions():
 	cursor.close()
 	return result
 
+@flask_application.route("/removeInventoryItem",methods=['GET'])
+def removeInventoryItem():
+	cursor = conn.cursor()
+	result = SUCCESS
+	cursor.callproc('sp_remove_inventory_item',[request.args.get('serial_num')])
+	result = cursor.fetchall()
+	cursor.close()
+	return jsonify(result=result)
+
+@flask_application.route("/addInventoryItem",methods=['GET'])
+def addInventoryItem():
+	cursor = conn.cursor()
+	result = SUCCESS
+
+	serial_num = request.args.get('serial_num')
+	invoice_id = request.args.get('invoice_id')
+	purchase_date = request.args.get('purchase_date')
+	price = request.args.get('price')
+	vendor_name = request.args.get('vendor_name')
+	building = request.args.get('building')
+	room_num = request.args.get('room_num')
+	shelf = request.args.get('shelf')
+	quantity = request.args.get('quantity')
+
+	cursor.callproc('sp_add_inventory_item',[serial_num,invoice_id,purchase_date,price,vendor_name,building,room_num,shelf,quantity])
+	result = cursor.fetchall()
+	cursor.close()
+	return jsonify(result=result)
+
+
 @flask_application.route("/getFilteredInventory",methods=['GET'])
 def getFilteredInventory():
 	cursor = conn.cursor()
@@ -334,6 +368,32 @@ def getFilteredInventory():
 	if shelf == "":
 		shelf = None
 	cursor.callproc('sp_get_filtered_inventory_items',[name,None,vendor_name,building,room_num,shelf])
+
+	result = cursor.fetchall()
+	cursor.close()
+	return jsonify(result=result)
+#type:filter_type,name:filter_name,topic:filter_topic,concept:filter_concept,subconcept:filter_subconcept
+@flask_application.route("/getFilteredLabsDemos",methods=['GET'])
+def getFilteredLabsDemos():
+	cursor = conn.cursor()
+	result = SUCCESS
+
+	name = request.args.get('name')
+	if name == "":
+		name = None
+	input_type = request.args.get('type')
+	if input_type == "":
+		input_type = None
+	topic = request.args.get('topic')
+	if topic == "":
+		topic = None
+	concept = request.args.get('concept')
+	if concept == "":
+		concept = None
+	subconcept = request.args.get('subconcept')
+	if subconcept == "":
+		subconcept = None
+	cursor.callproc('sp_get_filtered_labs_demos',[input_type,name,topic,concept,subconcept])
 
 	result = cursor.fetchall()
 	cursor.close()

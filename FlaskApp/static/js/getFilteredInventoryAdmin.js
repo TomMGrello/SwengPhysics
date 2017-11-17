@@ -1,12 +1,12 @@
-/*var deleteRequest = function(button){
-  console.log(button);
+var setSerialNumToRemove = function(button){
   var tr = button.closest('tr');
-  var row_banner_id = tr.cells[6].innerHTML;
-  var row_role = tr.cells[7].innerHTML;
-  deleteUserRequest(row_banner_id,row_role);
+  console.log(tr);
+  var serial_num = tr.cells[1].innerHTML;
+  console.log(serial_num);
+  window.sessionStorage.setItem('serial_num_to_remove',serial_num);
 };
 
-var acceptRequest = function(button){
+/*var acceptRequest = function(button){
   console.log(button);
   var tr = button.closest('tr');
   var index = parseInt(tr.cells[0].innerHTML) - 1;
@@ -19,6 +19,7 @@ var acceptRequest = function(button){
   var row_role = tr.cells[7].innerHTML;
   acceptUserRequest(row_banner_id,row_first_name,row_middle_name,row_last_name,row_username,row_role,row_email);
 };*/
+
 var getFilteredInventory = function(){
   var filter_name = document.getElementById('search_input').value.toLowerCase();
   var filter_vendor = document.getElementById('vendor_input').value.toLowerCase();
@@ -112,6 +113,8 @@ var getFilteredInventory = function(){
       var delete_span = document.createElement('span');
       delete_span.setAttribute('class', 'glyphicon glyphicon-trash');
 
+      delete_btn.onclick = function(){setSerialNumToRemove(this);};
+
       delete_btn.appendChild(delete_span);
       delete_p.appendChild(delete_btn);
       delete_td.appendChild(delete_p);
@@ -134,6 +137,9 @@ $(function() {
   });
   document.getElementById('btn_search').addEventListener('click',function(){
     getFilteredInventory();
+  });
+  document.getElementById('remove_btn').addEventListener('click', function(){
+    removeInventoryItem(window.sessionStorage.getItem('serial_num_to_remove'));
   });
   return false;
 });

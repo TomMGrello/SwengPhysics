@@ -155,27 +155,23 @@ div.modal-body{
   font-size:18px;
 }
 
-@media (min-width:1200px) {
-  div.col-lg-2.col-lg-offset-0.col-md-3.col-sm-4{
-    max-width:25%;
-  }
-}
-
-@media (min-width:1200px) {
-  button.btn.btn-success.navbar-btn{
-    margin:10px 15px;
-  }
-}
-
-@media (max-width:767px) {
-  button.btn.btn-success.navbar-btn{
-    margin:10px 131px;
-  }
-}
-
 div#filtercont.container{
   width:100%;
 }
 
+input#srch-term.form-control{
+}
+
 a{
 }
+
+button#filtersubmit.btn.btn-default{
+  margin-bottom:80%;
+  background:black;
+}
+
+button#filtersubmit.btn.btn-default:hover{
+  margin-bottom:80%;
+  background:limegreen;
+}
+
