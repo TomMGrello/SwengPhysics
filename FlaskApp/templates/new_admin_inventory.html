@@ -2,16 +2,15 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>redesigned-inventory page ADMIN</title>
-    <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="static/styles/updatedAdminPage.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>redesigned-inventory page ADMIN</title>
+  <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="static/styles/updatedAdminPage.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
 </head>
 
 <body><img src="static/images/RULogo.png">
-    <p class="lead text-right text-success"></p>
     <nav class="navbar navbar-default" id="mainnavbar">
         <div class="container-fluid">
             <div class="navbar-header"><a class="navbar-brand visible-xs-block navbar-link" href="#">Menu </a>
@@ -19,9 +18,15 @@
             </div>
             <div class="collapse navbar-collapse" id="navcol-1">
                 <ul class="nav navbar-nav navbar-left">
-                    <li role="presentation"><a href="/inventory">View Inventory</a></li>
-                    <li role="presentation"><a href="/manageUserRequests">Manage Users</a></li>
-                    <li role="presentation"><a id='signout' >Log out</a></li>
+                    <li role="presentation"><a href="#">View Labs &amp; Demos</a></li>
+                    <li class="dropdown"><a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Manage <span class="caret"></span></a>
+                      <ul role="menu" class="dropdown-menu">
+                          <li role="presentation"><a href="/manageUserRequests">User Requests</a></li>
+                          <li role="presentation"><a href="/PermissionsForAdminPage">User Permissions</a></li>
+                          <li role="presentation"><a href="#">Lab/Demo Requests</a></li>
+                      </ul>
+                    </li>
+                    <li id="signout" role="presentation"><a href="#">Log out</a></li>
                 </ul>
             </div>
         </div>
@@ -36,7 +41,7 @@
             <button class="btn btn-success navbar-btn" type="button"  href="#myModal" data-toggle="modal">Add Item</button>
              <!--Search Code starts here-->
         <div class="input-group">
-			<input type="text" class="form-control" placeholder="Search" name="srch-term" id="search_input">
+			<input id="search_input" type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">
 			<div class="input-group-btn">
 				<button id="btn_search" class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
 			</div>
@@ -46,29 +51,29 @@
         <!--FILTER CODE starts here-->
         <h2 style = "text-align: center;"> Filter </h2>
             <hr>
-        <div id = "filtercont" class="container">
-            <div class="row">
-                <form class="form">
-                    <div class="form-group">
-                        <label class="" for="building_input">Building</label>
-                        <input type="email" class="form-control" id="building_input" placeholder="Building...">
-                    <div class="form-group">
-                        <label class="" for="room_num_input">Room Number</label>
-                        <input type="email" class="form-control" id="room_num_input" placeholder="Room number...">
-                    </div>
-                    <div class="form-group">
-                        <label class="" for="shelf_input">Shelf</label>
-                        <input type="email" class="form-control" id="shelf_input" placeholder="Shelf...">
-                    </div>
-                    <div class="form-group">
-                        <label class="" for="vendor_input">Vendor</label>
-                        <input type="email" class="form-control" id="vendor_input" placeholder="Vendor...">
-                    </div>
-                    </div>
-                    <button id="btn_filter" type="submit" class="btn btn-default">Filter</button>
-                </form>
+            <div id = "filtercont" class="container">
+                <div class="row">
+                    <form class="form">
+                        <div class="form-group">
+                            <label class="" for="building_input">Building</label>
+                            <input type="email" class="form-control" id="building_input" placeholder="Building...">
+                        <div class="form-group">
+                            <label class="" for="room_num_input">Room Number</label>
+                            <input type="email" class="form-control" id="room_num_input" placeholder="Room number...">
+                        </div>
+                        <div class="form-group">
+                            <label class="" for="shelf_input">Shelf</label>
+                            <input type="email" class="form-control" id="shelf_input" placeholder="Shelf...">
+                        </div>
+                        <div class="form-group">
+                            <label class="" for="vendor_input">Vendor</label>
+                            <input type="email" class="form-control" id="vendor_input" placeholder="Vendor...">
+                        </div>
+                        </div>
+                        <button id="btn_filter" type="submit" class="btn btn-default">Filter</button>
+                    </form>
+                </div>
             </div>
-        </div>
         <!--FILTER CODE ends here-->
         </div>
 
@@ -87,39 +92,44 @@
           <form >
             <div class="form-group">
               <label for="email">Serial Number:</label>
-              <input id="add_serial" type="email" class="form-control" id="itemcode" placeholder="1x2y3z" 						name="itemcode">
+              <input id="add_serial" type="email" class="form-control"  placeholder="1x2y3z" 						name="itemcode">
             </div>
             <div class="form-group">
               <label for="pwd">Item Name:</label>
-              <input type="password" class="form-control" id="itemname" placeholder="Name" 					name="itemname">
+              <input id="add_name" type="password" class="form-control"  placeholder="Name" 					name="itemname">
             </div>
             <div class="form-group">
               <label for="email">Quantity</label>
-              <input type="email" class="form-control" id="quantity" placeholder="5" 						name="quantity">
+              <input id="add_quantity" class="form-control"  placeholder="5" 						name="quantity">
             </div>
             <div class="form-group">
-              <label for="email">Location:</label>
-                <label class="radio-inline">
-                <input type="radio" name="optradio">Lab 156
-              </label>
-              <label class="radio-inline">
-                <input type="radio" name="optradio">Lab 149
-              </label>
-              <label class="radio-inline">
-                <input type="radio" name="optradio">Lab 138
-              </label>
-              <label class="radio-inline">
-                <input type="radio" name="optradio">Lab 142
-              </label>
+              <label for="email">Building:</label>
+              <input id="add_building" class="form-control"  placeholder="Science" 						name="building">
+
             </div>
             <div class="form-group">
-              <label for="email">Available:</label>
-              <label class="radio-inline">
-                <input type="radio" name="optradio">Yes
-              </label>
-              <label class="radio-inline">
-                <input type="radio" name="optradio">No
-              </label>
+              <label for="email">Room Number:</label>
+              <input id="add_room_number" class="form-control" placeholder="135" 						name="room_number">
+            </div>
+            <div class="form-group">
+              <label for="email">Shelf:</label>
+              <input id="add_shelf" class="form-control" placeholder="A-1" 						name="add_shelf">
+            </div>
+            <div class="form-group">
+              <label for="email">Invoice ID:</label>
+              <input id="add_invoice_id" class="form-control"  placeholder="125846" 						name="add_invoice_id">
+            </div>
+            <div class="form-group">
+              <label for="email">Vendor:</label>
+              <input id="add_vendor" class="form-control"  placeholder="Verilog" 						name="add_vendor">
+            </div>
+            <div class="form-group">
+              <label for="email">Price:</label>
+              <input id="add_price" class="form-control"  placeholder="50.00" 						name="add_price">
+            </div>
+            <div class="form-group">
+              <label for="email">Purchase Date:</label>
+              <input id="add_purchase_date" class="form-control"  placeholder="09/24/2017" 						name="add_purhcase_date">
             </div>
             <button type="submit" class="btn btn-default">Submit</button>
           </form>
@@ -160,10 +170,7 @@
                       <th>Edit</th>
                       <th>Delete</th>
                    </thead>
-    <tbody id = 'tablebody'>
-
-
-
+    <tbody id="tablebody">
 
 
     </tbody>
@@ -194,11 +201,11 @@
       </div>
           <div class="modal-body">
           <div class="form-group">
-        <input id="add_serial" class="form-control " type="text" placeholder="Serial Number">
+        <input class="form-control " type="text" placeholder="Serial Number">
         </div>
         <div class="form-group">
 
-        <input id="add_name" class="form-control " type="text" placeholder="Item Name">
+        <input class="form-control " type="text" placeholder="Item Name">
         </div>
 
         <div class="form-group">
@@ -251,7 +258,6 @@
     <script src="static/js/addInventoryItem.js"></script>
     <script src="static/js/getFilteredInventoryAdmin.js"></script>
     <script src="static/js/signout.js"></script>
-
 </body>
 
 </html>

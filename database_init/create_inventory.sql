@@ -66,6 +66,7 @@ source sp_get_filtered_inventory_items.sql;
 source sp_add_lab.sql;
 source sp_add_item_to_lab_demo.sql;
 source sp_get_filtered_labs_demos.sql;
+source sp_remove_inventory_item.sql;
 
 --                          name            serial invoice date      price  vendor        building   room shelf quantity
 call sp_add_inventory_item("TEST OBJECT 1", 123456,555888,"09/24/95",106.35,"TEST VENDOR","ROBINSON","223","A-1",5);

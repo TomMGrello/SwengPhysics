@@ -72,3 +72,5 @@ call sp_add_user_request(555555555,'Tom','M','Grello','tomgrello','student','tes
 call sp_add_user_request(666666666,'Ryan',' ','Bell','ryanbell','professor','test@test.com');
 call sp_add_user_request(777777777,'Connor', ' ', 'Snee','connorsnee','lab_admin','test@test.com');
 call sp_add_user_request(888888888,'Dharmik',' ','Pandya','dharmikpandya','sys_admin','test@test.com');
+
+source create_inventory.sql;
