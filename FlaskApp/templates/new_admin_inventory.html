@@ -91,47 +91,47 @@
         <div class="modal-body">
           <form >
             <div class="form-group">
-              <label for="email">Serial Number:</label>
-              <input id="add_serial" type="email" class="form-control"  placeholder="1x2y3z" 						name="itemcode">
+              <label>Serial Number:</label>
+              <input id="add_serial" class="form-control"  placeholder="1x2y3z" 						name="itemcode">
             </div>
             <div class="form-group">
-              <label for="pwd">Item Name:</label>
-              <input id="add_name" type="password" class="form-control"  placeholder="Name" 					name="itemname">
+              <label>Item Name:</label>
+              <input id="add_name" class="form-control"  placeholder="Name" 					name="itemname">
             </div>
             <div class="form-group">
-              <label for="email">Quantity</label>
+              <label>Quantity</label>
               <input id="add_quantity" class="form-control"  placeholder="5" 						name="quantity">
             </div>
             <div class="form-group">
-              <label for="email">Building:</label>
+              <label>Building:</label>
               <input id="add_building" class="form-control"  placeholder="Science" 						name="building">
 
             </div>
             <div class="form-group">
-              <label for="email">Room Number:</label>
+              <label>Room Number:</label>
               <input id="add_room_number" class="form-control" placeholder="135" 						name="room_number">
             </div>
             <div class="form-group">
-              <label for="email">Shelf:</label>
+              <label>Shelf:</label>
               <input id="add_shelf" class="form-control" placeholder="A-1" 						name="add_shelf">
             </div>
             <div class="form-group">
-              <label for="email">Invoice ID:</label>
+              <label>Invoice ID:</label>
               <input id="add_invoice_id" class="form-control"  placeholder="125846" 						name="add_invoice_id">
             </div>
             <div class="form-group">
-              <label for="email">Vendor:</label>
+              <label>Vendor:</label>
               <input id="add_vendor" class="form-control"  placeholder="Verilog" 						name="add_vendor">
             </div>
             <div class="form-group">
-              <label for="email">Price:</label>
+              <label>Price:</label>
               <input id="add_price" class="form-control"  placeholder="50.00" 						name="add_price">
             </div>
             <div class="form-group">
-              <label for="email">Purchase Date:</label>
+              <label>Purchase Date:</label>
               <input id="add_purchase_date" class="form-control"  placeholder="09/24/2017" 						name="add_purhcase_date">
             </div>
-            <button type="submit" class="btn btn-default">Submit</button>
+            <button id="add_item_btn" type="submit" class="btn btn-default">Submit</button>
           </form>
         </div>
         <div class="modal-footer">
@@ -201,7 +201,7 @@
       </div>
           <div class="modal-body">
           <div class="form-group">
-        <input class="form-control " type="text" placeholder="Serial Number">
+        <input id="update_serial" class="form-control " type="text" placeholder="Serial Number">
         </div>
         <div class="form-group">
 
@@ -210,7 +210,7 @@
 
         <div class="form-group">
 
-        <input class="form-control " type="text" placeholder="Quantity">
+        <input id="update_quantity" class="form-control " type="text" placeholder="Quantity">
         </div>
               <div class="form-group">
 
@@ -219,7 +219,7 @@
 
       </div>
           <div class="modal-footer ">
-        <button type="button" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span> Update</button>
+        <button id="update_btn" type="submit" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span> Update</button>
       </div>
         </div>
     <!-- /.modal-content -->
@@ -256,6 +256,7 @@
     <script src="static/bootstrap/js/bootstrap.min.js"></script>
     <script src="static/js/removeInventoryItem.js"></script>
     <script src="static/js/addInventoryItem.js"></script>
+    <script src="static/js/modifyInventoryItem.js"></script>
     <script src="static/js/getFilteredInventoryAdmin.js"></script>
     <script src="static/js/signout.js"></script>
 </body>

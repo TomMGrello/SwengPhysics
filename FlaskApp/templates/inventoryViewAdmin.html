@@ -84,18 +84,18 @@
           <h4 class="modal-title">Add Item</h4>
         </div>
         <div class="modal-body">
-          <form >
+          <form>
             <div class="form-group">
-              <label for="email">Serial Number:</label>
-              <input id="add_serial" type="email" class="form-control" id="itemcode" placeholder="1x2y3z" 						name="itemcode">
+              <label>Serial Number:</label>
+              <input id="add_serial1" class="form-control" placeholder="1x2y3z" 						name="itemcode">
             </div>
             <div class="form-group">
-              <label for="pwd">Item Name:</label>
-              <input type="password" class="form-control" id="itemname" placeholder="Name" 					name="itemname">
+              <label>Item Name:</label>
+              <input class="form-control" id="itemname" placeholder="Name" 					name="itemname">
             </div>
             <div class="form-group">
-              <label for="email">Quantity</label>
-              <input type="email" class="form-control" id="quantity" placeholder="5" 						name="quantity">
+              <label>Quantity</label>
+              <input class="form-control" id="quantity" placeholder="5" 						name="quantity">
             </div>
             <div class="form-group">
               <label for="email">Location:</label>
@@ -113,7 +113,7 @@
               </label>
             </div>
             <div class="form-group">
-              <label for="email">Available:</label>
+              <label>Available:</label>
               <label class="radio-inline">
                 <input type="radio" name="optradio">Yes
               </label>
@@ -121,7 +121,7 @@
                 <input type="radio" name="optradio">No
               </label>
             </div>
-            <button type="submit" class="btn btn-default">Submit</button>
+            <button id="add_item_btn" type="submit" class="btn btn-default">Submit</button>
           </form>
         </div>
         <div class="modal-footer">
@@ -203,16 +203,16 @@
 
         <div class="form-group">
 
-        <input class="form-control " type="text" placeholder="Quantity">
+        <input id="add_quantity" class="form-control " type="text" placeholder="Quantity">
         </div>
               <div class="form-group">
 
-        <input class="form-control " type="text" placeholder="Location">
+        <input id="add_location" class="form-control " type="text" placeholder="Location">
         </div>
 
       </div>
           <div class="modal-footer ">
-        <button type="button" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span> Update</button>
+        <button id="update_btn" type="button" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span> Update</button>
       </div>
         </div>
     <!-- /.modal-content -->

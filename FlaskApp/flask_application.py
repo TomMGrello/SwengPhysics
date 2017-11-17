@@ -317,7 +317,7 @@ def allUserPermissions():
 	return result
 
 @flask_application.route("/addInventoryItem",methods=['GET'])
-def acceptUserRequest():
+def addInventoryItem():
 	cursor = conn.cursor()
 	result = ERROR
 	banner_id = session['banner_id']
@@ -328,7 +328,7 @@ def acceptUserRequest():
 
 	if int(canAddRecord) == 1:
 		name = request.args.get('name')
-		serial = request.args.get('serial')
+		serial = request.args.get('serial_num')
 		invoice_id = request.args.get('invoice_id')
 		purchase_date = request.args.get('purchase_date')
 		price = request.args.get('price')
@@ -337,12 +337,14 @@ def acceptUserRequest():
 		room_num = request.args.get('room_num')
 		shelf = request.args.get('shelf')
 		quantity = request.args.get('quantity')
-		cursor.callproc('sp_add_inventory_item',[name, serial, invoice_id, purchase_date, price, vendor_name, building, room_num, shelf, quantity])
+		#cursor.callproc('sp_add_inventory_item',[name, int(serial), int(invoice_id), purchase_date, float(price), vendor_name, building, room_num, shelf, int(quantity)])
+		cursor.callproc('sp_add_inventory_item',[name, int(serial), 111111, purchase_date, 20.00, vendor_name, building, room_num, shelf, 1])
 		result = SUCCESS
+	cursor.close()
 	return jsonify(result=result)
 
 @flask_application.route("/modifyInventoryItem",methods=['GET'])
-def acceptUserRequest():
+def modifyInventoryItem():
 	cursor = conn.cursor()
 	result = ERROR
 	banner_id = session['banner_id']
@@ -353,7 +355,7 @@ def acceptUserRequest():
 
 	if int(canModifyRecord) == 1:
 		name = request.args.get('name')
-		serial = request.args.get('serial')
+		serial = request.args.get('serial_num')
 		invoice_id = request.args.get('invoice_id')
 		purchase_date = request.args.get('purchase_date')
 		price = request.args.get('price')
@@ -362,13 +364,13 @@ def acceptUserRequest():
 		room_num = request.args.get('room_num')
 		shelf = request.args.get('shelf')
 		quantity = request.args.get('quantity')
-		cursor.callproc('sp_add_inventory_item',[name, serial, invoice_id, purchase_date, price, vendor_name, building, room_num, shelf, quantity])
+		cursor.callproc('sp_add_inventory_item',[name, int(serial), 111111, purchase_date, 20.00, vendor_name, building, room_num, shelf, 1])
 		result = SUCCESS
-
+	cursor.close()
 	return jsonify(result=result)
 
 @flask_application.route("/removeInventoryItem",methods=['GET'])
-def acceptUserRequest():
+def removeInventoryItem():
 	cursor = conn.cursor()
 	result = ERROR
 	banner_id = session['banner_id']
@@ -378,37 +380,9 @@ def acceptUserRequest():
 	canRemoveRecord = user_permissions[CAN_REMOVE_RECORD_INDEX];
 
 	if int(canRemoveRecord) == 1:
-
-
-	return jsonify(result=result)
-
-
-@flask_application.route("/removeInventoryItem",methods=['GET'])
-def removeInventoryItem():
-	cursor = conn.cursor()
-	result = SUCCESS
-	cursor.callproc('sp_remove_inventory_item',[request.args.get('serial_num')])
-	result = cursor.fetchall()
-	cursor.close()
-	return jsonify(result=result)
-
-@flask_application.route("/addInventoryItem",methods=['GET'])
-def addInventoryItem():
-	cursor = conn.cursor()
-	result = SUCCESS
-
-	serial_num = request.args.get('serial_num')
-	invoice_id = request.args.get('invoice_id')
-	purchase_date = request.args.get('purchase_date')
-	price = request.args.get('price')
-	vendor_name = request.args.get('vendor_name')
-	building = request.args.get('building')
-	room_num = request.args.get('room_num')
-	shelf = request.args.get('shelf')
-	quantity = request.args.get('quantity')
-
-	cursor.callproc('sp_add_inventory_item',[serial_num,invoice_id,purchase_date,price,vendor_name,building,room_num,shelf,quantity])
-	result = cursor.fetchall()
+		serial = request.args.get('serial_num')
+		cursor.callproc('sp_remove_inventory_item', [serial])
+		result = SUCCESS
 	cursor.close()
 	return jsonify(result=result)
 

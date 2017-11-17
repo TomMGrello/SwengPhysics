@@ -1,5 +1,5 @@
-function addInventoryItem(serial_num,invoice_id,purchase_date,price,vendor_name,building,room_num,shelf,quantity){
-  $.getJSON('/addInventoryItem',{
+function modifyInventoryItem(serial_num,invoice_id,purchase_date,price,vendor_name,building,room_num,shelf,quantity){
+  $.getJSON('/modifyInventoryItem',{
     name:name,
     serial_num:serial_num,
     invoice_id:invoice_id,
