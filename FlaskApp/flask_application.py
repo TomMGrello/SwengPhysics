@@ -316,7 +316,6 @@ def allUserPermissions():
 	cursor.close()
 	return result
 
-<<<<<<< HEAD
 @flask_application.route("/addInventoryItem",methods=['GET'])
 def acceptUserRequest():
 	cursor = conn.cursor()
@@ -380,10 +379,10 @@ def acceptUserRequest():
 
 	if int(canRemoveRecord) == 1:
 
+
 	return jsonify(result=result)
 
 
-=======
 @flask_application.route("/removeInventoryItem",methods=['GET'])
 def removeInventoryItem():
 	cursor = conn.cursor()
@@ -439,6 +438,7 @@ def getFilteredInventory():
 	result = cursor.fetchall()
 	cursor.close()
 	return jsonify(result=result)
+
 #type:filter_type,name:filter_name,topic:filter_topic,concept:filter_concept,subconcept:filter_subconcept
 @flask_application.route("/getFilteredLabsDemos",methods=['GET'])
 def getFilteredLabsDemos():
