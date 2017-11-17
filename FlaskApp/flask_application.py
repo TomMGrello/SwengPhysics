@@ -381,7 +381,7 @@ def getFilteredLabsDemos():
 	name = request.args.get('name')
 	if name == "":
 		name = None
-	input_type = request.args.get('type')
+	input_type = request.args.get('input_type')
 	if input_type == "":
 		input_type = None
 	topic = request.args.get('topic')

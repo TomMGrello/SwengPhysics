@@ -15,7 +15,7 @@
 };*/
 
 
-var getFilteredInventory = function(){
+var getFilteredLabsDemos = function(){
   var select_type = document.getElementById('filter_type');
   var filter_type = select_type.options[select_type.selectedIndex].value.toLowerCase();
   console.log("TYPE: " + filter_type);
@@ -23,7 +23,7 @@ var getFilteredInventory = function(){
   var filter_topic = document.getElementById('filter_topic').value.toLowerCase();
   var filter_concept = document.getElementById('filter_concept').value.toLowerCase();
   var filter_subconcept = document.getElementById('filter_subconcept').value.toLowerCase();
-  $.getJSON('/getFilteredLabsDemos',{type:filter_type,name:filter_name,topic:filter_topic,concept:filter_concept,subconcept:filter_subconcept},
+  $.getJSON('/getFilteredLabsDemos',{input_type:filter_type,name:filter_name,topic:filter_topic,concept:filter_concept,subconcept:filter_subconcept},
   function(data){
     var data_array = data.result;
     var table = document.getElementById('tablebody');
@@ -107,9 +107,10 @@ var getFilteredInventory = function(){
   });
 }
 $(function() {
-  getFilteredInventory();
-  document.getElementById('filter_submit').addEventListener('click',function(){
-    getFilteredInventory();
+  getFilteredLabsDemos();
+  document.getElementById('filter_submit').addEventListener('click',function(e){
+    e.preventDefault();
+    getFilteredLabsDemos();
   });
   return false;
 });
