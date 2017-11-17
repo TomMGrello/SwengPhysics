@@ -74,9 +74,9 @@ source sp_get_items_by_lab_id.sql;
 --                          name            serial invoice date      price  vendor        building   room shelf quantity
 call sp_add_inventory_item("TEST OBJECT 1", 123456,555888,"09/24/95",106.35,"TEST VENDOR","ROBINSON","223","A-1",5);
 call sp_add_inventory_item("TEST OBJECT 2", 638854,555888,"09/24/95",56.87,"TEST VENDOR","SCIENCE","223","A-1",8);
-call sp_add_lab("LAB", "LAB1", "TOPIC1", "CONCEPT1", "SUBCONCEPT1");
-call sp_add_lab("LAB", "LAB2", "TOPIC2", "CONCEPT1", "SUBCONCEPT2");
-call sp_add_lab("DEMO", "DEMO1", "TOPIC2", "CONCEPT2", "SUBCONCEPT1");
-call sp_add_lab("DEMO", "DEMO2", "TOPIC1", "CONCEPT2", "SUBCONCEPT2");
+call sp_add_lab("LAB", "LAB1", "TOPIC1", "CONCEPT1", "SUBCONCEPT1",NULL);
+call sp_add_lab("LAB", "LAB2", "TOPIC2", "CONCEPT1", "SUBCONCEPT2",NULL);
+call sp_add_lab("DEMO", "DEMO1", "TOPIC2", "CONCEPT2", "SUBCONCEPT1",NULL);
+call sp_add_lab("DEMO", "DEMO2", "TOPIC1", "CONCEPT2", "SUBCONCEPT2",NULL);
 call sp_add_item_to_lab_demo("LAB1",123456,5);
 call sp_add_item_to_lab_demo("LAB1",638854,20);

@@ -32,7 +32,7 @@ var populateEditModal = function(button) {
 
 var editLabDemo = function(){
   var lab_id = window.sessionStorage.getItem('lab_id');
-  var editname=document.getElementById('edit_name').value;
+  var name=document.getElementById('edit_name').value;
   var topic=document.getElementById('edit_topic').value;
   var concept=document.getElementById('edit_concept').value;
   var subconcept=document.getElementById('edit_subconcept').value;
@@ -41,7 +41,7 @@ var editLabDemo = function(){
   var type = "LAB";
   if(demo.checked)
     type = "DEMO";
-  $.getJSON('/addLab',{type:type,name:name,topic:topic,concept:concept,subconcept:subconcept},function(data){return false;});
+  $.getJSON('/addLab',{lab_id:lab_id,type:type,name:name,topic:topic,concept:concept,subconcept:subconcept},function(data){console.log("EDITED");return false;});
 }
 
 var populateRequiredItems = function(button){

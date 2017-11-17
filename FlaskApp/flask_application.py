@@ -427,8 +427,9 @@ def addLab():
 	topic = request.args.get('topic')
 	concept = request.args.get('concept')
 	subconcept = request.args.get('subconcept')
+	lab_id = request.args.get('lab_id')
 
-	cursor.callproc('sp_add_lab',[input_type,name,topic,concept,subconcept])
+	cursor.callproc('sp_add_lab',[input_type,name,topic,concept,subconcept,lab_id])
 	cursor.fetchall()
 	return jsonify(result=result)
 
