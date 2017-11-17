@@ -326,6 +326,24 @@ def removeInventoryItem():
 	cursor.close()
 	return jsonify(result=result)
 
+@flask_application.route("/getLab",methods=['GET'])
+def getLab():
+	cursor = conn.cursor()
+	result = SUCCESS
+	cursor.callproc('sp_get_lab_by_id',[int(request.args.get('lab_id'))])
+	result = cursor.fetchall()
+	cursor.close()
+	return jsonify(result=result)
+
+@flask_application.route("/getLabItems",methods=['GET'])
+def getLabItems():
+	cursor = conn.cursor()
+	result = SUCCESS
+	cursor.callproc('sp_get_items_by_lab_id',[int(request.args.get('lab_id'))])
+	result = cursor.fetchall()
+	cursor.close()
+	return jsonify(result=result)
+
 @flask_application.route("/addInventoryItem",methods=['GET'])
 def addInventoryItem():
 	cursor = conn.cursor()
@@ -397,6 +415,21 @@ def getFilteredLabsDemos():
 
 	result = cursor.fetchall()
 	cursor.close()
+	return jsonify(result=result)
+
+@flask_application.route("/addLab",methods=['GET'])
+def addLab():
+	cursor = conn.cursor()
+	result = SUCCESS
+
+	input_type = request.args.get('type')
+	name = request.args.get('name')
+	topic = request.args.get('topic')
+	concept = request.args.get('concept')
+	subconcept = request.args.get('subconcept')
+
+	cursor.callproc('sp_add_lab',[input_type,name,topic,concept,subconcept])
+	cursor.fetchall()
 	return jsonify(result=result)
 
 print("Python version is: " + platform.python_version())

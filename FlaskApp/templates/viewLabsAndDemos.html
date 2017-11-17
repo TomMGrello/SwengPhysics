@@ -12,38 +12,38 @@
 
 <body><img src="static/images/RULogo.png">
     <nav class="navbar navbar-default" id="mainnavbar">
-    <div class="container-fluid">
-        <div class="navbar-header"><a href="#" class="navbar-brand visible-xs-block navbar-link">Menu </a>
-            <button data-toggle="collapse" data-target="#navcol-1" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
-        </div>
-        <div class="collapse navbar-collapse" id="navcol-1">
-            <ul class="nav navbar-nav">
-                <li class="dropdown"><a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">View <span class="caret"></span></a>
-                    <ul role="menu" class="dropdown-menu">
-                        <li role="presentation"><a href="#">Inventory </a></li>
-                        <li role="presentation"><a href="#">Labs &amp; Demos</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown"><a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Manage <span class="caret"></span></a>
-                    <ul role="menu" class="dropdown-menu">
-                        <li role="presentation"><a href="#">User Requests</a></li>
-                        <li role="presentation"><a href="#">User Permissions</a></li>
-                        <li role="presentation"><a href="#">Lab/Demo Rquests</a></li>
+      <div class="container-fluid">
+          <div class="navbar-header"><a href="#" class="navbar-brand visible-xs-block navbar-link">Menu </a>
+              <button data-toggle="collapse" data-target="#navcol-1" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+          </div>
+          <div class="collapse navbar-collapse" id="navcol-1">
+              <ul class="nav navbar-nav">
+                  <li class="dropdown"><a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">View <span class="caret"></span></a>
+                      <ul role="menu" class="dropdown-menu">
+                          <li role="presentation"><a href="#">Inventory </a></li>
+                          <li role="presentation"><a href="#">Labs &amp; Demos</a></li>
+                      </ul>
+                  </li>
+                  <li class="dropdown"><a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Manage <span class="caret"></span></a>
+                      <ul role="menu" class="dropdown-menu">
+                          <li role="presentation"><a href="#">User Requests</a></li>
+                          <li role="presentation"><a href="#">User Permissions</a></li>
+                          <li role="presentation"><a href="#">Lab/Demo Rquests</a></li>
 
-                    </ul>
-                </li>
-                <li class="dropdown"><a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Database <span class="caret"></span></a>
-                    <ul role="menu" class="dropdown-menu">
-                        <li role="presentation"><a href="#">Import database</a></li>
+                      </ul>
+                  </li>
+                  <li class="dropdown"><a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Database <span class="caret"></span></a>
+                      <ul role="menu" class="dropdown-menu">
+                          <li role="presentation"><a href="#">Import database</a></li>
 
-                    </ul>
-                </li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#">Log Out</a></li>
-            </ul>
-        </div>
-    </div>
+                      </ul>
+                  </li>
+              </ul>
+              <ul class="nav navbar-nav navbar-right">
+                      <li><a id="signout" href="#">Log out</a></li>
+              </ul>
+          </div>
+      </div>
 </nav>
     <div class="col-lg-2 col-lg-offset-0 col-md-3 col-sm-4">
         <nav class="navbar navbar-default" id="sidenavbar">
@@ -116,30 +116,30 @@
           <form >
             <div class="form-group">
               <label for="email">Name:</label>
-              <input type="email" class="form-control" id="itemcode" placeholder="name for lab/demo" name="firstname">
+              <input id="input_name" type="email" class="form-control" id="itemcode" placeholder="name for lab/demo" name="firstname">
             </div>
             <div class="form-group">
               <label for="pwd">Topic:</label>
-              <input type="password" class="form-control" id="itemname" placeholder="topic name" name="middlename">
+              <input id="input_topic" type="password" class="form-control" id="itemname" placeholder="topic name" name="middlename">
             </div>
             <div class="form-group">
               <label for="email">Concept:</label>
-              <input type="email" class="form-control" id="quantity" placeholder="concept for lab/demo" name="lastname">
+              <input id="input_concept" type="email" class="form-control" id="quantity" placeholder="concept for lab/demo" name="lastname">
             </div>
               <div class="form-group">
               <label for="email">Subconcept</label>
-              <input type="email" class="form-control" id="quantity" placeholder="subconcept name for lab/demo" name="email">
+              <input id="input_subconcept" type="email" class="form-control" id="quantity" placeholder="subconcept name for lab/demo" name="email">
             </div>
             <div class="form-group">
               <label for="email">Category</label>
                 <label class="radio-inline">
-                <input type="radio" name="optradio"> Lab
+                <input id="input_lab" type="radio" name="optradio"> Lab
               </label>
               <label class="radio-inline">
-                <input type="radio" name="optradio">Demo
+                <input id="input_demo" type="radio" name="optradio">Demo
               </label>
             </div>
-            <button type="submit" class="btn btn-default">Submit</button>
+            <button id="new_lab_btn" type="submit" class="btn btn-default">Submit</button>
           </form>
         </div>
         <div class="modal-footer">
@@ -168,8 +168,6 @@
 
             <thead>
              <th>
-                <input type="checkbox" id="checkall" /></th>
-                <th>ID</th>
                 <th>Type</th>
                 <th>Name</th>
                 <th>Topic</th>
@@ -210,32 +208,32 @@
           <div class="modal-body">
           <form >
             <div class="form-group">
-              <label for="pwd">Name:</label>
-              <input type="password" class="form-control" id="itemname" placeholder="Name" 					name="itemname">
+              <label for="edit_name">Name:</label>
+              <input type="password" class="form-control" id="edit_name" placeholder="Name" 					name="edit_name">
             </div>
             <div class="form-group">
-              <label for="email">Topic</label>
-              <input type="email" class="form-control" id="quantity" placeholder="edt topic name" 						name="quantity">
+              <label for="edit_topic">Topic</label>
+              <input type="email" class="form-control" id="edit_topic" placeholder="rename topic" 						name="edit_topic">
             </div>
              <div class="form-group">
-              <label for="email">Concept</label>
-              <input type="email" class="form-control" id="quantity" placeholder="rename concept" 						name="quantity">
+              <label for="edit_concept">Concept</label>
+              <input type="email" class="form-control" id="edit_concept" placeholder="rename concept" 						name="edit_concept">
             </div>
              <div class="form-group">
-              <label for="email">Subconcept</label>
-              <input type="email" class="form-control" id="quantity" placeholder="rename subconcept" 						name="quantity">
+              <label for="edit_subconcept">Subconcept</label>
+              <input type="email" class="form-control" id="edit_subconcept" placeholder="rename subconcept" 						name="edit_subconcept">
             </div>
 
             <div class="form-group">
               <label for="email">Category:</label>
               <label class="radio-inline">
-                <input type="radio" name="optradio">Lab
+                <input id="edit_lab_rad" type="radio" name="optradio">Lab
               </label>
               <label class="radio-inline">
-                <input type="radio" name="optradio">Demo
+                <input id="edit_demo_rad" type="radio" name="optradio">Demo
               </label>
             </div>
-            <button data-target="#additem" data-dismiss="modal" class="btn btn-success navbar-btn " type="button"  href="#myModal" data-toggle="modal">Add Item</button>
+            <button id="modal_add_item" data-target="#additem" data-dismiss="modal" class="btn btn-success navbar-btn " type="button"  href="#myModal" data-toggle="modal">Add Item</button>
 
           </form>
         </div>
@@ -318,6 +316,8 @@
     <script src="static/js/jQuery.js"></script>
     <script src="static/bootstrap/js/bootstrap.min.js"></script>
     <script src="static/js/getFilteredLabsAdmin.js"></script>
+    <script src="static/js/addLab.js"></script>
+
 
 
 </body>

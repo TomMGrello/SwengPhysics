@@ -1,4 +1,65 @@
+var populateEditModal = function(button) {
+  var tr = button.closest('tr');
+  var lab_id = tr.id;
+  window.sessionStorage.setItem('lab_id',lab_id);
+  $.getJSON('/getLab',{lab_id:lab_id},function(data){
+    console.log(data.result);
+    var edit_name = document.getElementById('edit_name');
+    var edit_topic = document.getElementById('edit_topic');
+    var edit_concept = document.getElementById('edit_concept');
+    var edit_subconcept = document.getElementById('edit_subconcept');
+    var edit_lab_rad = document.getElementById('edit_lab_rad');
+    var edit_demo_rad = document.getElementById('edit_demo_rad');
 
+    var data_array = data.result;
+    var lab_data = data_array[0];
+
+    edit_name.value = lab_data[2];
+    edit_topic.value = lab_data[3];
+    edit_concept.value = lab_data[4];
+    edit_subconcept.value = lab_data[5];
+
+    if(lab_data[1].toLowerCase() === "lab"){
+      edit_lab_rad.checked = true;
+      edit_demo_rad.checked = false;
+    } else {
+      edit_lab_rad.checked = false;
+      edit_demo_rad.checked = true;
+    }
+
+  });
+}
+
+var editLabDemo = function(){
+  var lab_id = window.sessionStorage.getItem('lab_id');
+  var editname=document.getElementById('edit_name').value;
+  var topic=document.getElementById('edit_topic').value;
+  var concept=document.getElementById('edit_concept').value;
+  var subconcept=document.getElementById('edit_subconcept').value;
+  var lab=document.getElementById('edit_lab_rad');
+  var demo=document.getElementById('edit_demo_rad');
+  var type = "LAB";
+  if(demo.checked)
+    type = "DEMO";
+  $.getJSON('/addLab',{type:type,name:name,topic:topic,concept:concept,subconcept:subconcept},function(data){return false;});
+}
+
+var populateRequiredItems = function(button){
+  var lab_id = window.sessionStorage.getItem('lab_id');
+
+  $.getJSON('/getLabItems',{lab_id:lab_id},function(data){
+    console.log(data.result);
+    var add_current_items = document.getElementById('addCurrentItems');
+
+    var data_array = data.result;
+
+    for(var i = 0; i < data_array.length; i++){
+      var curr_item = data_array[i];
+
+    }
+
+  });
+}
 
 /*var acceptRequest = function(button){
   console.log(button);
@@ -100,7 +161,7 @@ var getFilteredLabsDemos = function(){
 
 
       table.appendChild(newRow);
-
+      edit_btn.onclick = function(){populateEditModal(this);};
 
     }
 
@@ -111,6 +172,10 @@ $(function() {
   document.getElementById('filter_submit').addEventListener('click',function(e){
     e.preventDefault();
     getFilteredLabsDemos();
+  });
+  document.getElementById('modal_add_item').addEventListener('click',function(){
+    editLabDemo();
+    populateRequiredItems();
   });
   return false;
 });

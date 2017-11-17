@@ -16,7 +16,7 @@ CREATE PROCEDURE `sp_get_filtered_labs_demos`(
 BEGIN
   SELECT * FROM lab_demo
   WHERE 1=1
-  AND (p_name IS NULL OR name Like p_name)
+  AND (p_name IS NULL OR name Like CONCAT('%',p_name,'%'))
   AND (p_type IS NULL OR type Like p_type)
   AND (p_topic IS NULL OR topic Like p_topic)
   AND (p_concept IS NULL OR concept Like p_concept)

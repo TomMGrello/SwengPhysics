@@ -12,24 +12,35 @@
 
 <body><img src="static/images/RULogo.png">
     <nav class="navbar navbar-default" id="mainnavbar">
-        <div class="container-fluid">
-            <div class="navbar-header"><a class="navbar-brand visible-xs-block navbar-link" href="#">Menu </a>
-                <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
-            </div>
-            <div class="collapse navbar-collapse" id="navcol-1">
-                <ul class="nav navbar-nav navbar-left">
-                    <li role="presentation"><a href="#">View Labs &amp; Demos</a></li>
-                    <li class="dropdown"><a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Manage <span class="caret"></span></a>
-                      <ul role="menu" class="dropdown-menu">
-                          <li role="presentation"><a href="/manageUserRequests">User Requests</a></li>
-                          <li role="presentation"><a href="/PermissionsForAdminPage">User Permissions</a></li>
-                          <li role="presentation"><a href="#">Lab/Demo Requests</a></li>
-                      </ul>
-                    </li>
-                    <li id="signout" role="presentation"><a href="#">Log out</a></li>
-                </ul>
-            </div>
-        </div>
+      <div class="container-fluid">
+          <div class="navbar-header"><a class="navbar-brand visible-xs-block navbar-link" href="#">Menu </a>
+              <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+          </div>
+          <div class="collapse navbar-collapse" id="navcol-1">
+          <ul class="nav navbar-nav">
+              <li class="dropdown"><a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">View <span class="caret"></span></a>
+                  <ul role="menu" class="dropdown-menu">
+                      <li role="presentation"><a href="#">Inventory </a></li>
+                      <li role="presentation"><a href="#">Labs &amp; Demos</a></li>
+                  </ul>
+              </li>
+              <li class="dropdown"><a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Manage <span class="caret"></span></a>
+                  <ul role="menu" class="dropdown-menu">
+                      <li role="presentation"><a href="#">User Requests</a></li>
+                      <li role="presentation"><a href="#">User Permissions</a></li>
+                      <li role="presentation"><a href="#">Lab/Demo Rquests</a></li>
+                  </ul>
+              <li class="dropdown"><a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Database <span class="caret"></span></a>
+                  <ul role="menu" class="dropdown-menu">
+                      <li role="presentation"><a href="#">Import Database</a></li>
+                  </ul>
+              </li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+                  <li><a id = "signout" href="#">Log out</a></li>
+          </ul>
+      </div>
+      </div>
     </nav>
     <div class="col-lg-2 col-lg-offset-0 col-md-3 col-sm-4">
         <nav class="navbar navbar-default" id="sidenavbar">
@@ -38,7 +49,13 @@
             <button data-toggle="collapse" data-target="#navcol-2" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
         </div>
         <div class="collapse navbar-collapse" id="navcol-2">
-            <button class="btn btn-success navbar-btn" type="button"  href="#myModal" data-toggle="modal">Add Item</button>
+          <div class="row">
+                <div class="col-sm-12">
+                    <div class="text-center">
+                    <button class="btn btn-success navbar-btn " type="button"  href="#myModal" data-toggle="modal">Add</button>
+                    </div>
+                </div>
+            </div>
              <!--Search Code starts here-->
         <div class="input-group">
 			<input id="search_input" type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">

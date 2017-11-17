@@ -14,7 +14,7 @@ BEGIN
     quantity
   ) values (
     p_serial,
-    (SELECT lab_id FROM lab_demo WHERE lab_name=p_lab_name),
+    (SELECT lab_id FROM lab_demo WHERE name=p_lab_name),
     p_quantity
   );
   commit;
