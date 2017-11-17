@@ -61,6 +61,27 @@ def main():
 def showPermissions():
 	return render_template("showPermissions.html");
 
+@flask_application.route("/manageLabRequest",methods=['GET'])
+def manageLabRequest():
+	return render_template("labsDemosRequests.html");
+
+@flask_application.route("/uploadDatabase",methods=['GET'])
+def uploadDatabase():
+	cursor = conn.cursor()
+
+
+	if session.has_key('banner_id') == False:
+		return render_template("index.html")
+
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_modify_record = user_permissions[CAN_MODIFY_RECORD_INDEX];
+
+	if int(can_modify_record) == 1:
+		return render_template("uploadDatabase.html")
+
 @flask_application.route("/inventory",methods=['GET'])
 def mainInventoryView():
 	cursor = conn.cursor()
