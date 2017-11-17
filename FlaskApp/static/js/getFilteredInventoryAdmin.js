@@ -132,10 +132,12 @@ var getFilteredInventory = function(){
 }
 $(function() {
   getFilteredInventory();
-  document.getElementById('btn_filter').addEventListener('click',function(){
+  document.getElementById('btn_filter').addEventListener('click',function(e){
+    e.preventDefault();
     getFilteredInventory();
   });
-  document.getElementById('btn_search').addEventListener('click',function(){
+  document.getElementById('btn_search').addEventListener('click',function(e){
+    e.preventDefault();
     getFilteredInventory();
   });
   document.getElementById('remove_btn').addEventListener('click', function(){
