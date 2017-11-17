@@ -23,7 +23,7 @@ CREATE TABLE `physics`.`object_invoice`(
     `object_invoice_id` int(36) auto_increment,
     `invoice_id` int(36) NULL,
     `serial_num` int(45) NULL,
-    `object_price` float(10),
+    `object_price` float(10) NULL,
     FOREIGN KEY(`invoice_id`) REFERENCES invoice(`invoice_id`),
     FOREIGN KEY(`serial_num`) REFERENCES object(`serial_num`),
     PRIMARY KEY(`object_invoice_id`));
