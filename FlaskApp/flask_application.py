@@ -87,7 +87,21 @@ def PermissionsForAdminPage():
 
 @flask_application.route("/labsAndDemos",methods=['GET'])
 def labsAndDemos():
-	return render_template("viewLabsAndDemos.html");
+	cursor = conn.cursor()
+
+
+	if session.has_key('banner_id') == False:
+		return render_template("index.html")
+
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_modify_record = user_permissions[CAN_MODIFY_RECORD_INDEX];
+	if(int(can_modify_record) == 1):
+		return render_template("viewLabsAndDemos.html");
+	else:
+		return render_template("viewLabsAndDemosNonAdmin.html")
 
 @flask_application.route("/manageUserRequests",methods=['GET'])
 def ManageUser():
