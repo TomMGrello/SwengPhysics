@@ -5,7 +5,6 @@
 from flask import Flask, render_template, json, request, session, redirect, url_for, jsonify
 from flaskext.mysql import MySQL
 import os
-import platform
 
 ###########################################################################################
 ##################################### ERROR CONSTANTS #####################################
@@ -16,7 +15,7 @@ SUCCESS = 'SUCCESS'
 MISSING_INPUT = 'INPUT_NOT_SUPPLIED'
 NO_REQUESTS = 'NO_REQUESTS'
 INCORRECT_PERMISSIONS = 'INCORRECT_PERMISSIONS'
-NO_PERMISSIONS = 'NO_PERMISSIONS'
+ERROR = 'ERROR'
 
 ###########################################################################################
 ##################################### PERMS INDECES #######################################
@@ -77,18 +76,18 @@ def mainInventoryView():
 	can_modify_record = user_permissions[CAN_MODIFY_RECORD_INDEX];
 
 	if int(can_modify_record) == 1:
-		return render_template("inventoryViewAdmin.html")
+		return render_template("AdminPage.html")
 	else:
-		return render_template("inventoryViewNonAdmin.html")
+		return render_template("inventoryView.html")
 
 
 @flask_application.route("/PermissionsForAdminPage",methods=['GET'])
 def PermissionsForAdminPage():
 	return render_template("PermissionsForAdminPage.html");
 
-@flask_application.route("/manageUserRequests",methods=['GET'])
+@flask_application.route("/manageUser",methods=['GET'])
 def ManageUser():
-	return render_template("manageUserRequests.html");
+	return render_template("ManageUser.html");
 
 @flask_application.route("/requestAccess",methods=['GET'])
 def RequestAccess():
@@ -107,7 +106,7 @@ def login():
 	result = MISSING_INPUT
 	cursor = conn.cursor()
 
-	username = request.args.get('user')
+	username = request.args.get('user','N/A')
 	if username:
 		result = SUCCESS
 		session['username'] = username
@@ -219,12 +218,11 @@ def addUser():
 		username = request.args.get('user')
 		role = request.args.get('role')
 		email = request.args.get('email')
-
 		cursor = conn.cursor()
-		cursor.callproc('sp_add_user',[banner_id, first_name, middle_name, last_name, username, role, email])
-		result = SUCCESS
-		result = cursor.fetchall()
 
+		result = SUCCESS
+		cursor.callproc('sp_add_user',[banner_id, first_name, middle_name, last_name, username, role, email])
+		result = cursor.fetchall()
 	cursor.close()
 	return jsonify(result=result)
 
@@ -314,8 +312,72 @@ def allUserPermissions():
 	cursor.close()
 	return result
 
+@flask_application.route("/addInventoryItem",methods=['GET'])
+def acceptUserRequest():
+	cursor = conn.cursor()
+	result = ERROR
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
 
-print("Python version is: " + platform.python_version())
+	user_permissions = cursor.fetchall()[0]
+	canAddRecord = user_permissions[CAN_ADD_RECORD_INDEX];
+
+	if int(canAddRecord) == 1:
+		name = request.args.get('name')
+		serial = request.args.get('serial')
+		invoice_id = request.args.get('invoice_id')
+		purchase_date = request.args.get('purchase_date')
+		price = request.args.get('price')
+		vendor_name = request.args.get('vendor_name')
+		building = request.args.get('building')
+		room_num = request.args.get('room_num')
+		shelf = request.args.get('shelf')
+		quantity = request.args.get('quantity')
+		cursor.callproc('sp_add_inventory_item',[name, serial, invoice_id, purchase_date, price, vendor_name, building, room_num, shelf, quantity])
+		result = SUCCESS
+	return jsonify(result=result)
+
+@flask_application.route("/modifyInventoryItem",methods=['GET'])
+def acceptUserRequest():
+	cursor = conn.cursor()
+	result = ERROR
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	canModifyRecord = user_permissions[CAN_MODIFY_RECORD_INDEX];
+
+	if int(canModifyRecord) == 1:
+		name = request.args.get('name')
+		serial = request.args.get('serial')
+		invoice_id = request.args.get('invoice_id')
+		purchase_date = request.args.get('purchase_date')
+		price = request.args.get('price')
+		vendor_name = request.args.get('vendor_name')
+		building = request.args.get('building')
+		room_num = request.args.get('room_num')
+		shelf = request.args.get('shelf')
+		quantity = request.args.get('quantity')
+		cursor.callproc('sp_add_inventory_item',[name, serial, invoice_id, purchase_date, price, vendor_name, building, room_num, shelf, quantity])
+		result = SUCCESS
+
+	return jsonify(result=result)
+
+@flask_application.route("/removeInventoryItem",methods=['GET'])
+def acceptUserRequest():
+	cursor = conn.cursor()
+	result = ERROR
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	canRemoveRecord = user_permissions[CAN_REMOVE_RECORD_INDEX];
+
+	if int(canRemoveRecord) == 1:
+		
+
+	return jsonify(result=result)
+
 
 if __name__ == "__main__":
 	flask_application.debug = True
