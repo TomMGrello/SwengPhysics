@@ -24,8 +24,6 @@ CREATE TABLE `physics`.`object_invoice`(
     `invoice_id` int(36) NULL,
     `serial_num` int(45) NULL,
     `object_price` float(10) NULL,
-    FOREIGN KEY(`invoice_id`) REFERENCES invoice(`invoice_id`),
-    FOREIGN KEY(`serial_num`) REFERENCES object(`serial_num`),
     PRIMARY KEY(`object_invoice_id`));
 
 CREATE TABLE `physics`.`lab_demo`(
@@ -43,8 +41,6 @@ CREATE TABLE `physics`.`object_lab_demo`(
   `serial_num` int(45) NULL,
   `lab_id` int(36) NULL,
   `quantity` int(20) NULL,
-  FOREIGN KEY(`serial_num`) REFERENCES object(`serial_num`),
-  FOREIGN KEY(`lab_id`) REFERENCES lab_demo(`lab_id`),
   PRIMARY KEY(`object_lab_demo_id`));
 
 CREATE TABLE `physics`.`item_locations`(
@@ -53,13 +49,9 @@ CREATE TABLE `physics`.`item_locations`(
     `serial_num` int(45) NULL,
     `quantity` int(10) NULL,
     `shelf` VARCHAR(10) NULL,
-    FOREIGN KEY(`location_id`) REFERENCES location(`location_id`),
-    FOREIGN KEY(`serial_num`) REFERENCES object(`serial_num`),
     PRIMARY KEY(`item_locations_id`),
     UNIQUE KEY(`serial_num`));
 
-ALTER TABLE `physics`.`item_locations`
-  ADD CONSTRAINT uq_item_locations UNIQUE(serial_num,location_id);
 
 source sp_add_inventory_item.sql;
 source sp_get_filtered_inventory_items.sql;

@@ -466,6 +466,22 @@ def addLab():
 
 	cursor.callproc('sp_add_lab',[input_type,name,topic,concept,subconcept,lab_id])
 	cursor.fetchall()
+	cursor.close()
+	return jsonify(result=result)
+
+@flask_application.route("/addItemToLab", methods=['GET'])
+def addItemToLab():
+	cursor = conn.cursor()
+	result = SUCCESS
+
+	lab_id = request.args.get('lab_id')
+	serial_num = request.args.get('serial_num')
+	quantity = request.args.get('quantity')
+
+	print "LAB ID: " + str(lab_id)
+	cursor.callproc('sp_add_item_to_lab_demo',[int(lab_id),int(serial_num),int(quantity)])
+	cursor.fetchall()
+	cursor.close()
 	return jsonify(result=result)
 
 print("Python version is: " + platform.python_version())

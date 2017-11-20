@@ -26,6 +26,8 @@ BEGIN
       p_subconcept
     );
   ELSE
+
+    DELETE from lab_demo where lab_id=p_lab_id;
     REPLACE into lab_demo (
       lab_id,
       type,

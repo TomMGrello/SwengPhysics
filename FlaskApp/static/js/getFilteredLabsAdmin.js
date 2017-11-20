@@ -2,6 +2,7 @@ var populateEditModal = function(button) {
   var tr = button.closest('tr');
   var lab_id = tr.id;
   window.sessionStorage.setItem('lab_id',lab_id);
+  populateRequiredItems();
   $.getJSON('/getLab',{lab_id:lab_id},function(data){
     console.log(data.result);
     var edit_name = document.getElementById('edit_name');
@@ -50,30 +51,57 @@ var populateRequiredItems = function(button){
   $.getJSON('/getLabItems',{lab_id:lab_id},function(data){
     console.log(data.result);
     var add_current_items = document.getElementById('addCurrentItems');
-
+    add_current_items.innerHTML = "";
     var data_array = data.result;
 
     for(var i = 0; i < data_array.length; i++){
       var curr_item = data_array[i];
-
+      var new_opt = document.createElement('option');
+      new_opt.text = curr_item[3] + " x " + curr_item[5];
+      add_current_items.appendChild(new_opt);
     }
+
+    populateInventoryDropdown();
 
   });
 }
 
-/*var acceptRequest = function(button){
-  console.log(button);
-  var tr = button.closest('tr');
-  var index = parseInt(tr.cells[0].innerHTML) - 1;
-  var row_banner_id = tr.cells[6].innerHTML;
-  var row_first_name = tr.cells[1].innerHTML;
-  var row_middle_name = tr.cells[2].innerHTML;
-  var row_last_name = tr.cells[3].innerHTML;
-  var row_username = tr.cells[5].innerHTML;
-  var row_email = tr.cells[4].innerHTML;
-  var row_role = tr.cells[7].innerHTML;
-  acceptUserRequest(row_banner_id,row_first_name,row_middle_name,row_last_name,row_username,row_role,row_email);
-};*/
+var populateInventoryDropdown = function(){
+  $.getJSON('/getFilteredInventory',{},
+  function(data){
+    var data_array = data.result;
+    var select_serial = document.getElementById('addAllItems');
+    select_serial.innerHTML = "";
+    for(var curr_item = 0; curr_item < data_array.length; curr_item++){
+      var item = data_array[curr_item];
+      var name = item[1];
+      var serial_num = item[2];
+      var shelf = item[7];
+      var building = item[9];
+      var room_num = item[10];
+      var invoice_id = item[12];
+      var price = item[14];
+      var date = item[17];
+      var vendor = item[18];
+      var quantity = item[6];
+
+      var new_opt = document.createElement('option');
+      new_opt.text = name;
+      new_opt.value = serial_num;
+      select_serial.appendChild(new_opt);
+    }
+  });
+}
+
+var addItemToLab = function(){
+  var quantity = document.getElementById('addItemQuantity').value;
+  var select_serial = document.getElementById('addAllItems');
+  var serial_num = select_serial.options[select_serial.selectedIndex].value.toLowerCase();
+  var lab_id = window.sessionStorage.getItem('lab_id');
+  alert(lab_id);
+  $.getJSON('/addItemToLab',{lab_id:lab_id,quantity:quantity,serial_num:serial_num},function(data){alert("Item added to lab");return false;});
+
+}
 
 
 var getFilteredLabsDemos = function(){
@@ -175,7 +203,9 @@ $(function() {
   });
   document.getElementById('modal_add_item').addEventListener('click',function(){
     editLabDemo();
-    populateRequiredItems();
   });
+  document.getElementById('btn_add_item_to_lab').addEventListener('click',function(){
+    addItemToLab();
+  })
   return false;
 });

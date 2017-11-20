@@ -28,7 +28,7 @@
                       <ul role="menu" class="dropdown-menu">
                           <li role="presentation"><a href="/manageUserRequests">User Requests</a></li>
                           <li role="presentation"><a href="/PermissionsForAdminPage">User Permissions</a></li>
-                          <li role="presentation"><a href="/manageUserRequests">Lab/Demo Rquests</a></li>
+                          <li role="presentation"><a href="/manageLabRequest">Lab/Demo Rquests</a></li>
 
                       </ul>
                   </li>
@@ -265,8 +265,8 @@
                     </select>
                  </div>
             <div class="form-group">
-              <label id="addItemQuantity" for="pwd">Quantity:</label>
-              <input type="text" class="form-control" id="itemname" placeholder="Name" 					name="itemname">
+              <label for="pwd">Quantity:</label>
+              <input id="addItemQuantity"type="text" class="form-control" id="itemname" placeholder="Name" 					name="itemname">
             </div>
             <div class="form-group">
                  <label class="" for="orderBy">Select Item To Add</label>
@@ -280,7 +280,7 @@
           </form>
         </div>
           <div class="modal-footer ">
-        <button type="button" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-plus-sign"></span> Add</button>
+        <button id="btn_add_item_to_lab" type="button" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-plus-sign"></span> Add</button>
       </div>
         </div>
     <!-- /.modal-content -->
