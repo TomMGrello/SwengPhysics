@@ -93,6 +93,7 @@ def mainInventoryView():
 
 
 	if session.has_key('banner_id') == False:
+		cursor.close()
 		return render_template("index.html")
 
 	banner_id = session['banner_id']
@@ -100,7 +101,7 @@ def mainInventoryView():
 
 	user_permissions = cursor.fetchall()[0]
 	can_modify_record = user_permissions[CAN_MODIFY_RECORD_INDEX];
-	curosr.close()
+	cursor.close()
 	if int(can_modify_record) == 1:
 		return render_template("new_admin_inventory.html")
 	else:
