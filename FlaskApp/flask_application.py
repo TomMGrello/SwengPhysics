@@ -2,7 +2,7 @@
 ########################################  IMPORTS  ########################################
 ###########################################################################################
 
-from flask import Flask, render_template, json, request, session, redirect, url_for, jsonify
+from flask import Flask, render_template, json, request, session, redirect, url_for, jsonify, g
 from flaskext.mysql import MySQL
 import os
 import platform
@@ -46,8 +46,21 @@ flask_application.config['MYSQL_DATABASE_DB'] = 'physics'
 flask_application.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(flask_application)
 
-conn = mysql.connect()
+#conn = mysql.connect()
 
+def connect_db():
+	conn = mysql.connect()
+	return conn
+
+def get_db():
+	if not hasattr(g, 'physics'):
+		g.physics = connect_db()
+	return g.physics
+
+@flask_application.teardown_appcontext
+def close_db(_):
+    if hasattr(g, 'physics'):
+        g.physics.close()
 
 ###########################################################################################
 ############################   WEBPAGE ENDPOINTS   ########################################
@@ -55,22 +68,19 @@ conn = mysql.connect()
 
 @flask_application.route("/")
 def main():
-	print "Showing index.html"
 	return render_template("index.html")
 
 @flask_application.route("/showPermissions",methods=['GET'])
 def showPermissions():
-	print "This should not run anymore"
 	return render_template("showPermissions.html");
 
 @flask_application.route("/manageLabRequest",methods=['GET'])
 def manageLabRequest():
-	print "Showing lab/demo requests"
 	return render_template("labsDemosRequests.html");
 
 @flask_application.route("/uploadDatabase",methods=['GET'])
 def uploadDatabase():
-	print "Showing the upload database page"
+	conn = get_db()
 	cursor = conn.cursor()
 
 
@@ -82,18 +92,17 @@ def uploadDatabase():
 
 	user_permissions = cursor.fetchall()[0]
 	can_modify_record = user_permissions[CAN_MODIFY_RECORD_INDEX];
-	cursor.close()
+
 	if int(can_modify_record) == 1:
 		return render_template("uploadDatabase.html")
 
 @flask_application.route("/inventory",methods=['GET'])
 def mainInventoryView():
-	print "Showing the inventory page"
+	conn = get_db()
 	cursor = conn.cursor()
 
 
 	if session.has_key('banner_id') == False:
-		cursor.close()
 		return render_template("index.html")
 
 	banner_id = session['banner_id']
@@ -101,7 +110,7 @@ def mainInventoryView():
 
 	user_permissions = cursor.fetchall()[0]
 	can_modify_record = user_permissions[CAN_MODIFY_RECORD_INDEX];
-	cursor.close()
+
 	if int(can_modify_record) == 1:
 		return render_template("new_admin_inventory.html")
 	else:
@@ -110,17 +119,15 @@ def mainInventoryView():
 
 @flask_application.route("/PermissionsForAdminPage",methods=['GET'])
 def PermissionsForAdminPage():
-	print "Showing the manage permissions page"
 	return render_template("PermissionsForAdminPage.html");
 
 @flask_application.route("/labsAndDemos",methods=['GET'])
 def labsAndDemos():
-	print "Showing the labs and demos page"
+	conn = get_db()
 	cursor = conn.cursor()
 
 
 	if session.has_key('banner_id') == False:
-		cursor.close()
 		return render_template("index.html")
 
 	banner_id = session['banner_id']
@@ -128,7 +135,6 @@ def labsAndDemos():
 
 	user_permissions = cursor.fetchall()[0]
 	can_modify_record = user_permissions[CAN_MODIFY_RECORD_INDEX];
-	cursor.close()
 	if(int(can_modify_record) == 1):
 		return render_template("viewLabsAndDemos.html");
 	else:
@@ -136,17 +142,14 @@ def labsAndDemos():
 
 @flask_application.route("/manageUserRequests",methods=['GET'])
 def ManageUser():
-	print "Showing the manage user requests page"
 	return render_template("manageUserRequests.html");
 
 @flask_application.route("/requestAccess",methods=['GET'])
 def RequestAccess():
-	print "Showing the request access page"
 	return render_template("RequestAccess.html");
 
 @flask_application.route("/test",methods=['GET'])
 def test():
-	print "This should not run anymore"
 	return render_template("test.html");
 
 ###########################################################################################
@@ -155,8 +158,8 @@ def test():
 
 @flask_application.route("/login",methods=['GET'])
 def login():
-	print "Start login"
 	result = MISSING_INPUT
+	conn = get_db()
 	cursor = conn.cursor()
 
 	username = request.args.get('user')
@@ -173,12 +176,10 @@ def login():
 			result = NO_BANNER_ID_ERROR
 
 	cursor.close()
-	print "End login"
 	return jsonify(result=result)
 
 @flask_application.route("/addUserRequest",methods=['GET','POST'])
 def addUserRequest():
-	print "Start add user request"
 	result = MISSING_INPUT
 	first_name = request.args.get('first_name')
 	middle_name = request.args.get('middle_name')
@@ -188,19 +189,19 @@ def addUserRequest():
 	role = request.args.get('role')
 	email = request.args.get('email')
 	cursor = conn.cursor()
+	print "RUNNING ADD USER REQUEST"
 
 	if banner_id and first_name and last_name and role:
 		result = SUCCESS
 		cursor.callproc('sp_add_user_request',[banner_id,first_name,middle_name,last_name,username,role,email])
 
 	cursor.close()
-	print "End add user request"
 	return jsonify(result=result)
 
 @flask_application.route("/deleteUserRequest",methods=['GET'])
 def deleteUserRequest():
-	print "Start delete user request"
 	result = INCORRECT_PERMISSIONS
+	conn = get_db()
 	cursor = conn.cursor()
 	banner_id = session['banner_id']
 	cursor.callproc('sp_get_permissions',[banner_id])
@@ -219,12 +220,11 @@ def deleteUserRequest():
 			cursor.callproc('sp_delete_user_request',[banner_id, role])
 
 	cursor.close()
-	print "End delete user request"
 	return jsonify(result=result)
 
 @flask_application.route("/acceptUserRequest",methods=['GET'])
 def acceptUserRequest():
-	print "Start accept user request"
+	conn = get_db()
 	cursor = conn.cursor()
 	result = INCORRECT_PERMISSIONS
 	banner_id = session['banner_id']
@@ -255,15 +255,13 @@ def acceptUserRequest():
 		cursor.callproc('sp_change_permissions',[banner_id,perms[0],perms[1],perms[2],perms[3],perms[4],perms[5],perms[6],perms[7],perms[8]])
 		cursor.callproc('sp_delete_user_request',[banner_id,role])
 		result = SUCCESS
-	cursor.close()
-	print "End accept user request"
 	return jsonify(result=result)
 
 @flask_application.route("/addUser",methods=['GET','POST'])
 def addUser():
-	print "Start add user"
 	result = MISSING_INPUT
 	result = INCORRECT_PERMISSIONS
+	conn = get_db()
 	cursor = conn.cursor()
 	banner_id = session['banner_id']
 	cursor.callproc('sp_get_permissions',[banner_id])
@@ -279,7 +277,7 @@ def addUser():
 		username = request.args.get('user')
 		role = request.args.get('role')
 		email = request.args.get('email')
-		cursor.close()
+
 		cursor = conn.cursor()
 		cursor.callproc('sp_add_user',[banner_id, first_name, middle_name, last_name, username, role, email])
 		result = SUCCESS
@@ -290,7 +288,8 @@ def addUser():
 
 @flask_application.route("/changePermissions",methods=['GET'])
 def changePermissions():
-	cursor - conn.cursor()
+	conn = get_db()
+	cursor = conn.cursor()
 	result = 'FAIL'
 
 	banner_id = session['banner_id']
@@ -317,12 +316,11 @@ def changePermissions():
 		cursor.callproc('sp_change_permissions',[banner_id, can_add_user, can_remove_user, can_modify_permissions, can_request_record, can_add_record, can_modify_record, can_remove_record, can_backup_database, can_restore_database])
 
 	cursor.close()
-	print "End add user"
 	return jsonify(result=result)
 
 @flask_application.route("/permissions",methods=['GET'])
 def permissions():
-	print "Start get permissions"
+	conn = get_db()
 	cursor = conn.cursor()
 	result = NO_BANNER_ID_ERROR
 	banner_id = session['banner_id']
@@ -332,22 +330,20 @@ def permissions():
 	if banner_id:
 		cursor.callproc('sp_get_permissions',[banner_id])
 		perms = cursor.fetchall()[0]
+		print perms
 		result = perms
 
 	cursor.close()
-	print "End get permissions"
 	return jsonify(result=result)
 
 @flask_application.route("/signout",methods=['GET'])
 def signout():
-	print "Start signout"
 	session.clear();
-	print "End signout"
 	return jsonify(result="CLEARED");
 
 @flask_application.route("/getAllUserRequests",methods=['GET'])
 def getAllUserRequests():
-	print "Start get all user requests"
+	conn = get_db()
 	cursor = conn.cursor()
 	result = INCORRECT_PERMISSIONS
 
@@ -358,17 +354,17 @@ def getAllUserRequests():
 	can_add_user = user_permissions[CAN_ADD_USER_INDEX]
 
 	if int(can_add_user) == 1:
+		print "allowed"
 		cursor.callproc('sp_get_all_user_requests',[])
 		requests = cursor.fetchall()
+		print requests
 		result = requests
 
 	cursor.close()
-	print "End get all user requests"
 	return jsonify(result=result)
 
 @flask_application.route("/allUserPermissions",methods=['GET'])
 def allUserPermissions():
-	print "Start get all user permissions"
 	cursor = conn.cursor()
 	result = NO_PERMISSIONS
 
@@ -377,45 +373,41 @@ def allUserPermissions():
 
 	result = jsonify(result=all_permissions)
 	cursor.close()
-	print "End get all user permissions"
 	return result
 
 @flask_application.route("/removeInventoryItem",methods=['GET'])
 def removeInventoryItem():
-	print "Start remove inventory item"
+	conn = get_db()
 	cursor = conn.cursor()
 	result = SUCCESS
 	cursor.callproc('sp_remove_inventory_item',[request.args.get('serial_num')])
 	result = cursor.fetchall()
 	cursor.close()
-	print "End remove inventory item"
 	return jsonify(result=result)
 
 @flask_application.route("/getLab",methods=['GET'])
 def getLab():
-	print "Start get lab"
+	conn = get_db()
 	cursor = conn.cursor()
 	result = SUCCESS
 	cursor.callproc('sp_get_lab_by_id',[int(request.args.get('lab_id'))])
 	result = cursor.fetchall()
 	cursor.close()
-	print "End get lab"
 	return jsonify(result=result)
 
 @flask_application.route("/getLabItems",methods=['GET'])
 def getLabItems():
-	print "Start get lab items"
+	conn = get_db()
 	cursor = conn.cursor()
 	result = SUCCESS
 	cursor.callproc('sp_get_items_by_lab_id',[int(request.args.get('lab_id'))])
 	result = cursor.fetchall()
 	cursor.close()
-	print "End get lab items"
 	return jsonify(result=result)
 
 @flask_application.route("/addInventoryItem",methods=['GET'])
 def addInventoryItem():
-	print "Start add inventory item"
+	conn = get_db()
 	cursor = conn.cursor()
 	result = SUCCESS
 
@@ -432,13 +424,12 @@ def addInventoryItem():
 	cursor.callproc('sp_add_inventory_item',[serial_num,invoice_id,purchase_date,price,vendor_name,building,room_num,shelf,quantity])
 	result = cursor.fetchall()
 	cursor.close()
-	print "End add inventory item"
 	return jsonify(result=result)
 
 
 @flask_application.route("/getFilteredInventory",methods=['GET'])
 def getFilteredInventory():
-	print "Start get filtered inventory"
+	conn = get_db()
 	cursor = conn.cursor()
 	result = SUCCESS
 
@@ -461,12 +452,11 @@ def getFilteredInventory():
 
 	result = cursor.fetchall()
 	cursor.close()
-	print "End get filtered inventory"
 	return jsonify(result=result)
 #type:filter_type,name:filter_name,topic:filter_topic,concept:filter_concept,subconcept:filter_subconcept
 @flask_application.route("/getFilteredLabsDemos",methods=['GET'])
 def getFilteredLabsDemos():
-	print "Start get filtered labs/demos"
+	conn = get_db()
 	cursor = conn.cursor()
 	result = SUCCESS
 
@@ -489,12 +479,11 @@ def getFilteredLabsDemos():
 
 	result = cursor.fetchall()
 	cursor.close()
-	print "End get filtered labs/demos"
 	return jsonify(result=result)
 
 @flask_application.route("/addLab",methods=['GET'])
 def addLab():
-	print "Start add lab"
+	conn = get_db()
 	cursor = conn.cursor()
 	result = SUCCESS
 
@@ -507,24 +496,6 @@ def addLab():
 
 	cursor.callproc('sp_add_lab',[input_type,name,topic,concept,subconcept,lab_id])
 	cursor.fetchall()
-	cursor.close()
-	print "End add lab"
-	return jsonify(result=result)
-
-@flask_application.route("/addItemToLab", methods=['GET'])
-def addItemToLab():
-	print "Start add item to lab"
-	cursor = conn.cursor()
-	result = SUCCESS
-
-	lab_id = request.args.get('lab_id')
-	serial_num = request.args.get('serial_num')
-	quantity = request.args.get('quantity')
-
-	cursor.callproc('sp_add_item_to_lab_demo',[int(lab_id),int(serial_num),int(quantity)])
-	cursor.fetchall()
-	cursor.close()
-	print "End add item to lab"
 	return jsonify(result=result)
 
 print("Python version is: " + platform.python_version())
