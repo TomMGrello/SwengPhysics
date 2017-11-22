@@ -1,3 +1,5 @@
+DROP database physics;
+
 CREATE DATABASE physics;
 
 CREATE TABLE `physics`.`user`(

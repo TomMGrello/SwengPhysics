@@ -78,7 +78,7 @@ def uploadDatabase():
 
 	user_permissions = cursor.fetchall()[0]
 	can_modify_record = user_permissions[CAN_MODIFY_RECORD_INDEX];
-
+	cursor.close()
 	if int(can_modify_record) == 1:
 		return render_template("uploadDatabase.html")
 
@@ -95,7 +95,7 @@ def mainInventoryView():
 
 	user_permissions = cursor.fetchall()[0]
 	can_modify_record = user_permissions[CAN_MODIFY_RECORD_INDEX];
-
+	curosr.close()
 	if int(can_modify_record) == 1:
 		return render_template("new_admin_inventory.html")
 	else:
@@ -112,6 +112,7 @@ def labsAndDemos():
 
 
 	if session.has_key('banner_id') == False:
+		cursor.close()
 		return render_template("index.html")
 
 	banner_id = session['banner_id']
@@ -119,6 +120,7 @@ def labsAndDemos():
 
 	user_permissions = cursor.fetchall()[0]
 	can_modify_record = user_permissions[CAN_MODIFY_RECORD_INDEX];
+	cursor.close()
 	if(int(can_modify_record) == 1):
 		return render_template("viewLabsAndDemos.html");
 	else:
@@ -172,7 +174,6 @@ def addUserRequest():
 	role = request.args.get('role')
 	email = request.args.get('email')
 	cursor = conn.cursor()
-	print "RUNNING ADD USER REQUEST"
 
 	if banner_id and first_name and last_name and role:
 		result = SUCCESS
@@ -236,6 +237,7 @@ def acceptUserRequest():
 		cursor.callproc('sp_change_permissions',[banner_id,perms[0],perms[1],perms[2],perms[3],perms[4],perms[5],perms[6],perms[7],perms[8]])
 		cursor.callproc('sp_delete_user_request',[banner_id,role])
 		result = SUCCESS
+	cursor.close()
 	return jsonify(result=result)
 
 @flask_application.route("/addUser",methods=['GET','POST'])
@@ -257,7 +259,7 @@ def addUser():
 		username = request.args.get('user')
 		role = request.args.get('role')
 		email = request.args.get('email')
-
+		cursor.close()
 		cursor = conn.cursor()
 		cursor.callproc('sp_add_user',[banner_id, first_name, middle_name, last_name, username, role, email])
 		result = SUCCESS
@@ -308,7 +310,6 @@ def permissions():
 	if banner_id:
 		cursor.callproc('sp_get_permissions',[banner_id])
 		perms = cursor.fetchall()[0]
-		print perms
 		result = perms
 
 	cursor.close()
@@ -331,10 +332,8 @@ def getAllUserRequests():
 	can_add_user = user_permissions[CAN_ADD_USER_INDEX]
 
 	if int(can_add_user) == 1:
-		print "allowed"
 		cursor.callproc('sp_get_all_user_requests',[])
 		requests = cursor.fetchall()
-		print requests
 		result = requests
 
 	cursor.close()
@@ -478,7 +477,6 @@ def addItemToLab():
 	serial_num = request.args.get('serial_num')
 	quantity = request.args.get('quantity')
 
-	print "LAB ID: " + str(lab_id)
 	cursor.callproc('sp_add_item_to_lab_demo',[int(lab_id),int(serial_num),int(quantity)])
 	cursor.fetchall()
 	cursor.close()
