@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>redesigned-labs and demo</title>
+    <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/styles/viewLabsDemos.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+</head>
+
+<body><img src="static/images/RULogo.png">
+    <nav class="navbar navbar-default" id="mainnavbar">
+      <div class="container-fluid">
+          <div class="navbar-header"><a href="#" class="navbar-brand visible-xs-block navbar-link">Menu </a>
+              <button data-toggle="collapse" data-target="#navcol-1" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+          </div>
+          <div class="collapse navbar-collapse" id="navcol-1">
+              <ul class="nav navbar-nav">
+                  <li class="dropdown"><a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">View <span class="caret"></span></a>
+                      <ul role="menu" class="dropdown-menu">
+                          <li role="presentation"><a href="/inventory">Inventory </a></li>
+                          <li role="presentation"><a href="/labsAndDemos">Labs &amp; Demos</a></li>
+                      </ul>
+                  </li>
+                  <li class="dropdown"><a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Manage <span class="caret"></span></a>
+                      <ul role="menu" class="dropdown-menu">
+                          <li role="presentation"><a href="/manageUserRequests">User Requests</a></li>
+                          <li role="presentation"><a href="/PermissionsForAdminPage">User Permissions</a></li>
+                          <li role="presentation"><a href="/manageUserRequests">Lab/Demo Rquests</a></li>
+
+                      </ul>
+                  </li>
+                  <li class="dropdown"><a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Database <span class="caret"></span></a>
+                      <ul role="menu" class="dropdown-menu">
+                          <li role="presentation"><a href="/uploadDatabase">Import database</a></li>
+
+                      </ul>
+                  </li>
+              </ul>
+              <ul class="nav navbar-nav navbar-right">
+                      <li><a id="signout" href="#">Log out</a></li>
+              </ul>
+          </div>
+      </div>
+</nav>
+    <div class="col-lg-2 col-lg-offset-0 col-md-3 col-sm-4">
+        <nav class="navbar navbar-default" id="sidenavbar">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button data-toggle="collapse" data-target="#navcol-2" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+        </div>
+        <div class="collapse navbar-collapse" id="navcol-2">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="text-center">
+                    <button class="btn btn-success navbar-btn " type="button"  href="#myModal" data-toggle="modal">Add</button>
+                    </div>
+                </div>
+            </div>
+
+            <!--FILTER CODE starts here-->
+        <h2 style = "text-align: center;"> Filter </h2>
+            <hr>
+        <div id = "filtercont" class="container">
+            <div class="row">
+                <form class="form">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label class="" for="orderBy">Labs/Demos</label>
+                            <select id="filter_type" class="form-control">
+                            <option></option>
+                            <option value="lab">Labs</option>
+                            <option value="demo">Demos</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="" for="filter_name">Name</label>
+                            <input id="filter_name" type="text" class="form-control" placeholder="Name" name="filter_name">
+                        </div>
+                        <div class="form-group">
+                            <label class="" for="filter_topic">Topic</label>
+                            <input id="filter_topic" type="text" class="form-control" placeholder="Topic" name="filter_topic">
+                        </div>
+                        <div class="form-group">
+                            <label class="" for="filter_concept">Concept</label>
+                            <input id="filter_concept" type="text" class="form-control" placeholder="Concept" name="filter_concept">
+                        </div>
+                        <div class="form-group">
+                            <label class="" for="filter_subconcept">Subconcept</label>
+                            <input id="filter_subconcept" type="text" class="form-control" placeholder="Subconcept" name="filter_subconcept">
+                        </div>
+                    </div>
+
+                    <button id= "filter_submit"  class="btn btn-default">Filter</button>
+                </form>
+            </div>
+        </div>
+        <!--FILTER CODE ends here-->
+
+        </div>
+
+    </div>
+     <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Add Lab/Demo</h4>
+        </div>
+        <div class="modal-body">
+          <form >
+            <div class="form-group">
+              <label for="text">Name:</label>
+              <input id="input_name" type="text" class="form-control" id="itemcode" placeholder="name for lab/demo" name="firstname">
+            </div>
+            <div class="form-group">
+              <label for="pwd">Topic:</label>
+              <input id="input_topic" type="text" class="form-control" id="itemname" placeholder="topic name" name="middlename">
+            </div>
+            <div class="form-group">
+              <label for="text">Concept:</label>
+              <input id="input_concept" type="text" class="form-control" id="quantity" placeholder="concept for lab/demo" name="lastname">
+            </div>
+              <div class="form-group">
+              <label for="text">Subconcept</label>
+              <input id="input_subconcept" type="text" class="form-control" id="quantity" placeholder="subconcept name for lab/demo" name="text">
+            </div>
+            <div class="form-group">
+              <label for="text">Category</label>
+                <label class="radio-inline">
+                <input id="input_lab" type="radio" name="optradio"> Lab
+              </label>
+              <label class="radio-inline">
+                <input id="input_demo" type="radio" name="optradio">Demo
+              </label>
+            </div>
+            <button id="new_lab_btn" type="submit" class="btn btn-default">Submit</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</nav>
+    </div>
+    <div class="col-lg-10 col-lg-offset-0 col-md-9 col-sm-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="text-center text-primary panel-title"><strong>Labs &amp; Demos</strong></h3></div>
+            <div class="panel-body">
+                <div class="table-responsive">
+    <div class="row">
+
+
+        <div class="col-md-12">
+        <div class="table-responsive">
+
+
+        <table id="mytable" class="table table-bordred table-striped">
+
+            <thead>
+             <th>
+                <th>Type</th>
+                <th>Name</th>
+                <th>Topic</th>
+                <th>Concept</th>
+                <th>Subconcept</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </thead>
+    <tbody id="tablebody">
+
+
+    </tbody>
+
+</table>
+
+<div class="clearfix"></div>
+<ul class="pagination pull-right">
+  <li class="disabled"><a href="#"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+  <li class="active"><a href="#">1</a></li>
+
+  <li><a href="#"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
+</ul>
+
+            </div>
+
+        </div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+      <div class="modal-dialog">
+    <div class="modal-content">
+          <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+        <h4 class="modal-title custom_align" id="Heading">Edit $Lab/$Demo</h4>
+      </div>
+          <div class="modal-body">
+          <form >
+            <div class="form-group">
+              <label for="edit_name">Name:</label>
+              <input type="text" class="form-control" id="edit_name" placeholder="Name" 					name="edit_name">
+            </div>
+            <div class="form-group">
+              <label for="edit_topic">Topic</label>
+              <input type="text" class="form-control" id="edit_topic" placeholder="rename topic" 						name="edit_topic">
+            </div>
+             <div class="form-group">
+              <label for="edit_concept">Concept</label>
+              <input type="text" class="form-control" id="edit_concept" placeholder="rename concept" 						name="edit_concept">
+            </div>
+             <div class="form-group">
+              <label for="edit_subconcept">Subconcept</label>
+              <input type="text" class="form-control" id="edit_subconcept" placeholder="rename subconcept" 						name="edit_subconcept">
+            </div>
+
+            <div class="form-group">
+              <label for="text">Category:</label>
+              <label class="radio-inline">
+                <input id="edit_lab_rad" type="radio" name="optradio">Lab
+              </label>
+              <label class="radio-inline">
+                <input id="edit_demo_rad" type="radio" name="optradio">Demo
+              </label>
+            </div>
+            <button id="modal_add_item" data-target="#additem" data-dismiss="modal" class="btn btn-success navbar-btn " type="button"  href="#myModal" data-toggle="modal">Add Item</button>
+
+          </form>
+        </div>
+
+          <div class="modal-footer ">
+        <button type="button" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span> Update</button>
+      </div>
+        </div>
+    <!-- /.modal-content -->
+  </div>
+      <!-- /.modal-dialog -->
+    </div>
+<!--Add Item pop for edit item code starts here -->
+<div class="modal fade" id="additem" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+      <div class="modal-dialog">
+    <div class="modal-content">
+          <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+        <h4 class="modal-title custom_align" id="Heading">Add Item to Lab/Demo</h4>
+      </div>
+          <div class="modal-body">
+          <form >
+            <div class="form-group">
+                 <label class="" for="orderBy"> Currently Required Items</label>
+                    <select id="addCurrentItems" class="form-control">
+                        <option></option>
+                        <option>Cell</option>
+                        <option>Dura Cell</option>
+                    </select>
+                 </div>
+            <div class="form-group">
+              <label id="addItemQuantity" for="pwd">Quantity:</label>
+              <input type="text" class="form-control" id="itemname" placeholder="Name" 					name="itemname">
+            </div>
+            <div class="form-group">
+                 <label class="" for="orderBy">Select Item To Add</label>
+                    <select id="addAllItems" class="form-control">
+                        <option></option>
+                        <option>1x1z1d</option>
+                        <option>1122335</option>
+                    </select>
+                 </div>
+
+          </form>
+        </div>
+          <div class="modal-footer ">
+        <button type="button" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-plus-sign"></span> Add</button>
+      </div>
+        </div>
+    <!-- /.modal-content -->
+  </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!--Add Item pop for edit item code ends here -->
+
+
+    <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+      <div class="modal-dialog">
+    <div class="modal-content">
+          <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+        <h4 class="modal-title custom_align" id="Heading">Delete this Record?</h4>
+      </div>
+          <div class="modal-body">
+
+       <div class="alert alert-danger"><span class="glyphicon glyphicon-warning-sign"></span> Are you sure you want to delete this record?</div>
+
+      </div>
+        <div class="modal-footer ">
+        <button type="button" class="btn btn-success" ><span class="glyphicon glyphicon-ok-sign"></span> Yes</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> No</button>
+      </div>
+        </div>
+    <!-- /.modal-content -->
+  </div>
+</div>
+            </div>
+        </div>
+    </div>
+    <script src="static/js/jQuery.js"></script>
+    <script src="static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="static/js/getFilteredLabsAdmin.js"></script>
+    <script src="static/js/addLab.js"></script>
+    <script src="static/js/signout.js"></script>
+
+
+
+
+</body>
+
+</html>
