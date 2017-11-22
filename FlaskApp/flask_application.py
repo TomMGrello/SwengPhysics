@@ -55,18 +55,22 @@ conn = mysql.connect()
 
 @flask_application.route("/")
 def main():
+	print "Showing index.html"
 	return render_template("index.html")
 
 @flask_application.route("/showPermissions",methods=['GET'])
 def showPermissions():
+	print "This should not run anymore"
 	return render_template("showPermissions.html");
 
 @flask_application.route("/manageLabRequest",methods=['GET'])
 def manageLabRequest():
+	print "Showing lab/demo requests"
 	return render_template("labsDemosRequests.html");
 
 @flask_application.route("/uploadDatabase",methods=['GET'])
 def uploadDatabase():
+	print "Showing the upload database page"
 	cursor = conn.cursor()
 
 
@@ -84,6 +88,7 @@ def uploadDatabase():
 
 @flask_application.route("/inventory",methods=['GET'])
 def mainInventoryView():
+	print "Showing the inventory page"
 	cursor = conn.cursor()
 
 
@@ -104,10 +109,12 @@ def mainInventoryView():
 
 @flask_application.route("/PermissionsForAdminPage",methods=['GET'])
 def PermissionsForAdminPage():
+	print "Showing the manage permissions page"
 	return render_template("PermissionsForAdminPage.html");
 
 @flask_application.route("/labsAndDemos",methods=['GET'])
 def labsAndDemos():
+	print "Showing the labs and demos page"
 	cursor = conn.cursor()
 
 
@@ -128,14 +135,17 @@ def labsAndDemos():
 
 @flask_application.route("/manageUserRequests",methods=['GET'])
 def ManageUser():
+	print "Showing the manage user requests page"
 	return render_template("manageUserRequests.html");
 
 @flask_application.route("/requestAccess",methods=['GET'])
 def RequestAccess():
+	print "Showing the request access page"
 	return render_template("RequestAccess.html");
 
 @flask_application.route("/test",methods=['GET'])
 def test():
+	print "This should not run anymore"
 	return render_template("test.html");
 
 ###########################################################################################
@@ -144,6 +154,7 @@ def test():
 
 @flask_application.route("/login",methods=['GET'])
 def login():
+	print "Start login"
 	result = MISSING_INPUT
 	cursor = conn.cursor()
 
@@ -161,10 +172,12 @@ def login():
 			result = NO_BANNER_ID_ERROR
 
 	cursor.close()
+	print "End login"
 	return jsonify(result=result)
 
 @flask_application.route("/addUserRequest",methods=['GET','POST'])
 def addUserRequest():
+	print "Start add user request"
 	result = MISSING_INPUT
 	first_name = request.args.get('first_name')
 	middle_name = request.args.get('middle_name')
@@ -180,10 +193,12 @@ def addUserRequest():
 		cursor.callproc('sp_add_user_request',[banner_id,first_name,middle_name,last_name,username,role,email])
 
 	cursor.close()
+	print "End add user request"
 	return jsonify(result=result)
 
 @flask_application.route("/deleteUserRequest",methods=['GET'])
 def deleteUserRequest():
+	print "Start delete user request"
 	result = INCORRECT_PERMISSIONS
 	cursor = conn.cursor()
 	banner_id = session['banner_id']
@@ -203,10 +218,12 @@ def deleteUserRequest():
 			cursor.callproc('sp_delete_user_request',[banner_id, role])
 
 	cursor.close()
+	print "End delete user request"
 	return jsonify(result=result)
 
 @flask_application.route("/acceptUserRequest",methods=['GET'])
 def acceptUserRequest():
+	print "Start accept user request"
 	cursor = conn.cursor()
 	result = INCORRECT_PERMISSIONS
 	banner_id = session['banner_id']
@@ -238,10 +255,12 @@ def acceptUserRequest():
 		cursor.callproc('sp_delete_user_request',[banner_id,role])
 		result = SUCCESS
 	cursor.close()
+	print "End accept user request"
 	return jsonify(result=result)
 
 @flask_application.route("/addUser",methods=['GET','POST'])
 def addUser():
+	print "Start add user"
 	result = MISSING_INPUT
 	result = INCORRECT_PERMISSIONS
 	cursor = conn.cursor()
@@ -297,10 +316,12 @@ def changePermissions():
 		cursor.callproc('sp_change_permissions',[banner_id, can_add_user, can_remove_user, can_modify_permissions, can_request_record, can_add_record, can_modify_record, can_remove_record, can_backup_database, can_restore_database])
 
 	cursor.close()
+	print "End add user"
 	return jsonify(result=result)
 
 @flask_application.route("/permissions",methods=['GET'])
 def permissions():
+	print "Start get permissions"
 	cursor = conn.cursor()
 	result = NO_BANNER_ID_ERROR
 	banner_id = session['banner_id']
@@ -313,15 +334,19 @@ def permissions():
 		result = perms
 
 	cursor.close()
+	print "End get permissions"
 	return jsonify(result=result)
 
 @flask_application.route("/signout",methods=['GET'])
 def signout():
+	print "Start signout"
 	session.clear();
+	print "End signout"
 	return jsonify(result="CLEARED");
 
 @flask_application.route("/getAllUserRequests",methods=['GET'])
 def getAllUserRequests():
+	print "Start get all user requests"
 	cursor = conn.cursor()
 	result = INCORRECT_PERMISSIONS
 
@@ -337,10 +362,12 @@ def getAllUserRequests():
 		result = requests
 
 	cursor.close()
+	print "End get all user requests"
 	return jsonify(result=result)
 
 @flask_application.route("/allUserPermissions",methods=['GET'])
 def allUserPermissions():
+	print "Start get all user permissions"
 	cursor = conn.cursor()
 	result = NO_PERMISSIONS
 
@@ -349,37 +376,45 @@ def allUserPermissions():
 
 	result = jsonify(result=all_permissions)
 	cursor.close()
+	print "End get all user permissions"
 	return result
 
 @flask_application.route("/removeInventoryItem",methods=['GET'])
 def removeInventoryItem():
+	print "Start remove inventory item"
 	cursor = conn.cursor()
 	result = SUCCESS
 	cursor.callproc('sp_remove_inventory_item',[request.args.get('serial_num')])
 	result = cursor.fetchall()
 	cursor.close()
+	print "End remove inventory item"
 	return jsonify(result=result)
 
 @flask_application.route("/getLab",methods=['GET'])
 def getLab():
+	print "Start get lab"
 	cursor = conn.cursor()
 	result = SUCCESS
 	cursor.callproc('sp_get_lab_by_id',[int(request.args.get('lab_id'))])
 	result = cursor.fetchall()
 	cursor.close()
+	print "End get lab"
 	return jsonify(result=result)
 
 @flask_application.route("/getLabItems",methods=['GET'])
 def getLabItems():
+	print "Start get lab items"
 	cursor = conn.cursor()
 	result = SUCCESS
 	cursor.callproc('sp_get_items_by_lab_id',[int(request.args.get('lab_id'))])
 	result = cursor.fetchall()
 	cursor.close()
+	print "End get lab items"
 	return jsonify(result=result)
 
 @flask_application.route("/addInventoryItem",methods=['GET'])
 def addInventoryItem():
+	print "Start add inventory item"
 	cursor = conn.cursor()
 	result = SUCCESS
 
@@ -396,11 +431,13 @@ def addInventoryItem():
 	cursor.callproc('sp_add_inventory_item',[serial_num,invoice_id,purchase_date,price,vendor_name,building,room_num,shelf,quantity])
 	result = cursor.fetchall()
 	cursor.close()
+	print "End add inventory item"
 	return jsonify(result=result)
 
 
 @flask_application.route("/getFilteredInventory",methods=['GET'])
 def getFilteredInventory():
+	print "Start get filtered inventory"
 	cursor = conn.cursor()
 	result = SUCCESS
 
@@ -423,10 +460,12 @@ def getFilteredInventory():
 
 	result = cursor.fetchall()
 	cursor.close()
+	print "End get filtered inventory"
 	return jsonify(result=result)
 #type:filter_type,name:filter_name,topic:filter_topic,concept:filter_concept,subconcept:filter_subconcept
 @flask_application.route("/getFilteredLabsDemos",methods=['GET'])
 def getFilteredLabsDemos():
+	print "Start get filtered labs/demos"
 	cursor = conn.cursor()
 	result = SUCCESS
 
@@ -449,10 +488,12 @@ def getFilteredLabsDemos():
 
 	result = cursor.fetchall()
 	cursor.close()
+	print "End get filtered labs/demos"
 	return jsonify(result=result)
 
 @flask_application.route("/addLab",methods=['GET'])
 def addLab():
+	print "Start add lab"
 	cursor = conn.cursor()
 	result = SUCCESS
 
@@ -466,10 +507,12 @@ def addLab():
 	cursor.callproc('sp_add_lab',[input_type,name,topic,concept,subconcept,lab_id])
 	cursor.fetchall()
 	cursor.close()
+	print "End add lab"
 	return jsonify(result=result)
 
 @flask_application.route("/addItemToLab", methods=['GET'])
 def addItemToLab():
+	print "Start add item to lab"
 	cursor = conn.cursor()
 	result = SUCCESS
 
@@ -480,6 +523,7 @@ def addItemToLab():
 	cursor.callproc('sp_add_item_to_lab_demo',[int(lab_id),int(serial_num),int(quantity)])
 	cursor.fetchall()
 	cursor.close()
+	print "End add item to lab"
 	return jsonify(result=result)
 
 print("Python version is: " + platform.python_version())
