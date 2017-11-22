@@ -1,26 +1,4 @@
-var setSerialNumToRemove = function(button){
-  var tr = button.closest('tr');
-  console.log(tr);
-  var serial_num = tr.cells[1].innerHTML;
-  console.log(serial_num);
-  window.sessionStorage.setItem('serial_num_to_remove',serial_num);
-};
-
-/*var acceptRequest = function(button){
-  console.log(button);
-  var tr = button.closest('tr');
-  var index = parseInt(tr.cells[0].innerHTML) - 1;
-  var row_banner_id = tr.cells[6].innerHTML;
-  var row_first_name = tr.cells[1].innerHTML;
-  var row_middle_name = tr.cells[2].innerHTML;
-  var row_last_name = tr.cells[3].innerHTML;
-  var row_username = tr.cells[5].innerHTML;
-  var row_email = tr.cells[4].innerHTML;
-  var row_role = tr.cells[7].innerHTML;
-  acceptUserRequest(row_banner_id,row_first_name,row_middle_name,row_last_name,row_username,row_role,row_email);
-};*/
-
-var getFilteredInventory = function(){
+var getFilteredInventoryAdmin = function(){
   var filter_name = document.getElementById('search_input').value.toLowerCase();
   var filter_vendor = document.getElementById('vendor_input').value.toLowerCase();
   var filter_building = document.getElementById('building_input').value.toLowerCase();
@@ -130,18 +108,3 @@ var getFilteredInventory = function(){
 
   });
 }
-$(function() {
-  getFilteredInventory();
-  document.getElementById('btn_filter').addEventListener('click',function(e){
-    e.preventDefault();
-    getFilteredInventory();
-  });
-  document.getElementById('btn_search').addEventListener('click',function(e){
-    e.preventDefault();
-    getFilteredInventory();
-  });
-  document.getElementById('remove_btn').addEventListener('click', function(){
-    removeInventoryItem(window.sessionStorage.getItem('serial_num_to_remove'));
-  });
-  return false;
-});
