@@ -95,7 +95,7 @@ var getFilteredLabsAdmin = function() {
 
                 newRow.onclick = function() {
                   populateInfoModal(this);
-                }
+                };
 
                 table.appendChild(newRow);
                 edit_btn.onclick = function() {

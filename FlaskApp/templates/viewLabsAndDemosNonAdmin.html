@@ -167,6 +167,52 @@
             <!-- /.modal-dialog -->
          </div>
       </div>
+
+      <div class="modal fade" id="info" tabindex="-1" role="dialog" aria-labelledby="info" aria-hidden="true">
+         <div class="modal-dialog">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                  <h4 class="modal-title custom_align" id="Heading">More Info</h4>
+               </div>
+               <div class="modal-body">
+                  <form >
+                     <div class="form-group">
+                        <label for="info_name">Name:</label>
+                        <input readonly type="text" class="form-control" id="info_name" placeholder="Name" 					name="info_name">
+                     </div>
+                     <div class="form-group">
+                        <label for="info_topic">Topic</label>
+                        <input readonly type="text" class="form-control" id="info_topic" placeholder="Topic" 						name="info_topic">
+                     </div>
+                     <div class="form-group">
+                        <label for="info_concept">Concept</label>
+                        <input readonly type="text" class="form-control" id="info_concept" placeholder="Concept" 						name="info_concept">
+                     </div>
+                     <div class="form-group">
+                        <label for="info_subconcept">Subconcept</label>
+                        <input readonly type="text" class="form-control" id="info_subconcept" placeholder="Subconcept" 						name="info_subconcept">
+                     </div>
+                     <div class="form-group">
+                        <label for="info_lab_demo">Category:</label>
+                        <input readonly id="info_lab_demo" type="text" name="info_lab_demo" placeholder="Lab/Demo">
+                     </div>
+                     <div class="form-group">
+                        <label class="" for="orderBy">Required Items</label>
+                        <select id="info_required_items" class="form-control">
+
+                        </select>
+                     </div>
+                  </form>
+               </div>
+               <div class="modal-footer ">
+               </div>
+            </div>
+            <!-- /.modal-content -->
+         </div>
+         <!-- /.modal-dialog -->
+      </div>
+
       <!-- /.modal-dialog -->
       </div>
       <!--Add Item pop for edit item code ends here -->
@@ -176,6 +222,8 @@
       <script src="static/js/jQuery.js"></script>
       <script src="static/bootstrap/js/bootstrap.min.js"></script>
       <script src="static/js/labsAndDemos/normal/getFilteredLabs.js"></script>
+      <script src="static/js/labsAndDemos/admin/populateRequiredInfoItems.js"></script>
+      <script src="static/js/labsAndDemos/admin/populateInfoModal.js"></script>
       <script src="static/js/labsAndDemos/normal/onPageLoad.js"></script>
       <script src="static/js/signout.js"></script>
    </body>

@@ -43,6 +43,10 @@ var getFilteredLabsDemos = function() {
                 var subconcept_td = document.createElement("td");
                 subconcept_td.innerHTML = subconcept;
 
+                newRow.setAttribute('data-title', 'Info');
+                newRow.setAttribute('data-toggle', 'modal');
+                newRow.setAttribute('data-target', '#info');
+
                 newRow.appendChild(rowIndex);
                 newRow.appendChild(type_td);
                 newRow.appendChild(name_td);
@@ -84,6 +88,9 @@ var getFilteredLabsDemos = function() {
                 delete_p.appendChild(delete_btn);
                 delete_td.appendChild(delete_p);
 
+                newRow.onclick = function() {
+                  populateInfoModal(this);
+                };
 
                 table.appendChild(newRow);
 
