@@ -7,6 +7,9 @@ div.col-lg-3.col-lg-offset-0.col-md-3.col-sm-4 {
     max-width: 800px;
     margin: auto 0;
 }
+tr:hover td {
+  background:#ccc
+}
 img {
     padding-left: 10px;
     padding-bottom: 10px;

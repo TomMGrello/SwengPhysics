@@ -43,6 +43,10 @@ var getFilteredLabsAdmin = function() {
                 var subconcept_td = document.createElement("td");
                 subconcept_td.innerHTML = subconcept;
 
+                newRow.setAttribute('data-title', 'Info');
+                newRow.setAttribute('data-toggle', 'modal');
+                newRow.setAttribute('data-target', '#info');
+
                 newRow.appendChild(rowIndex);
                 newRow.appendChild(type_td);
                 newRow.appendChild(name_td);
@@ -80,6 +84,8 @@ var getFilteredLabsAdmin = function() {
                 var delete_span = document.createElement('span');
                 delete_span.setAttribute('class', 'glyphicon glyphicon-trash');
 
+
+
                 delete_btn.appendChild(delete_span);
                 delete_p.appendChild(delete_btn);
                 delete_td.appendChild(delete_p);
@@ -87,6 +93,9 @@ var getFilteredLabsAdmin = function() {
                 newRow.appendChild(edit_td);
                 newRow.appendChild(delete_td);
 
+                newRow.onclick = function() {
+                  populateInfoModal(this);
+                }
 
                 table.appendChild(newRow);
                 edit_btn.onclick = function() {
