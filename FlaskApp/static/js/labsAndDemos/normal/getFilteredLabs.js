@@ -1,4 +1,4 @@
-var getFilteredLabsDemos = function() {
+var getFilteredLabsDemos = function(order_by) {
     var select_type = document.getElementById('filter_type');
     var filter_type = select_type.options[select_type.selectedIndex].value.toLowerCase();
     console.log("TYPE: " + filter_type);
@@ -11,7 +11,8 @@ var getFilteredLabsDemos = function() {
             name: filter_name,
             topic: filter_topic,
             concept: filter_concept,
-            subconcept: filter_subconcept
+            subconcept: filter_subconcept,
+            order_by: order_by
         },
         function(data) {
             var data_array = data.result;

@@ -90,12 +90,12 @@
                            <table id="mytable" class="table table-bordred table-striped">
                               <thead>
                                  <th>#</th>
-                                 <th>Serial</th>
-                                 <th>Name</th>
-                                 <th>Quantity</th>
-                                 <th>Location</th>
-                                 <th>Shelf</th>
-                                 <th>Vendor</th>
+                                 <th id="th_serial">Serial</th>
+                                 <th id="th_name">Name</th>
+                                 <th id="th_quantity">Quantity</th>
+                                 <th id="th_location">Location</th>
+                                 <th id="th_shelf">Shelf</th>
+                                 <th id="th_vendor">Vendor</th>
                               </thead>
                               <tbody id="tablebody">
                               </tbody>
@@ -110,36 +110,38 @@
                      </div>
                   </div>
                </div>
-               <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+               <div class="modal fade" id="info" tabindex="-1" role="dialog" aria-labelledby="info" aria-hidden="true">
                   <div class="modal-dialog">
                      <div class="modal-content">
                         <div class="modal-header">
                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-                           <h4 class="modal-title custom_align" id="Heading">Edit Item Detail</h4>
+                           <h4 class="modal-title custom_align" id="Heading">More Info</h4>
                         </div>
                         <div class="modal-body">
                            <div class="form-group">
-                              <input class="form-control " type="text" placeholder="Serial Number">
+                              <span><label for="info_serial">Serial: </label></span><span><input id="info_serial" class="form-control " type="text" placeholder="Serial Number"></span>
+                              <span><label for="info_name">Name: </label></span><span><input id="info_name" class="form-control " type="text" placeholder="Item Name"></span>
                            </div>
                            <div class="form-group">
-                              <input class="form-control " type="text" placeholder="Item Name">
+                             <span><label for="info_quantity">Quantity: </label></span><span><input id="info_quantity" class="form-control " type="text" placeholder="Quantity"></span>
+                             <span><label for="info_location">Location: </label></span><span><input id="info_location" class="form-control " type="text" placeholder="Location"></span>
                            </div>
                            <div class="form-group">
-                              <input class="form-control " type="text" placeholder="Quantity">
+                             <span><label for="info_invoice_id">Invoice ID: </label></span><span><input id="info_invoice_id" class="form-control " type="text" placeholder="Invoice ID"><span>
+                             <span><label for="info_invoice_price">Price: </label></span><span><input id="info_invoice_price" class="form-control " type="text" placeholder="Invoice Price"><span>
                            </div>
                            <div class="form-group">
-                              <input class="form-control " type="text" placeholder="Location">
+                             <select id="info_associated_labs" class="form-control">
+
+                             </select>
                            </div>
-                        </div>
-                        <div class="modal-footer ">
-                           <button type="button" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span> Update</button>
                         </div>
                      </div>
                      <!-- /.modal-content -->
                   </div>
                   <!-- /.modal-dialog -->
                </div>
-               <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+               <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="info" aria-hidden="true">
                   <div class="modal-dialog">
                      <div class="modal-content">
                         <div class="modal-header">
@@ -163,6 +165,8 @@
       <script src="static/js/jQuery.js"></script>
       <script src="static/bootstrap/js/bootstrap.min.js"></script>
       <script src="static/js/inventory/normal/getFilteredInventory.js"></script>
+      <script src="static/js/inventory/normal/populateAssociatedInfoLabs.js"></script>
+      <script src="static/js/inventory/normal/populateInfoModal.js"></script>
       <script src="static/js/inventory/normal/onPageLoad.js"></script>
       <script src="static/js/signout.js"></script>
    </body>

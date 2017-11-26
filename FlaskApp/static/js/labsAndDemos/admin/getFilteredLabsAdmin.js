@@ -1,4 +1,4 @@
-var getFilteredLabsAdmin = function() {
+var getFilteredLabsAdmin = function(order_by) {
     var select_type = document.getElementById('filter_type');
     var filter_type = select_type.options[select_type.selectedIndex].value.toLowerCase();
     console.log("TYPE: " + filter_type);
@@ -11,7 +11,8 @@ var getFilteredLabsAdmin = function() {
             name: filter_name,
             topic: filter_topic,
             concept: filter_concept,
-            subconcept: filter_subconcept
+            subconcept: filter_subconcept,
+            order_by:order_by
         },
         function(data) {
             var data_array = data.result;
@@ -25,8 +26,6 @@ var getFilteredLabsAdmin = function() {
                 var concept = item[4];
                 var subconcept = item[5];
                 var lab_id = item[0];
-
-
 
                 var newRow = document.createElement("tr");
                 newRow.id = lab_id;
@@ -53,7 +52,6 @@ var getFilteredLabsAdmin = function() {
                 newRow.appendChild(topic_td);
                 newRow.appendChild(concept_td);
                 newRow.appendChild(subconcept_td);
-
 
                 var edit_td = document.createElement('td');
                 var edit_p = document.createElement('p');
@@ -93,13 +91,16 @@ var getFilteredLabsAdmin = function() {
                 newRow.appendChild(edit_td);
                 newRow.appendChild(delete_td);
 
-                newRow.onclick = function() {
+                newRow.onclick = function(e) {
                   populateInfoModal(this);
                 };
 
                 table.appendChild(newRow);
                 edit_btn.onclick = function() {
                     populateEditModal(this);
+                };
+
+                delete_btn.onclick = function() {
                 };
 
             }

@@ -1,4 +1,4 @@
-var getFilteredInventory = function() {
+var getFilteredInventory = function(order_by) {
     var filter_name = document.getElementById('search_input').value.toLowerCase();
     var filter_vendor = document.getElementById('vendor_input').value.toLowerCase();
     var filter_building = document.getElementById('building_input').value.toLowerCase();
@@ -9,7 +9,8 @@ var getFilteredInventory = function() {
             vendor_name: filter_vendor,
             building: filter_building,
             room_num: filter_room_num,
-            shelf: filter_shelf
+            shelf: filter_shelf,
+            order_by: order_by
         },
         function(data) {
             var data_array = data.result;
@@ -29,7 +30,12 @@ var getFilteredInventory = function() {
                 var quantity = item[6];
 
                 var newRow = document.createElement("tr");
-                newRow.id = "row";
+                newRow.id = serial_num;
+
+                newRow.setAttribute('data-title', 'Info');
+                newRow.setAttribute('data-toggle', 'modal');
+                newRow.setAttribute('data-target', '#info');
+
                 var rowIndex = document.createElement("td")
                 rowIndex.id = "index";
                 rowIndex.innerHTML = (curr_item + 1);
@@ -65,6 +71,11 @@ var getFilteredInventory = function() {
                 newRow.appendChild(location_td);
                 newRow.appendChild(shelf_td);
                 newRow.appendChild(vendor_td);
+
+                newRow.onclick = function(e) {
+                  populateInfoModal(this);
+                };
+
                 //newRow.appendChild(purchase_date_td);
                 //newRow.appendChild(price_td);
 

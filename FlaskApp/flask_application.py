@@ -395,12 +395,32 @@ def getLab():
 	cursor.close()
 	return jsonify(result=result)
 
+@flask_application.route("/getItem",methods=['GET'])
+def getItem():
+	conn = get_db()
+	cursor = conn.cursor()
+	result = SUCCESS
+	cursor.callproc('sp_get_item_by_serial',[int(request.args.get('serial_num'))])
+	result = cursor.fetchall()
+	cursor.close()
+	return jsonify(result=result)
+
 @flask_application.route("/getLabItems",methods=['GET'])
 def getLabItems():
 	conn = get_db()
 	cursor = conn.cursor()
 	result = SUCCESS
 	cursor.callproc('sp_get_items_by_lab_id',[int(request.args.get('lab_id'))])
+	result = cursor.fetchall()
+	cursor.close()
+	return jsonify(result=result)
+
+@flask_application.route("/getAssociatedLabs",methods=['GET'])
+def getAssociatedLabs():
+	conn = get_db()
+	cursor = conn.cursor()
+	result = SUCCESS
+	cursor.callproc('sp_get_associated_labs',[int(request.args.get('serial_num'))])
 	result = cursor.fetchall()
 	cursor.close()
 	return jsonify(result=result)
@@ -448,7 +468,21 @@ def getFilteredInventory():
 	shelf = request.args.get('shelf')
 	if shelf == "":
 		shelf = None
-	cursor.callproc('sp_get_filtered_inventory_items',[name,None,vendor_name,building,room_num,shelf])
+	order_by = request.args.get('order_by')
+	asc_or_desc = 0
+	prev_sort_field = ""
+	if session.has_key('prev_sort_field') == True:
+		prev_sort_field = session['prev_sort_field']
+		asc_or_desc = session['asc_or_desc']
+	if prev_sort_field == order_by:
+		if asc_or_desc == 0:
+			asc_or_desc = 1
+		else:
+			asc_or_desc = 0
+	else:
+		session['prev_sort_field'] = order_by
+	session['asc_or_desc'] = asc_or_desc
+	cursor.callproc('sp_get_filtered_inventory_items',[name,None,vendor_name,building,room_num,shelf,order_by,asc_or_desc])
 
 	result = cursor.fetchall()
 	cursor.close()
@@ -475,7 +509,23 @@ def getFilteredLabsDemos():
 	subconcept = request.args.get('subconcept')
 	if subconcept == "":
 		subconcept = None
-	cursor.callproc('sp_get_filtered_labs_demos',[input_type,name,topic,concept,subconcept])
+
+	order_by = request.args.get('order_by')
+	asc_or_desc = 0
+	prev_sort_field = ""
+	if session.has_key('prev_sort_field') == True:
+		prev_sort_field = session['prev_sort_field']
+		asc_or_desc = session['asc_or_desc']
+	if prev_sort_field == order_by:
+		if asc_or_desc == 0:
+			asc_or_desc = 1
+		else:
+			asc_or_desc = 0
+	else:
+		session['prev_sort_field'] = order_by
+	session['asc_or_desc'] = asc_or_desc
+
+	cursor.callproc('sp_get_filtered_labs_demos',[input_type,name,topic,concept,subconcept,order_by,asc_or_desc])
 
 	result = cursor.fetchall()
 	cursor.close()
