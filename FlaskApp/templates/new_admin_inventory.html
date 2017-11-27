@@ -56,80 +56,6 @@
                         <div class="text-center">
                            <button class="btn btn-success navbar-btn " type="button"  href="#myModal" data-toggle="modal">Add</button>
                         </div>
-<<<<<<< HEAD
-                        <div class="form-group">
-                            <label class="" for="vendor_input">Vendor</label>
-                            <input type="email" class="form-control" id="vendor_input" placeholder="Vendor...">
-                        </div>
-                        </div>
-                        <button id="btn_filter" type="submit" class="btn btn-default">Filter</button>
-                    </form>
-                </div>
-            </div>
-        <!--FILTER CODE ends here-->
-        </div>
-
-    </div>
-     <!-- Modal -->
-  <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
-
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Add Item</h4>
-        </div>
-        <div class="modal-body">
-          <form >
-            <div class="form-group">
-              <label>Serial Number:</label>
-              <input id="add_serial" class="form-control"  placeholder="1x2y3z" 						name="itemcode">
-            </div>
-            <div class="form-group">
-              <label>Item Name:</label>
-              <input id="add_name" class="form-control"  placeholder="Name" 					name="itemname">
-            </div>
-            <div class="form-group">
-              <label>Quantity</label>
-              <input id="add_quantity" class="form-control"  placeholder="5" 						name="quantity">
-            </div>
-            <div class="form-group">
-              <label>Building:</label>
-              <input id="add_building" class="form-control"  placeholder="Science" 						name="building">
-
-            </div>
-            <div class="form-group">
-              <label>Room Number:</label>
-              <input id="add_room_number" class="form-control" placeholder="135" 						name="room_number">
-            </div>
-            <div class="form-group">
-              <label>Shelf:</label>
-              <input id="add_shelf" class="form-control" placeholder="A-1" 						name="add_shelf">
-            </div>
-            <div class="form-group">
-              <label>Invoice ID:</label>
-              <input id="add_invoice_id" class="form-control"  placeholder="125846" 						name="add_invoice_id">
-            </div>
-            <div class="form-group">
-              <label>Vendor:</label>
-              <input id="add_vendor" class="form-control"  placeholder="Verilog" 						name="add_vendor">
-            </div>
-            <div class="form-group">
-              <label>Price:</label>
-              <input id="add_price" class="form-control"  placeholder="50.00" 						name="add_price">
-            </div>
-            <div class="form-group">
-              <label>Purchase Date:</label>
-              <input id="add_purchase_date" class="form-control"  placeholder="09/24/2017" 						name="add_purhcase_date">
-            </div>
-            <button id="add_item_btn" type="submit" class="btn btn-default">Submit</button>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-=======
                      </div>
                   </div>
                   <!--Search Code starts here-->
@@ -230,7 +156,6 @@
                </div>
             </div>
          </nav>
->>>>>>> c59258fa90bee3756ff56695b23db087ad5c745a
       </div>
       <div class="col-lg-10 col-lg-offset-0 col-md-9 col-sm-8">
          <div class="panel panel-default">
@@ -346,83 +271,6 @@
                   </div>
                </div>
             </div>
-<<<<<<< HEAD
-
-        </div>
-	</div>
-</div>
-
-
-<div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
-      <div class="modal-dialog">
-    <div class="modal-content">
-          <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-        <h4 class="modal-title custom_align" id="Heading">Edit Item Detail</h4>
-      </div>
-          <div class="modal-body">
-          <div class="form-group">
-        <input id="update_serial" class="form-control " type="text" placeholder="Serial Number">
-        </div>
-        <div class="form-group">
-
-        <input id="update_name" class="form-control " type="text" placeholder="Item Name">
-        </div>
-
-        <div class="form-group">
-
-        <input id="update_quantity" class="form-control " type="text" placeholder="Quantity">
-        </div>
-              <div class="form-group">
-
-        <input class="form-control " type="text" placeholder="Location">
-        </div>
-
-      </div>
-          <div class="modal-footer ">
-        <button id="update_btn" type="submit" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span> Update</button>
-      </div>
-        </div>
-    <!-- /.modal-content -->
-  </div>
-      <!-- /.modal-dialog -->
-    </div>
-
-
-
-    <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
-      <div class="modal-dialog">
-    <div class="modal-content">
-          <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-        <h4 class="modal-title custom_align" id="Heading">Delete this entry</h4>
-      </div>
-          <div class="modal-body">
-
-       <div class="alert alert-danger"><span class="glyphicon glyphicon-warning-sign"></span> Are you sure you want to delete this Record?</div>
-
-      </div>
-        <div class="modal-footer ">
-        <button id="remove_btn" type="button" class="btn btn-success" ><span class="glyphicon glyphicon-ok-sign"></span> Yes</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> No</button>
-      </div>
-        </div>
-    <!-- /.modal-content -->
-  </div>
-</div>
-            </div>
-        </div>
-    </div>
-    <script src="static/js/jQuery.js"></script>
-    <script src="static/bootstrap/js/bootstrap.min.js"></script>
-    <script src="static/js/removeInventoryItem.js"></script>
-    <script src="static/js/addInventoryItem.js"></script>
-    <script src="static/js/modifyInventoryItem.js"></script>
-    <script src="static/js/getFilteredInventoryAdmin.js"></script>
-    <script src="static/js/signout.js"></script>
-</body>
-
-=======
          </div>
       </div>
       <script src="static/js/jQuery.js"></script>
@@ -436,5 +284,4 @@
       <script src="static/js/inventory/admin/onPageLoad.js"></script>
       <script src="static/js/signout.js"></script>
    </body>
->>>>>>> c59258fa90bee3756ff56695b23db087ad5c745a
 </html>

@@ -52,10 +52,6 @@ CREATE TABLE `physics`.`item_locations`(
     PRIMARY KEY(`item_locations_id`),
     UNIQUE KEY(`serial_num`));
 
-<<<<<<< HEAD
-=======
-
->>>>>>> c59258fa90bee3756ff56695b23db087ad5c745a
 source sp_add_inventory_item.sql;
 source sp_get_filtered_inventory_items.sql;
 source sp_add_lab.sql;

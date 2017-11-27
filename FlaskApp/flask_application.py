@@ -188,6 +188,7 @@ def addUserRequest():
 	banner_id = request.args.get('banner_id')
 	role = request.args.get('role')
 	email = request.args.get('email')
+	conn = get_db()
 	cursor = conn.cursor()
 	print "RUNNING ADD USER REQUEST"
 
@@ -588,8 +589,6 @@ def addLab():
 	cursor.callproc('sp_add_lab',[input_type,name,topic,concept,subconcept,lab_id])
 	cursor.fetchall()
 	return jsonify(result=result)
-
-print("Python version is: " + platform.python_version())
 
 if __name__ == "__main__":
 	flask_application.debug = True
