@@ -58,9 +58,6 @@ CREATE TABLE `physics`.`item_locations`(
     PRIMARY KEY(`item_locations_id`),
     UNIQUE KEY(`serial_num`));
 
-ALTER TABLE `physics`.`item_locations`
-  ADD CONSTRAINT uq_item_locations UNIQUE(serial_num,location_id);
-
 source sp_add_inventory_item.sql;
 source sp_get_filtered_inventory_items.sql;
 source sp_add_lab.sql;

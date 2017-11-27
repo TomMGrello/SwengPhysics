@@ -104,7 +104,7 @@ var getFilteredInventory = function(){
       var delete_p = document.createElement('p');
       delete_p.setAttribute('data-placement','top');
       delete_p.setAttribute('data-toggle','tooltip');
-      delete_p.setAttribute('title','delete');
+      delete_p.setAttribute('title','Delete');
       var delete_btn = document.createElement('button');
       delete_btn.setAttribute('class','btn btn-danger btn-xs');
       delete_btn.setAttribute('data-title','Delete');
@@ -142,13 +142,14 @@ $(function() {
     removeInventoryItem(window.sessionStorage.getItem('serial_num_to_remove'));
   });
   document.getElementById('add_item_btn').addEventListener('click', function() {
-    //document.getElementById('add_serial').value;
+    //serial = document.getElementById('add_serial').value;
     //document.getElementById('itemname').value;
     //document.getElementById('quantity').value;
-    addInventoryItem(document.getElementById('add_serial').value, null, null, null, null, null, null, null, null);
+    //addInventoryItem(document.getElementById('add_serial').value, document.getElementById('add_invoice_id').value, document.getElementById('add_purchase_date').value, document.getElementById('add_price').value, document.getElementById('add_vendor').value, document.getElementById('add_building').value, document.getElementById('add_room_number').value, document.getElementById('add_shelf').value, null);
+    addInventoryItem(document.getElementById('add_name').value, document.getElementById('update_serial').value, null, null, null, null, null, null, null, null);
   });
   document.getElementById('update_btn').addEventListener('click', function() {
-    modifyInventoryItem(document.getElementById('update_serial').value, null, null, null, null, null, null, null, null);// document.getElementById('update_quantity').value);
+    modifyInventoryItem(document.getElementById('update_name').value, document.getElementById('update_serial').value, null, null, null, null, null, null, null, null);// document.getElementById('update_quantity').value);
   });
   return false;
 });

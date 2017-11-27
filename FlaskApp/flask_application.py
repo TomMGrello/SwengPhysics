@@ -325,7 +325,8 @@ def addInventoryItem():
 
 	user_permissions = cursor.fetchall()[0]
 	canAddRecord = user_permissions[CAN_ADD_RECORD_INDEX];
-
+	cursor.close()
+	cursor2 = conn.cursor()
 	if int(canAddRecord) == 1:
 		name = request.args.get('name')
 		serial = request.args.get('serial_num')
@@ -338,9 +339,9 @@ def addInventoryItem():
 		shelf = request.args.get('shelf')
 		quantity = request.args.get('quantity')
 		#cursor.callproc('sp_add_inventory_item',[name, int(serial), int(invoice_id), purchase_date, float(price), vendor_name, building, room_num, shelf, int(quantity)])
-		cursor.callproc('sp_add_inventory_item',[name, int(serial), 111111, purchase_date, 20.00, vendor_name, building, room_num, shelf, 1])
+		cursor2.callproc('sp_add_inventory_item',[name, int(serial), 111111, purchase_date, 20.00, vendor_name, building, room_num, shelf, 1])
 		result = SUCCESS
-	cursor.close()
+	cursor2.close()
 	return jsonify(result=result)
 
 @flask_application.route("/modifyInventoryItem",methods=['GET'])
