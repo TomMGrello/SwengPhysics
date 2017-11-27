@@ -1,163 +1,149 @@
 <!DOCTYPE html>
 <html>
-<head>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+   <head>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <link rel="stylesheet" href="static/styles/AdminPageStylesheet.css">
+      <link rel="stylesheet" href="static/styles/addItemStyleSheet.css">
+      <link rel="icon" href="static/images/favicon.ico" type="image/x-icon"/>
+      <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon"/>
+      <script type="text/javascript">
+         function display_c(){
+         var refresh=1000; // Refresh rate in milli seconds
+         mytime=setTimeout('display_ct()',refresh)
+         }
 
-<link rel="stylesheet" href="static/styles/AdminPageStylesheet.css">
-<link rel="stylesheet" href="static/styles/addItemStyleSheet.css">
-    <link rel="icon" href="static/images/favicon.ico" type="image/x-icon"/>
-    <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon"/>
-<script type="text/javascript">
-function display_c(){
-var refresh=1000; // Refresh rate in milli seconds
-mytime=setTimeout('display_ct()',refresh)
-}
+         function display_ct() {
+         var strcount
+         var x = new Date()
+         var x1=x.toUTCString();// changing the display to UTC string
+         document.getElementById('ct').innerHTML = x1;
+         tt=display_c();
+         }
+         // Get the modal
+         var modal = document.getElementById('id01');
 
-function display_ct() {
-var strcount
-var x = new Date()
-var x1=x.toUTCString();// changing the display to UTC string
-document.getElementById('ct').innerHTML = x1;
-tt=display_c();
-}
-// Get the modal
-var modal = document.getElementById('id01');
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-}
-function setURL(url){
-    document.getElementById('iframe').src = url;
-}
-</script>
-</head>
-
-<div id="container">
-
-   <div id="header">
-   <div class = "makeItCenter">
-		 <header>
-		 <div class="rowanLogo">
-			<img src="static/images/RULogo.png" alt="Rowan Logo"   width="300" height="45">
-			<div class = "timeDisplay">
-			 <body onload=display_ct();>
-					<span id='ct' ></span>
-			 </body>
-		 </div>
-		 </div>
-		 </header>
-
-
-	<div class="navbar">
-		  <a href="/adminPage">View Inventory</a>
-		  <a href="#news">Account Setting</a>
-		<div class="dropdown">
-			<!--Drop down for Manage -->
-			<button class="dropbtn">Manage
-			  <i class="fa fa-caret-down"></i>
-			</button>
-			<div class="dropdown-content">
-			  <a href = "onclick=">Users</a>
-			  <a href="#">Requests</a>
-			</div>
-		</div>
-		   <!--Drop down for Database -->
-		 <div class="dropdown">
-			<button class="dropbtn">Database
-			  <i class="fa fa-caret-down"></i>
-			</button>
-				<div class="dropdown-content">
-					<a href="#">View Database</a>
-					<a href="#">Manage Database</a>
-				</div>
-			</div>
-			<div class = "logoutButton">
-			<a href="#news">Logout</a>
-			</div>
-
-		</div>
-
+         // When the user clicks anywhere outside of the modal, close it
+         window.onclick = function(event) {
+             if (event.target == modal) {
+                 modal.style.display = "none";
+             }
+         }
+         function setURL(url){
+             document.getElementById('iframe').src = url;
+         }
+      </script>
+   </head>
+   <div id="container">
+      <div id="header">
+         <div class = "makeItCenter">
+            <header>
+               <div class="rowanLogo">
+                  <img src="static/images/RULogo.png" alt="Rowan Logo"   width="300" height="45">
+                  <div class = "timeDisplay">
+                     <body onload=display_ct();>
+                        <span id='ct' ></span>
+                     </body>
+                  </div>
+               </div>
+            </header>
+            <div class="navbar">
+               <a href="/adminPage">View Inventory</a>
+               <a href="#news">Account Setting</a>
+               <div class="dropdown">
+                  <!--Drop down for Manage -->
+                  <button class="dropbtn">Manage
+                  <i class="fa fa-caret-down"></i>
+                  </button>
+                  <div class="dropdown-content">
+                     <a href = "onclick=">Users</a>
+                     <a href="#">Requests</a>
+                  </div>
+               </div>
+               <!--Drop down for Database -->
+               <div class="dropdown">
+                  <button class="dropbtn">Database
+                  <i class="fa fa-caret-down"></i>
+                  </button>
+                  <div class="dropdown-content">
+                     <a href="#">View Database</a>
+                     <a href="#">Manage Database</a>
+                  </div>
+               </div>
+               <div class = "logoutButton">
+                  <a href="#news">Logout</a>
+               </div>
+            </div>
+         </div>
+         <hr>
+         <div id="body">
+            <div class="sidenav">
+               <button onclick = "document.getElementById('id01').style.display='block'" style="width:auto;"  class="button button2">Add Item</button>
+               <div class="searchDesign">
+                  <div class="search">
+                     <input type="text" class="searchTerm" placeholder="Search..">
+                     <button type="submit" class="searchButton">
+                     <i class="fa fa-search"></i>
+                     </button>
+                  </div>
+               </div>
+            </div>
+            <div class="main">
+            </div>
+         </div>
+         <div id="id01" class="modal">
+            <form  >
+               <div class="signUpBox">
+                  <h2>Add Item!</h2>
+            <form class="modal-content animate" >
+            <p>Object Name</p>
+            <input type="text" name="" placeholder="name">
+            <div class="maxl">
+            <p> Location(Lab):
+            <label class="radio inline">
+            <input type="radio">
+            <span>136</span>
+            </label>
+            <label class="radio inline">
+            <input type="radio"  >
+            <span>146</span>
+            </label>
+            <label class="radio inline">
+            <input type="radio">
+            <span>149 </span>
+            </label>
+            <label class="radio inline">
+            <input type="radio">
+            <span>152 </span>
+            </label>
+            </p>
+            </div>
+            <p></p>
+            <p>Quantity: </p>
+            <input type="text" placeholder="How many?">
+            <p>Topic: </p>
+            <input type="text" placeholder="topic">
+            <p>Concept: </p>
+            <input type="text" placeholder="concept">
+            <p>Subconcept: </p>
+            <input type="text" name="" placeholder="subconcept">
+            <p>Serial No.: </p>
+            <input type="text" name="" placeholder="1XzzY">
+            <!-- Code for Submit button -->
+            <input type="submit" value="Submit">
+            <!-- Code for cancel button -->
+            <input type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn" value="Cancel">
+            </form>
+            </div>
+            </form>
+         </div>
+         <div id="footer">
+            <div class = "imageContainer">
+               <img src="static/images/RULogo.png" alt="Rowan Logo" width="200" height="30" >
+            </div>
+            <div class = "streetAddress">
+               <p> Rowan University • 201 Mullica Hill Road • Glassboro, New Jersey 08028 • 856-256-4000 </p>
+            </div>
+         </div>
+      </div>
    </div>
-   <hr>
-   <div id="body">
-		<div class="sidenav">
-			<button onclick = "document.getElementById('id01').style.display='block'" style="width:auto;"  class="button button2">Add Item</button>
-			<div class="searchDesign">
-			   <div class="search">
-				  <input type="text" class="searchTerm" placeholder="Search..">
-				  <button type="submit" class="searchButton">
-					<i class="fa fa-search"></i>
-				 </button>
-			   </div>
-			</div>
-		</div>
-
-		<div class="main">
-			<iframe  src="{{url_for('static', filename='html_objects/permissions.html')}}" width="1280" height="580" scrolling="yes"> <!-- add stuff later--> </iframe>
-		</div>
-   </div>
-   <div id="id01" class="modal">
-
- <form  >
- <div class="signUpBox">
-			<h2>Add Item!</h2>
-			<form class="modal-content animate" >
-				<p>Object Name</p>
-				<input type="text" name="" placeholder="name">
-				<div class="maxl">
-					<p> Location(Lab):
-				    <label class="radio inline">
-					  <input type="radio">
-					  <span>136</span>
-				    </label>
-				    <label class="radio inline">
-					  <input type="radio"  >
-					  <span>146</span>
-				    </label>
-					<label class="radio inline">
-					  <input type="radio">
-					  <span>149 </span>
-				    </label>
-					<label class="radio inline">
-					  <input type="radio">
-					  <span>152 </span>
-				    </label>
-					</p>
-                </div>
-				<p></p>
-				<p>Quantity: </p>
-				<input type="text" placeholder="How many?">
-				<p>Topic: </p>
-				<input type="text" placeholder="topic">
-				<p>Concept: </p>
-				<input type="text" placeholder="concept">
-				<p>Subconcept: </p>
-				<input type="text" name="" placeholder="subconcept">
-				<p>Serial No.: </p>
-				<input type="text" name="" placeholder="1XzzY">
-
-				<!-- Code for Submit button -->
-				<input type="submit" value="Submit">
-				<!-- Code for cancel button -->
-				<input type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn" value="Cancel">
-			</form>
-		</div>
-    </form>
-</div>
-
-   <div id="footer">
-		<div class = "imageContainer">
-			<img src="static/images/RULogo.png" alt="Rowan Logo" width="200" height="30" >
-		</div>
-		<div class = "streetAddress">
-			<p> Rowan University • 201 Mullica Hill Road • Glassboro, New Jersey 08028 • 856-256-4000 </p>
-		</div>
-		</div>
-   </div>
-</div>
-
-
 </html>

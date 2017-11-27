@@ -2,7 +2,7 @@
 ########################################  IMPORTS  ########################################
 ###########################################################################################
 
-from flask import Flask, render_template, json, request, session, redirect, url_for, jsonify
+from flask import Flask, render_template, json, request, session, redirect, url_for, jsonify, g
 from flaskext.mysql import MySQL
 import os
 
@@ -46,8 +46,21 @@ flask_application.config['MYSQL_DATABASE_DB'] = 'physics'
 flask_application.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(flask_application)
 
-conn = mysql.connect()
+#conn = mysql.connect()
 
+def connect_db():
+	conn = mysql.connect()
+	return conn
+
+def get_db():
+	if not hasattr(g, 'physics'):
+		g.physics = connect_db()
+	return g.physics
+
+@flask_application.teardown_appcontext
+def close_db(_):
+    if hasattr(g, 'physics'):
+        g.physics.close()
 
 ###########################################################################################
 ############################   WEBPAGE ENDPOINTS   ########################################
@@ -61,8 +74,31 @@ def main():
 def showPermissions():
 	return render_template("showPermissions.html");
 
+@flask_application.route("/manageLabRequest",methods=['GET'])
+def manageLabRequest():
+	return render_template("labsDemosRequests.html");
+
+@flask_application.route("/uploadDatabase",methods=['GET'])
+def uploadDatabase():
+	conn = get_db()
+	cursor = conn.cursor()
+
+
+	if session.has_key('banner_id') == False:
+		return render_template("index.html")
+
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_modify_record = user_permissions[CAN_MODIFY_RECORD_INDEX];
+
+	if int(can_modify_record) == 1:
+		return render_template("uploadDatabase.html")
+
 @flask_application.route("/inventory",methods=['GET'])
 def mainInventoryView():
+	conn = get_db()
 	cursor = conn.cursor()
 
 
@@ -87,7 +123,22 @@ def PermissionsForAdminPage():
 
 @flask_application.route("/labsAndDemos",methods=['GET'])
 def labsAndDemos():
-	return render_template("viewLabsAndDemos.html");
+	conn = get_db()
+	cursor = conn.cursor()
+
+
+	if session.has_key('banner_id') == False:
+		return render_template("index.html")
+
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_modify_record = user_permissions[CAN_MODIFY_RECORD_INDEX];
+	if(int(can_modify_record) == 1):
+		return render_template("viewLabsAndDemos.html");
+	else:
+		return render_template("viewLabsAndDemosNonAdmin.html")
 
 @flask_application.route("/manageUserRequests",methods=['GET'])
 def ManageUser():
@@ -108,6 +159,7 @@ def test():
 @flask_application.route("/login",methods=['GET'])
 def login():
 	result = MISSING_INPUT
+	conn = get_db()
 	cursor = conn.cursor()
 
 	username = request.args.get('user','N/A')
@@ -149,6 +201,7 @@ def addUserRequest():
 @flask_application.route("/deleteUserRequest",methods=['GET'])
 def deleteUserRequest():
 	result = INCORRECT_PERMISSIONS
+	conn = get_db()
 	cursor = conn.cursor()
 	banner_id = session['banner_id']
 	cursor.callproc('sp_get_permissions',[banner_id])
@@ -171,6 +224,7 @@ def deleteUserRequest():
 
 @flask_application.route("/acceptUserRequest",methods=['GET'])
 def acceptUserRequest():
+	conn = get_db()
 	cursor = conn.cursor()
 	result = INCORRECT_PERMISSIONS
 	banner_id = session['banner_id']
@@ -207,6 +261,7 @@ def acceptUserRequest():
 def addUser():
 	result = MISSING_INPUT
 	result = INCORRECT_PERMISSIONS
+	conn = get_db()
 	cursor = conn.cursor()
 	banner_id = session['banner_id']
 	cursor.callproc('sp_get_permissions',[banner_id])
@@ -232,7 +287,8 @@ def addUser():
 
 @flask_application.route("/changePermissions",methods=['GET'])
 def changePermissions():
-	cursor - conn.cursor()
+	conn = get_db()
+	cursor = conn.cursor()
 	result = 'FAIL'
 
 	banner_id = session['banner_id']
@@ -263,6 +319,7 @@ def changePermissions():
 
 @flask_application.route("/permissions",methods=['GET'])
 def permissions():
+	conn = get_db()
 	cursor = conn.cursor()
 	result = NO_BANNER_ID_ERROR
 	banner_id = session['banner_id']
@@ -285,6 +342,7 @@ def signout():
 
 @flask_application.route("/getAllUserRequests",methods=['GET'])
 def getAllUserRequests():
+	conn = get_db()
 	cursor = conn.cursor()
 	result = INCORRECT_PERMISSIONS
 
@@ -344,6 +402,46 @@ def addInventoryItem():
 	cursor2.close()
 	return jsonify(result=result)
 
+@flask_application.route("/getLab",methods=['GET'])
+def getLab():
+	conn = get_db()
+	cursor = conn.cursor()
+	result = SUCCESS
+	cursor.callproc('sp_get_lab_by_id',[int(request.args.get('lab_id'))])
+	result = cursor.fetchall()
+	cursor.close()
+	return jsonify(result=result)
+
+@flask_application.route("/getItem",methods=['GET'])
+def getItem():
+	conn = get_db()
+	cursor = conn.cursor()
+	result = SUCCESS
+	cursor.callproc('sp_get_item_by_serial',[int(request.args.get('serial_num'))])
+	result = cursor.fetchall()
+	cursor.close()
+	return jsonify(result=result)
+
+@flask_application.route("/getLabItems",methods=['GET'])
+def getLabItems():
+	conn = get_db()
+	cursor = conn.cursor()
+	result = SUCCESS
+	cursor.callproc('sp_get_items_by_lab_id',[int(request.args.get('lab_id'))])
+	result = cursor.fetchall()
+	cursor.close()
+	return jsonify(result=result)
+
+@flask_application.route("/getAssociatedLabs",methods=['GET'])
+def getAssociatedLabs():
+	conn = get_db()
+	cursor = conn.cursor()
+	result = SUCCESS
+	cursor.callproc('sp_get_associated_labs',[int(request.args.get('serial_num'))])
+	result = cursor.fetchall()
+	cursor.close()
+	return jsonify(result=result)
+
 @flask_application.route("/modifyInventoryItem",methods=['GET'])
 def modifyInventoryItem():
 	cursor = conn.cursor()
@@ -390,6 +488,7 @@ def removeInventoryItem():
 
 @flask_application.route("/getFilteredInventory",methods=['GET'])
 def getFilteredInventory():
+	conn = get_db()
 	cursor = conn.cursor()
 	result = SUCCESS
 
@@ -408,7 +507,21 @@ def getFilteredInventory():
 	shelf = request.args.get('shelf')
 	if shelf == "":
 		shelf = None
-	cursor.callproc('sp_get_filtered_inventory_items',[name,None,vendor_name,building,room_num,shelf])
+	order_by = request.args.get('order_by')
+	asc_or_desc = 0
+	prev_sort_field = ""
+	if session.has_key('prev_sort_field') == True:
+		prev_sort_field = session['prev_sort_field']
+		asc_or_desc = session['asc_or_desc']
+	if prev_sort_field == order_by:
+		if asc_or_desc == 0:
+			asc_or_desc = 1
+		else:
+			asc_or_desc = 0
+	else:
+		session['prev_sort_field'] = order_by
+	session['asc_or_desc'] = asc_or_desc
+	cursor.callproc('sp_get_filtered_inventory_items',[name,None,vendor_name,building,room_num,shelf,order_by,asc_or_desc])
 
 	result = cursor.fetchall()
 	cursor.close()
@@ -417,6 +530,7 @@ def getFilteredInventory():
 #type:filter_type,name:filter_name,topic:filter_topic,concept:filter_concept,subconcept:filter_subconcept
 @flask_application.route("/getFilteredLabsDemos",methods=['GET'])
 def getFilteredLabsDemos():
+	conn = get_db()
 	cursor = conn.cursor()
 	result = SUCCESS
 
@@ -435,13 +549,47 @@ def getFilteredLabsDemos():
 	subconcept = request.args.get('subconcept')
 	if subconcept == "":
 		subconcept = None
-	cursor.callproc('sp_get_filtered_labs_demos',[input_type,name,topic,concept,subconcept])
+
+	order_by = request.args.get('order_by')
+	asc_or_desc = 0
+	prev_sort_field = ""
+	if session.has_key('prev_sort_field') == True:
+		prev_sort_field = session['prev_sort_field']
+		asc_or_desc = session['asc_or_desc']
+	if prev_sort_field == order_by:
+		if asc_or_desc == 0:
+			asc_or_desc = 1
+		else:
+			asc_or_desc = 0
+	else:
+		session['prev_sort_field'] = order_by
+	session['asc_or_desc'] = asc_or_desc
+
+	cursor.callproc('sp_get_filtered_labs_demos',[input_type,name,topic,concept,subconcept,order_by,asc_or_desc])
 
 	result = cursor.fetchall()
 	cursor.close()
 
 	return jsonify(result=result)
 
+@flask_application.route("/addLab",methods=['GET'])
+def addLab():
+	conn = get_db()
+	cursor = conn.cursor()
+	result = SUCCESS
+
+	input_type = request.args.get('type')
+	name = request.args.get('name')
+	topic = request.args.get('topic')
+	concept = request.args.get('concept')
+	subconcept = request.args.get('subconcept')
+	lab_id = request.args.get('lab_id')
+
+	cursor.callproc('sp_add_lab',[input_type,name,topic,concept,subconcept,lab_id])
+	cursor.fetchall()
+	return jsonify(result=result)
+
+print("Python version is: " + platform.python_version())
 
 if __name__ == "__main__":
 	flask_application.debug = True
