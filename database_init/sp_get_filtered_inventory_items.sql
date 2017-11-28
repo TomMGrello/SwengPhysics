@@ -20,9 +20,9 @@ CREATE PROCEDURE `sp_get_filtered_inventory_items`(
 BEGIN
   IF p_sort_by = 'name' AND p_asc_or_desc=0 THEN
     SELECT * FROM object
-    INNER JOIN item_locations on object.serial_num = item_locations.serial_num
+    INNER JOIN item_locations on object.hashed_serial_num = item_locations.hashed_serial_num
     INNER JOIN location on item_locations.location_id = location.location_id
-    INNER JOIN object_invoice on object.serial_num = object_invoice.serial_num
+    INNER JOIN object_invoice on object.hashed_serial_num = object_invoice.hashed_serial_num
     INNER JOIN invoice on object_invoice.invoice_id = invoice.invoice_id
     WHERE 1=1
     AND (p_name IS NULL OR object.name Like CONCAT('%',p_name,'%'))
@@ -33,9 +33,9 @@ BEGIN
     ORDER BY object.name ASC;
   ELSEIF p_sort_by = 'name' AND p_asc_or_desc=1 THEN
     SELECT * FROM object
-    INNER JOIN item_locations on object.serial_num = item_locations.serial_num
+    INNER JOIN item_locations on object.hashed_serial_num = item_locations.hashed_serial_num
     INNER JOIN location on item_locations.location_id = location.location_id
-    INNER JOIN object_invoice on object.serial_num = object_invoice.serial_num
+    INNER JOIN object_invoice on object.hashed_serial_num = object_invoice.hashed_serial_num
     INNER JOIN invoice on object_invoice.invoice_id = invoice.invoice_id
     WHERE 1=1
     AND (p_name IS NULL OR object.name Like CONCAT('%',p_name,'%'))
@@ -46,9 +46,9 @@ BEGIN
     ORDER BY object.name DESC;
   ELSEIF p_sort_by = 'quantity' AND p_asc_or_desc=0 THEN
     SELECT * FROM object
-    INNER JOIN item_locations on object.serial_num = item_locations.serial_num
+    INNER JOIN item_locations on object.hashed_serial_num = item_locations.hashed_serial_num
     INNER JOIN location on item_locations.location_id = location.location_id
-    INNER JOIN object_invoice on object.serial_num = object_invoice.serial_num
+    INNER JOIN object_invoice on object.hashed_serial_num = object_invoice.hashed_serial_num
     INNER JOIN invoice on object_invoice.invoice_id = invoice.invoice_id
     WHERE 1=1
     AND (p_name IS NULL OR object.name Like CONCAT('%',p_name,'%'))
@@ -59,9 +59,9 @@ BEGIN
     ORDER BY item_locations.quantity ASC;
   ELSEIF p_sort_by = 'quantity' AND p_asc_or_desc=1 THEN
     SELECT * FROM object
-    INNER JOIN item_locations on object.serial_num = item_locations.serial_num
+    INNER JOIN item_locations on object.hashed_serial_num = item_locations.hashed_serial_num
     INNER JOIN location on item_locations.location_id = location.location_id
-    INNER JOIN object_invoice on object.serial_num = object_invoice.serial_num
+    INNER JOIN object_invoice on object.hashed_serial_num = object_invoice.hashed_serial_num
     INNER JOIN invoice on object_invoice.invoice_id = invoice.invoice_id
     WHERE 1=1
     AND (p_name IS NULL OR object.name Like CONCAT('%',p_name,'%'))
@@ -72,9 +72,9 @@ BEGIN
     ORDER BY item_locations.quantity DESC;
   ELSEIF p_sort_by = 'location' AND p_asc_or_desc=0 THEN
     SELECT * FROM object
-    INNER JOIN item_locations on object.serial_num = item_locations.serial_num
+    INNER JOIN item_locations on object.hashed_serial_num = item_locations.hashed_serial_num
     INNER JOIN location on item_locations.location_id = location.location_id
-    INNER JOIN object_invoice on object.serial_num = object_invoice.serial_num
+    INNER JOIN object_invoice on object.hashed_serial_num = object_invoice.hashed_serial_num
     INNER JOIN invoice on object_invoice.invoice_id = invoice.invoice_id
     WHERE 1=1
     AND (p_name IS NULL OR object.name Like CONCAT('%',p_name,'%'))
@@ -85,9 +85,9 @@ BEGIN
     ORDER BY location.building ASC,location.room_num ASC;
   ELSEIF p_sort_by = 'location' AND p_asc_or_desc=1 THEN
     SELECT * FROM object
-    INNER JOIN item_locations on object.serial_num = item_locations.serial_num
+    INNER JOIN item_locations on object.hashed_serial_num = item_locations.hashed_serial_num
     INNER JOIN location on item_locations.location_id = location.location_id
-    INNER JOIN object_invoice on object.serial_num = object_invoice.serial_num
+    INNER JOIN object_invoice on object.hashed_serial_num = object_invoice.hashed_serial_num
     INNER JOIN invoice on object_invoice.invoice_id = invoice.invoice_id
     WHERE 1=1
     AND (p_name IS NULL OR object.name Like CONCAT('%',p_name,'%'))
@@ -98,9 +98,9 @@ BEGIN
     ORDER BY location.building DESC,location.room_num DESC;
   ELSEIF p_sort_by = 'shelf' AND p_asc_or_desc=0 THEN
     SELECT * FROM object
-    INNER JOIN item_locations on object.serial_num = item_locations.serial_num
+    INNER JOIN item_locations on object.hashed_serial_num = item_locations.hashed_serial_num
     INNER JOIN location on item_locations.location_id = location.location_id
-    INNER JOIN object_invoice on object.serial_num = object_invoice.serial_num
+    INNER JOIN object_invoice on object.hashed_serial_num = object_invoice.hashed_serial_num
     INNER JOIN invoice on object_invoice.invoice_id = invoice.invoice_id
     WHERE 1=1
     AND (p_name IS NULL OR object.name Like CONCAT('%',p_name,'%'))
@@ -111,9 +111,9 @@ BEGIN
     ORDER BY item_locations.shelf ASC;
   ELSEIF p_sort_by = 'shelf' AND p_asc_or_desc=1 THEN
     SELECT * FROM object
-    INNER JOIN item_locations on object.serial_num = item_locations.serial_num
+    INNER JOIN item_locations on object.hashed_serial_num = item_locations.hashed_serial_num
     INNER JOIN location on item_locations.location_id = location.location_id
-    INNER JOIN object_invoice on object.serial_num = object_invoice.serial_num
+    INNER JOIN object_invoice on object.hashed_serial_num = object_invoice.hashed_serial_num
     INNER JOIN invoice on object_invoice.invoice_id = invoice.invoice_id
     WHERE 1=1
     AND (p_name IS NULL OR object.name Like CONCAT('%',p_name,'%'))
@@ -124,9 +124,9 @@ BEGIN
     ORDER BY item_locations.shelf DESC;
   ELSEIF p_sort_by = 'vendor' AND p_asc_or_desc=0 THEN
     SELECT * FROM object
-    INNER JOIN item_locations on object.serial_num = item_locations.serial_num
+    INNER JOIN item_locations on object.hashed_serial_num = item_locations.hashed_serial_num
     INNER JOIN location on item_locations.location_id = location.location_id
-    INNER JOIN object_invoice on object.serial_num = object_invoice.serial_num
+    INNER JOIN object_invoice on object.hashed_serial_num = object_invoice.hashed_serial_num
     INNER JOIN invoice on object_invoice.invoice_id = invoice.invoice_id
     WHERE 1=1
     AND (p_name IS NULL OR object.name Like CONCAT('%',p_name,'%'))
@@ -137,9 +137,9 @@ BEGIN
     ORDER BY invoice.vendor_name ASC;
   ELSEIF p_sort_by = 'vendor' AND p_asc_or_desc=1 THEN
     SELECT * FROM object
-    INNER JOIN item_locations on object.serial_num = item_locations.serial_num
+    INNER JOIN item_locations on object.hashed_serial_num = item_locations.hashed_serial_num
     INNER JOIN location on item_locations.location_id = location.location_id
-    INNER JOIN object_invoice on object.serial_num = object_invoice.serial_num
+    INNER JOIN object_invoice on object.hashed_serial_num = object_invoice.hashed_serial_num
     INNER JOIN invoice on object_invoice.invoice_id = invoice.invoice_id
     WHERE 1=1
     AND (p_name IS NULL OR object.name Like CONCAT('%',p_name,'%'))
@@ -150,9 +150,9 @@ BEGIN
     ORDER BY invoice.vendor_name DESC;
   ELSEIF p_sort_by = 'serial' AND p_asc_or_desc=0 THEN
     SELECT * FROM object
-    INNER JOIN item_locations on object.serial_num = item_locations.serial_num
+    INNER JOIN item_locations on object.hashed_serial_num = item_locations.hashed_serial_num
     INNER JOIN location on item_locations.location_id = location.location_id
-    INNER JOIN object_invoice on object.serial_num = object_invoice.serial_num
+    INNER JOIN object_invoice on object.hashed_serial_num = object_invoice.hashed_serial_num
     INNER JOIN invoice on object_invoice.invoice_id = invoice.invoice_id
     WHERE 1=1
     AND (p_name IS NULL OR object.name Like CONCAT('%',p_name,'%'))
@@ -160,12 +160,12 @@ BEGIN
     AND (p_building IS NULL OR location.building Like p_building)
     AND (p_room_num IS NULL OR location.room_num Like p_room_num)
     AND (p_shelf IS NULL OR item_locations.shelf Like p_shelf)
-    ORDER BY object.serial_num ASC;
+    ORDER BY object.hashed_serial_num ASC;
   ELSEIF p_sort_by = 'serial' AND p_asc_or_desc=1 THEN
     SELECT * FROM object
-    INNER JOIN item_locations on object.serial_num = item_locations.serial_num
+    INNER JOIN item_locations on object.hashed_serial_num = item_locations.hashed_serial_num
     INNER JOIN location on item_locations.location_id = location.location_id
-    INNER JOIN object_invoice on object.serial_num = object_invoice.serial_num
+    INNER JOIN object_invoice on object.hashed_serial_num = object_invoice.hashed_serial_num
     INNER JOIN invoice on object_invoice.invoice_id = invoice.invoice_id
     WHERE 1=1
     AND (p_name IS NULL OR object.name Like CONCAT('%',p_name,'%'))
@@ -173,12 +173,12 @@ BEGIN
     AND (p_building IS NULL OR location.building Like p_building)
     AND (p_room_num IS NULL OR location.room_num Like p_room_num)
     AND (p_shelf IS NULL OR item_locations.shelf Like p_shelf)
-    ORDER BY object.serial_num DESC;
+    ORDER BY object.hashed_serial_num DESC;
   ELSE
     SELECT * FROM object
-    INNER JOIN item_locations on object.serial_num = item_locations.serial_num
+    INNER JOIN item_locations on object.hashed_serial_num = item_locations.hashed_serial_num
     INNER JOIN location on item_locations.location_id = location.location_id
-    INNER JOIN object_invoice on object.serial_num = object_invoice.serial_num
+    INNER JOIN object_invoice on object.hashed_serial_num = object_invoice.hashed_serial_num
     INNER JOIN invoice on object_invoice.invoice_id = invoice.invoice_id
     WHERE 1=1
     AND (p_name IS NULL OR object.name Like CONCAT('%',p_name,'%'))

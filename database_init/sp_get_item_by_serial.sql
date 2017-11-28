@@ -6,7 +6,7 @@ USE physics;
 --    call sp_get_all_inventory_items_with_filters(NULL,NULL,NULL,NULL,NULL,NULL)
 DELIMITER $$
 CREATE PROCEDURE `sp_get_item_by_serial`(
-  IN p_serial_num int(45)
+  IN p_hashed_serial_num int(36)
 )
 
 BEGIN
@@ -21,7 +21,7 @@ BEGIN
   INNER JOIN location on item_locations.location_id = location.location_id
   INNER JOIN object_invoice on object.serial_num = object_invoice.serial_num
   INNER JOIN invoice on object_invoice.invoice_id = invoice.invoice_id
-  WHERE object.serial_num = p_serial_num;
+  WHERE object.hashed_serial_num = p_hashed_serial_num;
 END $$
 
 DELIMITER ;

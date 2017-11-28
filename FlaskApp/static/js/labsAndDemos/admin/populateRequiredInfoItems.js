@@ -11,8 +11,9 @@ var populateRequiredInfoItems = function(button) {
 
         for (var i = 0; i < data_array.length; i++) {
             var curr_item = data_array[i];
+            console.log(curr_item);
             var new_opt = document.createElement('option');
-            new_opt.text = curr_item[3] + " x " + curr_item[5];
+            new_opt.text = curr_item[3] + " x " + curr_item[6];
             info_current_items.appendChild(new_opt);
         }
     });

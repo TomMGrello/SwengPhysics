@@ -380,7 +380,7 @@ def removeInventoryItem():
 	conn = get_db()
 	cursor = conn.cursor()
 	result = SUCCESS
-	cursor.callproc('sp_remove_inventory_item',[request.args.get('serial_num')])
+	cursor.callproc('sp_remove_inventory_item',[hash(request.args.get('serial_num'))])
 	result = cursor.fetchall()
 	cursor.close()
 	return jsonify(result=result)
@@ -400,7 +400,7 @@ def getItem():
 	conn = get_db()
 	cursor = conn.cursor()
 	result = SUCCESS
-	cursor.callproc('sp_get_item_by_serial',[int(request.args.get('serial_num'))])
+	cursor.callproc('sp_get_item_by_serial',[hash(request.args.get('serial_num'))])
 	result = cursor.fetchall()
 	cursor.close()
 	return jsonify(result=result)
@@ -420,7 +420,7 @@ def getAssociatedLabs():
 	conn = get_db()
 	cursor = conn.cursor()
 	result = SUCCESS
-	cursor.callproc('sp_get_associated_labs',[int(request.args.get('serial_num'))])
+	cursor.callproc('sp_get_associated_labs',[hash(request.args.get('serial_num'))])
 	result = cursor.fetchall()
 	cursor.close()
 	return jsonify(result=result)
@@ -432,6 +432,7 @@ def addInventoryItem():
 	result = SUCCESS
 
 	serial_num = request.args.get('serial_num')
+	hashed_serial_num = hash(serial_num)
 	invoice_id = request.args.get('invoice_id')
 	purchase_date = request.args.get('purchase_date')
 	price = request.args.get('price')
@@ -441,7 +442,7 @@ def addInventoryItem():
 	shelf = request.args.get('shelf')
 	quantity = request.args.get('quantity')
 
-	cursor.callproc('sp_add_inventory_item',[serial_num,invoice_id,purchase_date,price,vendor_name,building,room_num,shelf,quantity])
+	cursor.callproc('sp_add_inventory_item',[serial_num,hashed_serial_num,invoice_id,purchase_date,price,vendor_name,building,room_num,shelf,quantity])
 	result = cursor.fetchall()
 	cursor.close()
 	return jsonify(result=result)
@@ -547,6 +548,10 @@ def addLab():
 	cursor.callproc('sp_add_lab',[input_type,name,topic,concept,subconcept,lab_id])
 	cursor.fetchall()
 	return jsonify(result=result)
+
+print(str(hash("123456")))
+print(str(hash("638854")))
+
 
 if __name__ == "__main__":
 	flask_application.debug = True
