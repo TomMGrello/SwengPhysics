@@ -548,8 +548,6 @@ def addLab():
 	cursor.fetchall()
 	return jsonify(result=result)
 
-print("Python version is: " + platform.python_version())
-
 if __name__ == "__main__":
 	flask_application.debug = True
 	flask_application.secret_key = 'rowanphysicssweng'

@@ -32,10 +32,6 @@ var getFilteredInventoryAdmin = function(order_by) {
                 var newRow = document.createElement("tr");
                 newRow.id = serial_num;
 
-                newRow.setAttribute('data-title', 'Info');
-                newRow.setAttribute('data-toggle', 'modal');
-                newRow.setAttribute('data-target', '#info');
-
                 var rowIndex = document.createElement("td")
                 rowIndex.id = "index";
                 rowIndex.innerHTML = (curr_item + 1);
@@ -63,6 +59,48 @@ var getFilteredInventoryAdmin = function(order_by) {
                 var price_td = document.createElement("td");
                 price_td.id = "price";
                 price_td.innerHTML = price;
+
+                //Do e.stopPropagation() was not working, so I had to do this.
+                //Also couldn't put all the elements inside a span or div, since that messes up the
+                //table columns
+
+                //This prevents the "edit" and "delete" buttons from also opening up the Info modal
+
+                rowIndex.setAttribute('data-title', 'Info');
+                rowIndex.setAttribute('data-toggle', 'modal');
+                rowIndex.setAttribute('data-target', '#info');
+
+                serial_num_td.setAttribute('data-title', 'Info');
+                serial_num_td.setAttribute('data-toggle', 'modal');
+                serial_num_td.setAttribute('data-target', '#info');
+
+                name_td.setAttribute('data-title', 'Info');
+                name_td.setAttribute('data-toggle', 'modal');
+                name_td.setAttribute('data-target', '#info');
+
+                quantity_td.setAttribute('data-title', 'Info');
+                quantity_td.setAttribute('data-toggle', 'modal');
+                quantity_td.setAttribute('data-target', '#info');
+
+                location_td.setAttribute('data-title', 'Info');
+                location_td.setAttribute('data-toggle', 'modal');
+                location_td.setAttribute('data-target', '#info');
+
+                shelf_td.setAttribute('data-title', 'Info');
+                shelf_td.setAttribute('data-toggle', 'modal');
+                shelf_td.setAttribute('data-target', '#info');
+
+                vendor_td.setAttribute('data-title', 'Info');
+                vendor_td.setAttribute('data-toggle', 'modal');
+                vendor_td.setAttribute('data-target', '#info');
+
+                purchase_date_td.setAttribute('data-title', 'Info');
+                purchase_date_td.setAttribute('data-toggle', 'modal');
+                purchase_date_td.setAttribute('data-target', '#info');
+
+                price_td.setAttribute('data-title', 'Info');
+                price_td.setAttribute('data-toggle', 'modal');
+                price_td.setAttribute('data-target', '#info');
 
                 newRow.appendChild(rowIndex);
                 newRow.appendChild(serial_num_td);

@@ -42,9 +42,34 @@ var getFilteredLabsAdmin = function(order_by) {
                 var subconcept_td = document.createElement("td");
                 subconcept_td.innerHTML = subconcept;
 
-                newRow.setAttribute('data-title', 'Info');
-                newRow.setAttribute('data-toggle', 'modal');
-                newRow.setAttribute('data-target', '#info');
+                //Do e.stopPropagation() was not working, so I had to do this.
+                //Also couldn't put all the elements inside a span or div, since that messes up the
+                //table columns
+
+                //This prevents the "edit" and "delete" buttons from also opening up the Info modal
+                rowIndex.setAttribute('data-title', 'Info');
+                rowIndex.setAttribute('data-toggle', 'modal');
+                rowIndex.setAttribute('data-target', '#info');
+
+                type_td.setAttribute('data-title', 'Info');
+                type_td.setAttribute('data-toggle', 'modal');
+                type_td.setAttribute('data-target', '#info');
+
+                name_td.setAttribute('data-title', 'Info');
+                name_td.setAttribute('data-toggle', 'modal');
+                name_td.setAttribute('data-target', '#info');
+
+                topic_td.setAttribute('data-title', 'Info');
+                topic_td.setAttribute('data-toggle', 'modal');
+                topic_td.setAttribute('data-target', '#info');
+
+                concept_td.setAttribute('data-title', 'Info');
+                concept_td.setAttribute('data-toggle', 'modal');
+                concept_td.setAttribute('data-target', '#info');
+
+                subconcept_td.setAttribute('data-title', 'Info');
+                subconcept_td.setAttribute('data-toggle', 'modal');
+                subconcept_td.setAttribute('data-target', '#info');
 
                 newRow.appendChild(rowIndex);
                 newRow.appendChild(type_td);
