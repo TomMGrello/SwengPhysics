@@ -78,6 +78,10 @@ def showPermissions():
 def manageLabRequest():
 	return render_template("labsDemosRequests.html");
 
+@flask_application.route("/requestLab",methods=['GET'])
+def requestLab():
+	return render_template("requestLab.html");
+
 @flask_application.route("/uploadDatabase",methods=['GET'])
 def uploadDatabase():
 	conn = get_db()
@@ -536,7 +540,6 @@ def getFilteredLabsDemos():
 def addLab():
 	conn = get_db()
 	cursor = conn.cursor()
-	result = SUCCESS
 
 	input_type = request.args.get('type')
 	name = request.args.get('name')
@@ -545,12 +548,140 @@ def addLab():
 	subconcept = request.args.get('subconcept')
 	lab_id = request.args.get('lab_id')
 
-	cursor.callproc('sp_add_lab',[input_type,name,topic,concept,subconcept,lab_id])
-	cursor.fetchall()
+	result = INCORRECT_PERMISSIONS
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_add_record = user_permissions[CAN_ADD_RECORD_INDEX]
+	if can_add_record == 1:
+		cursor.callproc('sp_add_lab',[input_type,name,topic,concept,subconcept,lab_id])
+		cursor.fetchall()
+		result = SUCCESS
+
 	return jsonify(result=result)
 
-print(str(hash("123456")))
-print(str(hash("638854")))
+@flask_application.route("/addItemToLab",methods=['GET'])
+def addItemToLab():
+	conn = get_db()
+	cursor = conn.cursor()
+
+	quantity = request.args.get('quantity');
+	serial_num = request.args.get('serial_num')
+	lab_id = request.args.get('lab_id')
+
+	result = INCORRECT_PERMISSIONS
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_add_record = user_permissions[CAN_ADD_RECORD_INDEX]
+	if can_add_record == 1:
+		cursor.callproc('sp_add_item_to_lab_demo',[lab_id,hash(serial_num),quantity])
+		cursor.fetchall()
+		result = SUCCESS
+
+	return jsonify(result=result)
+
+
+@flask_application.route("/removeLab",methods=['GET'])
+def removeLab():
+	conn = get_db()
+	cursor = conn.cursor()
+
+	lab_id = request.args.get('lab_id')
+
+	result = INCORRECT_PERMISSIONS
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_remove_record = user_permissions[CAN_REMOVE_RECORD_INDEX]
+	if can_remove_record == 1:
+		result = SUCCESS
+		cursor.callproc('sp_remove_lab',[lab_id])
+		cursor.fetchall()
+
+	return jsonify(result=result)
+
+@flask_application.route("/addLabRequest",methods=['GET'])
+def addLabRequest():
+	result = MISSING_INPUT
+	lab_id = request.args.get('lab_id')
+	dates = request.args.get('dates')
+	time_needed = request.args.get('time_needed')
+	classroom = request.args.get('classroom')
+	banner_id = session['banner_id']
+	num_teams = request.args.get('num_teams')
+	notes = request.args.get('notes')
+	cursor = conn.cursor()
+
+	result = SUCCESS
+
+	cursor.callproc('sp_add_lab_request',[lab_id,dates,time_needed,classroom,banner_id,num_teams,notes])
+
+	cursor.close()
+	return jsonify(result=result)
+
+@flask_application.route("/acceptLabRequest",methods=['GET'])
+def acceptLabRequest():
+	result = MISSING_INPUT
+	request_id = request.args.get('request_id')
+	cursor = conn.cursor()
+
+	result = INCORRECT_PERMISSIONS
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_remove_record = user_permissions[CAN_REMOVE_RECORD_INDEX]
+	if can_remove_record == 1:
+		cursor.callproc('sp_remove_lab_request',[request_id])
+		cursor.fetchall()
+		result = SUCCESS
+	#send an email to the professor here
+
+	cursor.close()
+	return jsonify(result=result)
+
+@flask_application.route("/rejectLabRequest",methods=['GET'])
+def rejectLabRequest():
+	result = MISSING_INPUT
+	request_id = request.args.get('request_id')
+	cursor = conn.cursor()
+
+	result = INCORRECT_PERMISSIONS
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_remove_record = user_permissions[CAN_REMOVE_RECORD_INDEX]
+	if can_remove_record == 1:
+		cursor.callproc('sp_remove_lab_request',[request_id])
+		cursor.fetchall()
+		result = SUCCESS
+	#send an email to the professor here
+
+	cursor.close()
+	return jsonify(result=result)
+
+@flask_application.route("/getAllLabRequests",methods=['GET'])
+def getAllLabRequests():
+	result = MISSING_INPUT
+	cursor = conn.cursor()
+
+	result = INCORRECT_PERMISSIONS
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_remove_record = user_permissions[CAN_REMOVE_RECORD_INDEX]
+	if can_remove_record == 1:
+		cursor.callproc('sp_get_all_lab_requests',[])
+		result = cursor.fetchall()
+
+	cursor.close()
+	return jsonify(result=result)
 
 
 if __name__ == "__main__":

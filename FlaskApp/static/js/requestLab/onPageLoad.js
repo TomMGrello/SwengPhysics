@@ -1,0 +1,4 @@
+$(function() {
+    populateLabFields();
+    return false;
+});

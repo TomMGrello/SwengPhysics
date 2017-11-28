@@ -34,5 +34,9 @@ $(function() {
         editLabDemo();
         location.reload();
     });
+    document.getElementById('remove_ok').addEventListener('click', function() {
+        removeLab();
+        location.reload();
+    });
     return false;
 });

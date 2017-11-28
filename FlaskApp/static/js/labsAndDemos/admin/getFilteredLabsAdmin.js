@@ -126,6 +126,9 @@ var getFilteredLabsAdmin = function(order_by) {
                 };
 
                 delete_btn.onclick = function() {
+                  var tr = this.closest('tr');
+                  var lab_id = tr.id;
+                  window.sessionStorage.setItem('lab_id', lab_id);
                 };
 
             }
