@@ -58,6 +58,7 @@ source sp_get_all_permissions.sql;
 source sp_add_user_request.sql;
 source sp_delete_user_request.sql;
 source sp_get_all_user_requests.sql;
+source sp_get_email.sql;
 
 /*Following lines are for development purposes only
 They add 4 basic users for the 4 different pre-defined roles. Can be used for testing physics.*/

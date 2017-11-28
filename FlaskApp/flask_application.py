@@ -6,7 +6,10 @@ from flask import Flask, render_template, json, request, session, redirect, url_
 from flaskext.mysql import MySQL
 import os
 import platform
-
+import smtplib
+from email.MIMEMultipart import MIMEMultipart
+from email.MIMEText import MIMEText
+import time
 ###########################################################################################
 ##################################### ERROR CONSTANTS #####################################
 ###########################################################################################
@@ -176,6 +179,10 @@ def login():
 
 		if banner_id != "Username not found":
 			session['banner_id'] = banner_id
+			cursor.callproc('sp_get_email',[banner_id])
+			email = cursor.fetchall()[0][0]
+			if email != "Email not found":
+				session['email'] = email
 		else:
 			result = NO_BANNER_ID_ERROR
 
@@ -184,6 +191,7 @@ def login():
 
 @flask_application.route("/addUserRequest",methods=['GET','POST'])
 def addUserRequest():
+	conn = get_db()
 	result = MISSING_INPUT
 	first_name = request.args.get('first_name')
 	middle_name = request.args.get('middle_name')
@@ -614,13 +622,42 @@ def addLabRequest():
 	banner_id = session['banner_id']
 	num_teams = request.args.get('num_teams')
 	notes = request.args.get('notes')
-	cursor = conn.cursor()
+	lab_name = request.args.get('lab_name')
+	#cursor = conn.cursor()
 
 	result = SUCCESS
 
-	cursor.callproc('sp_add_lab_request',[lab_id,dates,time_needed,classroom,banner_id,num_teams,notes])
+	#cursor.callproc('sp_add_lab_request',[lab_id,dates,time_needed,classroom,banner_id,num_teams,notes])
 
-	cursor.close()
+
+
+	email_server = smtplib.SMTP('smtp.gmail.com',587)
+	email_server.ehlo()
+	email_server.starttls()
+	fromaddr = 'emailtesterphysics@gmail.com'
+	toaddr = session['email']
+
+	#get some sort of unique email Subject
+	email_id = toaddr + str(time.time())
+	email_id = str(abs(hash(email_id)))
+
+	body = 'Your lab/demo request has been received.\nYou will receive a notification when your request is approved or denied.\n\n'
+	lab_info = "TITLE: " + lab_name + "\n"
+	lab_info += "DATE(S) NEEDED: " + dates + "\n"
+	lab_info += "CLASSROOM: " + classroom + "\n"
+	lab_info += "NUMBER OF TEAMS: " + num_teams + "\n"
+	lab_info += "ADDITIONAL NOTES: " + notes + "\n"
+	body += lab_info
+	msg = MIMEText(body)
+	msg['From'] = fromaddr
+	msg['To'] = toaddr
+	msg['Subject'] = 'Physics request #' + email_id
+	text = msg.as_string()
+	email_server.login("emailtesterphysics@gmail.com","ttteeesssttt")
+	email_server.sendmail(fromaddr,toaddr,text)
+	email_server.quit()
+
+	#cursor.close()
 	return jsonify(result=result)
 
 @flask_application.route("/acceptLabRequest",methods=['GET'])
