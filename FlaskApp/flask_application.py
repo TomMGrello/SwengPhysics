@@ -614,22 +614,22 @@ def removeLab():
 
 @flask_application.route("/addLabRequest",methods=['GET'])
 def addLabRequest():
+	conn = get_db()
 	result = MISSING_INPUT
 	lab_id = request.args.get('lab_id')
 	dates = request.args.get('dates')
-	time_needed = request.args.get('time_needed')
+	time_needed = request.args.get('time')
 	classroom = request.args.get('classroom')
 	banner_id = session['banner_id']
 	num_teams = request.args.get('num_teams')
 	notes = request.args.get('notes')
 	lab_name = request.args.get('lab_name')
-	#cursor = conn.cursor()
+	cursor = conn.cursor()
 
 	result = SUCCESS
 
-	#cursor.callproc('sp_add_lab_request',[lab_id,dates,time_needed,classroom,banner_id,num_teams,notes])
-
-
+	cursor.callproc('sp_add_lab_request',[lab_id,dates,time_needed,classroom,banner_id,num_teams,notes])
+	cursor.fetchall()
 
 	email_server = smtplib.SMTP('smtp.gmail.com',587)
 	email_server.ehlo()
@@ -657,11 +657,12 @@ def addLabRequest():
 	email_server.sendmail(fromaddr,toaddr,text)
 	email_server.quit()
 
-	#cursor.close()
+	cursor.close()
 	return jsonify(result=result)
 
 @flask_application.route("/acceptLabRequest",methods=['GET'])
 def acceptLabRequest():
+	conn = get_db()
 	result = MISSING_INPUT
 	request_id = request.args.get('request_id')
 	cursor = conn.cursor()
@@ -673,16 +674,54 @@ def acceptLabRequest():
 	user_permissions = cursor.fetchall()[0]
 	can_remove_record = user_permissions[CAN_REMOVE_RECORD_INDEX]
 	if can_remove_record == 1:
-		cursor.callproc('sp_remove_lab_request',[request_id])
+		cursor.callproc('sp_get_lab_request_by_id',[request_id])
+		request_data = cursor.fetchall()[0]
+		dates = request_data[2]
+		time_needed = request_data[3]
+		classroom = request_data[4]
+		banner_id = request_data[5]
+		num_teams = request_data[6]
+		lab_name = request_data[10]
+		cursor.callproc('sp_delete_lab_request',[request_id])
 		cursor.fetchall()
 		result = SUCCESS
-	#send an email to the professor here
+
+		cursor.callproc('sp_get_email',[int(banner_id)])
+
+		email_server = smtplib.SMTP('smtp.gmail.com',587)
+		email_server.ehlo()
+		email_server.starttls()
+		fromaddr = 'emailtesterphysics@gmail.com'
+		toaddr = cursor.fetchall()[0][0]
+
+
+
+		#get some sort of unique email Subject
+		email_id = toaddr + str(time.time())
+		email_id = str(abs(hash(email_id)))
+
+		body = 'Your request for the following lab has been approved:\n\n'
+		lab_info = "TITLE: " + lab_name + "\n"
+		lab_info += "DATE(S) NEEDED: " + dates + "\n"
+		lab_info += "CLASSROOM: " + classroom + "\n"
+		lab_info += "NUMBER OF TEAMS: " + str(num_teams) + "\n"
+		body += lab_info
+		msg = MIMEText(body)
+		msg['From'] = fromaddr
+		msg['To'] = toaddr
+		msg['Subject'] = 'Physics request accepted #' + email_id
+		text = msg.as_string()
+		email_server.login("emailtesterphysics@gmail.com","ttteeesssttt")
+		email_server.sendmail(fromaddr,toaddr,text)
+		email_server.quit()
+		result = SUCCESS
 
 	cursor.close()
 	return jsonify(result=result)
 
 @flask_application.route("/rejectLabRequest",methods=['GET'])
 def rejectLabRequest():
+	conn = get_db()
 	result = MISSING_INPUT
 	request_id = request.args.get('request_id')
 	cursor = conn.cursor()
@@ -694,16 +733,54 @@ def rejectLabRequest():
 	user_permissions = cursor.fetchall()[0]
 	can_remove_record = user_permissions[CAN_REMOVE_RECORD_INDEX]
 	if can_remove_record == 1:
-		cursor.callproc('sp_remove_lab_request',[request_id])
+		cursor.callproc('sp_get_lab_request_by_id',[request_id])
+		request_data = cursor.fetchall()[0]
+		dates = request_data[2]
+		time_needed = request_data[3]
+		classroom = request_data[4]
+		banner_id = request_data[5]
+		num_teams = request_data[6]
+		lab_name = request_data[10]
+		cursor.callproc('sp_delete_lab_request',[request_id])
 		cursor.fetchall()
 		result = SUCCESS
-	#send an email to the professor here
+
+		cursor.callproc('sp_get_email',[int(banner_id)])
+
+		email_server = smtplib.SMTP('smtp.gmail.com',587)
+		email_server.ehlo()
+		email_server.starttls()
+		fromaddr = 'emailtesterphysics@gmail.com'
+		toaddr = cursor.fetchall()[0][0]
+
+
+
+		#get some sort of unique email Subject
+		email_id = toaddr + str(time.time())
+		email_id = str(abs(hash(email_id)))
+
+		body = 'Your request for the following lab has been rejected:\n\n'
+		lab_info = "TITLE: " + lab_name + "\n"
+		lab_info += "DATE(S) NEEDED: " + dates + "\n"
+		lab_info += "CLASSROOM: " + classroom + "\n"
+		lab_info += "NUMBER OF TEAMS: " + str(num_teams) + "\n"
+		body += lab_info
+		msg = MIMEText(body)
+		msg['From'] = fromaddr
+		msg['To'] = toaddr
+		msg['Subject'] = 'Physics request rejected #' + email_id
+		text = msg.as_string()
+		email_server.login("emailtesterphysics@gmail.com","ttteeesssttt")
+		email_server.sendmail(fromaddr,toaddr,text)
+		email_server.quit()
+		result = SUCCESS
 
 	cursor.close()
 	return jsonify(result=result)
 
 @flask_application.route("/getAllLabRequests",methods=['GET'])
 def getAllLabRequests():
+	conn = get_db()
 	result = MISSING_INPUT
 	cursor = conn.cursor()
 

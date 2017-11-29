@@ -65,6 +65,10 @@ source sp_get_items_by_lab_id.sql;
 source sp_get_item_by_serial.sql;
 source sp_get_associated_labs.sql;
 source sp_remove_lab.sql;
+source sp_add_lab_request.sql;
+source sp_delete_lab_request.sql;
+source sp_get_all_lab_requests.sql;
+source sp_get_lab_request_by_id.sql;
 
 
 --                          name            serial invoice date      price  vendor        building   room shelf quantity

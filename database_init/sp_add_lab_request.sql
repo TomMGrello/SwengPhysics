@@ -8,7 +8,7 @@ CREATE PROCEDURE `sp_add_lab_request`(
     IN p_classroom VARCHAR(45),
     IN p_banner_id INT(9),
     IN p_num_teams SMALLINT(5),
-	IN p_notes VARCHAR(250)
+	  IN p_notes VARCHAR(250)
 )
 
 BEGIN

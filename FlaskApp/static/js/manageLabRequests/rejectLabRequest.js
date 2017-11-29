@@ -4,6 +4,7 @@ var rejectLabRequest = function(button){
   $.getJSON("/rejectLabRequest",{
     request_id:request_id
   }, function(data){
+    location.reload();
     return false;
   });
 }

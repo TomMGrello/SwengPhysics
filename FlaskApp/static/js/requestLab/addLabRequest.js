@@ -9,7 +9,7 @@ var addLabRequest = function() {
   $.getJSON("/addLabRequest",{
     lab_id:lab_id,
     dates:dates,
-    time_needed:time_needed,
+    time:time_needed,
     num_teams:num_teams,
     notes:notes,
     classroom:room,
