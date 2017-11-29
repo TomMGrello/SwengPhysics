@@ -10,6 +10,7 @@ import smtplib
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 import time
+import spreadsheet
 ###########################################################################################
 ##################################### ERROR CONSTANTS #####################################
 ###########################################################################################
@@ -797,6 +798,19 @@ def getAllLabRequests():
 	cursor.close()
 	return jsonify(result=result)
 
+@flask_application.route("/importInventory",methods=['GET'])
+def importInventory():
+	conn = get_db()
+	cursor = conn.cursor()
+	importedData = spreadsheet.importInventorySheet()
+	numData = len(importedData)
+	
+	#for entry in range(0, numData):		
+		#cursor.callproc('sp_add_inventory_item',[name,serial_num,hashed_serial_num,invoice_id,purchase_date,price,vendor_name,building,room_num,shelf,quantity])
+		#cursor.callproc('sp_add_inventory_item',importData[entry])
+	cursor.close()
+	return jsonify(importedData=importedData)
+	
 
 if __name__ == "__main__":
 	flask_application.debug = True
