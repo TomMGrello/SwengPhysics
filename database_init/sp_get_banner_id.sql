@@ -1,4 +1,4 @@
-USE permissions;
+USE physics;
 DELIMITER $$
 CREATE PROCEDURE `sp_get_banner_id` (
   IN p_username VARCHAR(45)

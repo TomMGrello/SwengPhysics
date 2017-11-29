@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>redesigned-inventory page ADMIN</title>
+      <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+      <link rel="stylesheet" href="static/styles/updatedAdminPage.css">
+      <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+   </head>
+   <body>
+      <img src="static/images/RULogo.png">
+      <nav class="navbar navbar-default" id="mainnavbar">
+         <div class="container-fluid">
+            <div class="navbar-header"><a class="navbar-brand visible-xs-block navbar-link" href="#">Menu </a>
+               <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+            </div>
+            <div class="collapse navbar-collapse" id="navcol-1">
+               <ul class="nav navbar-nav">
+                  <li class="dropdown">
+                     <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">View <span class="caret"></span></a>
+                     <ul role="menu" class="dropdown-menu">
+                        <li role="presentation"><a href="/inventory">Inventory </a></li>
+                        <li role="presentation"><a href="/labsAndDemos">Labs &amp; Demos</a></li>
+                     </ul>
+                  </li>
+                  <li class="dropdown">
+                     <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Manage <span class="caret"></span></a>
+                     <ul role="menu" class="dropdown-menu">
+                        <li role="presentation"><a href="/manageUserRequests">User Requests</a></li>
+                        <li role="presentation"><a href="/PermissionsForAdminPage">User Permissions</a></li>
+                        <li role="presentation"><a href="/manageLabRequest">Lab/Demo Rquests</a></li>
+                     </ul>
+                  <li class="dropdown">
+                     <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Database <span class="caret"></span></a>
+                     <ul role="menu" class="dropdown-menu">
+                        <li role="presentation"><a href="/uploadDatabase">Import Database</a></li>
+                     </ul>
+                  </li>
+               </ul>
+               <ul class="nav navbar-nav navbar-right">
+                  <li><a id = "signout" href="#">Log out</a></li>
+               </ul>
+            </div>
+         </div>
+      </nav>
+      <div class="col-lg-2 col-lg-offset-0 col-md-3 col-sm-4">
+         <nav class="navbar navbar-default" id="sidenavbar">
+            <div class="container-fluid">
+               <div class="navbar-header">
+                  <button data-toggle="collapse" data-target="#navcol-2" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+               </div>
+               <div class="collapse navbar-collapse" id="navcol-2">
+                  <div class="row">
+                     <div class="col-sm-12">
+                        <div class="text-center">
+                           <button class="btn btn-success navbar-btn " type="button"  href="#myModal" data-toggle="modal">Add</button>
+                        </div>
+                     </div>
+                  </div>
+                  <!--Search Code starts here-->
+                  <div class="input-group">
+                     <input id="search_input" type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">
+                     <div class="input-group-btn">
+                        <button id="btn_search" class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                     </div>
+                  </div>
+                  <!--Search Code Ends here-->
+                  <!--FILTER CODE starts here-->
+                  <h2 style = "text-align: center;"> Filter </h2>
+                  <hr>
+                  <div id = "filtercont" class="container">
+                     <div class="row">
+                        <form class="form">
+                           <div class="form-group">
+                              <label class="" for="building_input">Building</label>
+                              <input type="text" class="form-control" id="building_input" placeholder="Building...">
+                              <div class="form-group">
+                                 <label class="" for="room_num_input">Room Number</label>
+                                 <input type="text" class="form-control" id="room_num_input" placeholder="Room number...">
+                              </div>
+                              <div class="form-group">
+                                 <label class="" for="shelf_input">Shelf</label>
+                                 <input type="text" class="form-control" id="shelf_input" placeholder="Shelf...">
+                              </div>
+                              <div class="form-group">
+                                 <label class="" for="vendor_input">Vendor</label>
+                                 <input type="text" class="form-control" id="vendor_input" placeholder="Vendor...">
+                              </div>
+                           </div>
+                           <button id="btn_filter" type="submit" class="btn btn-default">Filter</button>
+                        </form>
+                     </div>
+                  </div>
+                  <!--FILTER CODE ends here-->
+               </div>
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" role="dialog">
+               <div class="modal-dialog">
+                  <!-- Modal content-->
+                  <div class="modal-content">
+                     <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Add Item</h4>
+                     </div>
+                     <div class="modal-body">
+                        <form >
+                           <div class="form-group">
+                              <label for="text">Serial Number:</label>
+                              <input id="add_serial" type="text" class="form-control"  placeholder="1x2y3z" 						name="itemcode">
+                           </div>
+                           <div class="form-group">
+                              <label for="pwd">Item Name:</label>
+                              <input id="add_name" type="text" class="form-control"  placeholder="Name" 					name="itemname">
+                           </div>
+                           <div class="form-group">
+                              <label for="text">Quantity</label>
+                              <input id="add_quantity" class="form-control"  placeholder="5" 						name="quantity">
+                           </div>
+                           <div class="form-group">
+                              <label for="text">Building:</label>
+                              <input id="add_building" class="form-control"  placeholder="Science" 						name="building">
+                           </div>
+                           <div class="form-group">
+                              <label for="text">Room Number:</label>
+                              <input id="add_room_number" class="form-control" placeholder="135" 						name="room_number">
+                           </div>
+                           <div class="form-group">
+                              <label for="text">Shelf:</label>
+                              <input id="add_shelf" class="form-control" placeholder="A-1" 						name="add_shelf">
+                           </div>
+                           <div class="form-group">
+                              <label for="text">Invoice ID:</label>
+                              <input id="add_invoice_id" class="form-control"  placeholder="125846" 						name="add_invoice_id">
+                           </div>
+                           <div class="form-group">
+                              <label for="text">Vendor:</label>
+                              <input id="add_vendor" class="form-control"  placeholder="Verilog" 						name="add_vendor">
+                           </div>
+                           <div class="form-group">
+                              <label for="text">Price:</label>
+                              <input id="add_price" class="form-control"  placeholder="50.00" 						name="add_price">
+                           </div>
+                           <div class="form-group">
+                              <label for="text">Purchase Date:</label>
+                              <input id="add_purchase_date" class="form-control"  placeholder="09/24/2017" 						name="add_purhcase_date">
+                           </div>
+                           <button type="submit" class="btn btn-default">Submit</button>
+                        </form>
+                     </div>
+                     <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </nav>
+      </div>
+      <div class="col-lg-10 col-lg-offset-0 col-md-9 col-sm-8">
+         <div class="panel panel-default">
+            <div class="panel-heading">
+               <h3 class="text-center text-primary panel-title"><strong>Inventory</strong></h3>
+            </div>
+            <div class="panel-body">
+               <div class="table-responsive">
+                  <div class="row">
+                     <div class="col-md-12">
+                        <div class="table-responsive">
+                           <table id="mytable" class="table table-bordred table-striped">
+                              <thead>
+                                 <th>#</th>
+                                 <th id="th_serial">Serial</th>
+                                 <th id="th_name">Name</th>
+                                 <th id="th_quantity">Quantity</th>
+                                 <th id="th_location">Location</th>
+                                 <th id="th_shelf">Shelf</th>
+                                 <th id="th_vendor">Vendor</th>
+                                 <th>Edit</th>
+                                 <th>Delete</th>
+                              </thead>
+                              <tbody id="tablebody">
+                              </tbody>
+                           </table>
+                           <div class="clearfix"></div>
+                           <ul class="pagination pull-right">
+                              <li class="disabled"><a href="#"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+                              <li class="active"><a href="#">1</a></li>
+                              <li><a href="#"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+                  <div class="modal-dialog">
+                     <div class="modal-content">
+                        <div class="modal-header">
+                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                           <h4 class="modal-title custom_align" id="Heading">Edit Item Detail</h4>
+                        </div>
+                        <div class="modal-body">
+                           <div class="form-group">
+                              <input class="form-control " type="text" placeholder="Serial Number">
+                           </div>
+                           <div class="form-group">
+                              <input class="form-control " type="text" placeholder="Item Name">
+                           </div>
+                           <div class="form-group">
+                              <input class="form-control " type="text" placeholder="Quantity">
+                           </div>
+                           <div class="form-group">
+                              <input class="form-control " type="text" placeholder="Location">
+                           </div>
+                        </div>
+                        <div class="modal-footer ">
+                           <button type="button" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span> Update</button>
+                        </div>
+                     </div>
+                     <!-- /.modal-content -->
+                  </div>
+                  <!-- /.modal-dialog -->
+               </div>
+               <div class="modal fade" id="info" tabindex="-1" role="dialog" aria-labelledby="info" aria-hidden="true">
+                  <div class="modal-dialog">
+                     <div class="modal-content">
+                        <div class="modal-header">
+                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                           <h4 class="modal-title custom_align" id="Heading">More Info</h4>
+                        </div>
+                        <div class="modal-body">
+                           <div class="form-group">
+                              <span><label for="info_serial">Serial: </label></span><span><input id="info_serial" class="form-control " type="text" placeholder="Serial Number"></span>
+                              <span><label for="info_name">Name: </label></span><span><input id="info_name" class="form-control " type="text" placeholder="Item Name"></span>
+                           </div>
+                           <div class="form-group">
+                             <span><label for="info_quantity">Quantity: </label></span><span><input id="info_quantity" class="form-control " type="text" placeholder="Quantity"></span>
+                             <span><label for="info_location">Location: </label></span><span><input id="info_location" class="form-control " type="text" placeholder="Location"></span>
+                           </div>
+                           <div class="form-group">
+                             <span><label for="info_invoice_id">Invoice ID: </label></span><span><input id="info_invoice_id" class="form-control " type="text" placeholder="Invoice ID"><span>
+                             <span><label for="info_invoice_price">Price: </label></span><span><input id="info_invoice_price" class="form-control " type="text" placeholder="Invoice Price"><span>
+                           </div>
+                           <div class="form-group">
+                             <select id="info_associated_labs" class="form-control">
+
+                             </select>
+                           </div>
+                        </div>
+                     </div>
+                     <!-- /.modal-content -->
+                  </div>
+                  <!-- /.modal-dialog -->
+               </div>
+               <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+                  <div class="modal-dialog">
+                     <div class="modal-content">
+                        <div class="modal-header">
+                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                           <h4 class="modal-title custom_align" id="Heading">Delete this entry</h4>
+                        </div>
+                        <div class="modal-body">
+                           <div class="alert alert-danger"><span class="glyphicon glyphicon-warning-sign"></span> Are you sure you want to delete this Record?</div>
+                        </div>
+                        <div class="modal-footer ">
+                           <button id="remove_btn" type="button" class="btn btn-success" ><span class="glyphicon glyphicon-ok-sign"></span> Yes</button>
+                           <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> No</button>
+                        </div>
+                     </div>
+                     <!-- /.modal-content -->
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <script src="static/js/jQuery.js"></script>
+      <script src="static/bootstrap/js/bootstrap.min.js"></script>
+      <script src="static/js/inventory/admin/removeInventoryItem.js"></script>
+      <script src="static/js/inventory/admin/addInventoryItem.js"></script>
+      <script src="static/js/inventory/admin/setSerialNumToRemove.js"></script>
+      <script src="static/js/inventory/normal/populateAssociatedInfoLabs.js"></script>
+      <script src="static/js/inventory/normal/populateInfoModal.js"></script>
+      <script src="static/js/inventory/admin/getFilteredInventoryAdmin.js"></script>
+      <script src="static/js/inventory/admin/onPageLoad.js"></script>
+      <script src="static/js/signout.js"></script>
+   </body>
+</html>
