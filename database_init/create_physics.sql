@@ -47,6 +47,18 @@ CREATE TABLE `physics`.`user_permissions`(
      `role` VARCHAR(45) NULL,
      `email` VARCHAR(60) NULL,
      PRIMARY KEY(`user_request_id`));
+     
+ -- create lab requests table
+ CREATE TABLE `physics`.`lab_requests`(
+     `lab_request_id` INT(36) auto_increment,
+     `lab_id` INT(36),
+     `dates` VARCHAR(60),
+     `time_needed` VARCHAR(60),
+     `classroom` VARCHAR(45),
+     `banner_id` INT(9),
+     `num_teams` SMALLINT(5),
+     `notes` VARCHAR(250) NULL,
+     PRIMARY KEY(`lab_request_id`));
 
 source sp_add_user.sql;
 source sp_change_permissions.sql;
