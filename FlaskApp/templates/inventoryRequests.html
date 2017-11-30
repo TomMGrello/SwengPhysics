@@ -3,13 +3,13 @@
    <head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>redesigned-upload database file</title>
+      <title>Inventory Requests</title>
       <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
-      <link rel="stylesheet" href="static/styles/uploadDatabaseStyle.css">
+      <link rel="stylesheet" href="static/styles/labsDemosRequestsStyle.css">
       <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
    </head>
    <body>
-      <img src="assets/img/RULogo.png">
+      <img src="static/images/RULogo.png">
       <nav class="navbar navbar-default" id="mainnavbar">
          <div class="container-fluid">
             <div class="navbar-header"><a href="#" class="navbar-brand visible-xs-block navbar-link">Menu </a>
@@ -29,8 +29,9 @@
                      <ul role="menu" class="dropdown-menu">
                         <li role="presentation"><a href="/manageUserRequests">User Requests</a></li>
                         <li role="presentation"><a href="/PermissionsForAdminPage">User Permissions</a></li>
-                        <li role="presentation"><a href="/manageLabRequest">Lab/Demo Rquests</a></li>
+                        <li role="presentation"><a href="/manageLabRequests">Lab/Demo Requests</a></li>
                      </ul>
+                  </li>
                   <li class="dropdown">
                      <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Database <span class="caret"></span></a>
                      <ul role="menu" class="dropdown-menu">
@@ -44,30 +45,32 @@
             </div>
          </div>
       </nav>
-      <div class="col-lg-10 col-lg-offset-1 col-md-12">
+      <div class="col-lg-10 col-lg-offset-0 col-md-9 col-sm-8">
          <div class="panel panel-default">
             <div class="panel-heading">
-               <h3 class="text-center text-primary panel-title"><strong>Import Inventory </strong></h3>
+               <h3 class="text-center text-primary panel-title"><strong>Inventory</strong></h3>
             </div>
             <div class="panel-body">
-               <div class="container-fluid">
-                  <div class="col-md-8 col-md-offset-2">
-                     <h3>Upload your database file here..</h3>
-                     <form method="POST" action="#" enctype="multipart/form-data">
-                        <!-- COMPONENT START -->
-                        <div class="form-group">
-                           <div class="input-group input-file" name="Fichier1">
-                              <input type="text" class="form-control" placeholder='Choose a file...' />
-                              <span class="input-group-btn">
-                              <button class="btn btn-default btn-choose" type="button">Choose</button>
-                              </span>
-                           </div>
-                           <div id = "uploadbuttons"class="form-group">
-                              <button type="submit" class="btn btn-primary pull-right">Submit</button>
-                           </div>
-                        </div>
-                        <!-- COMPONENT END -->
-                     </form>
+               <div style = "overflow:auto;">
+                  <div class="container-fluid">
+                     <table class="table table-striped">
+                        <thead>
+                           <tr>
+                              <th></th>
+                              <th>Date Requested</th>
+                              <th>Time Requested</th>
+                              <th>Requested by</th>
+                              <th>Item Name</th>
+                              <th>Item Serial</th>
+                              <th>Classroom</th>
+                              <th># Units</th>
+                              <th class="text-center">Action</th>
+                           </tr>
+                        </thead>
+                        <tbody id="requests_table">
+                        </tbody>
+
+                     </table>
                   </div>
                </div>
             </div>
@@ -75,7 +78,11 @@
       </div>
       <script src="static/js/jquery.js"></script>
       <script src="static/bootstrap/js/bootstrap.min.js"></script>
-      <script src="static/js/signout.js"></script>
-      <script src="static/js/batchImport/choosefile.js"></script>
+      <script src="static/js/manageInventoryRequests/acceptInventoryRequest.js"></script>
+      <script src="static/js/manageInventoryRequests/rejectInventoryRequest.js"></script>
+      <script src="static/js/manageInventoryRequests/getAllInventoryRequests.js"></script>
+      <script src="static/js/manageInventoryRequests/onPageLoad.js"></script>
+
+
    </body>
 </html>

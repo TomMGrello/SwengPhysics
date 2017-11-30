@@ -10,7 +10,7 @@ import smtplib
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 import time
-import spreadsheet
+#import spreadsheet
 
 ###########################################################################################
 ##################################### ERROR CONSTANTS #####################################
@@ -104,6 +104,34 @@ def uploadDatabase():
 
 	if int(can_modify_record) == 1:
 		return render_template("uploadDatabase.html")
+
+@flask_application.route("/manageInventoryRequests",methods=['GET'])
+def manageInventoryRequests():
+	conn = get_db()
+	cursor = conn.cursor()
+
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_modify_record = user_permissions[CAN_MODIFY_RECORD_INDEX];
+
+	if int(can_modify_record) == 1:
+		return render_template("inventoryRequests.html")
+
+@flask_application.route("/requestInventory",methods=['GET'])
+def requestInventory():
+	conn = get_db()
+	cursor = conn.cursor()
+
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_request_record = user_permissions[CAN_REQUEST_RECORD_INDEX];
+
+	if int(can_request_record) == 1:
+		return render_template("requestInventory.html")
 
 @flask_application.route("/inventory",methods=['GET'])
 def mainInventoryView():
@@ -567,8 +595,7 @@ def addLab():
 	can_add_record = user_permissions[CAN_ADD_RECORD_INDEX]
 	if can_add_record == 1:
 		cursor.callproc('sp_add_lab',[input_type,name,topic,concept,subconcept,lab_id])
-		cursor.fetchall()
-		result = SUCCESS
+		result = cursor.fetchall()
 
 	return jsonify(result=result)
 
@@ -955,8 +982,8 @@ def importInventory():
 	cursor = conn.cursor()
 	importedData = spreadsheet.importInventorySheet()
 	numData = len(importedData)
-	
-	#for entry in range(0, numData):		
+
+	#for entry in range(0, numData):
 		#cursor.callproc('sp_add_inventory_item',[name,serial_num,hashed_serial_num,invoice_id,purchase_date,price,vendor_name,building,room_num,shelf,quantity])
 		#cursor.callproc('sp_add_inventory_item',importData[entry])
 	cursor.close()

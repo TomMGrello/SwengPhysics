@@ -1,0 +1,4 @@
+$(function() {
+    getAllInventoryRequests();
+    return false;
+});

@@ -25,6 +25,7 @@ BEGIN
       p_concept,
       p_subconcept
     );
+    SELECT LAST_INSERT_ID();
   ELSE
 
     DELETE from lab_demo where lab_id=p_lab_id;
@@ -43,6 +44,7 @@ BEGIN
       p_concept,
       p_subconcept
     );
+    SELECT p_lab_id;
     END IF;
   commit;
 
