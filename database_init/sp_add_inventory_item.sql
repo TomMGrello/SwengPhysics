@@ -16,6 +16,9 @@ CREATE PROCEDURE `sp_add_inventory_item`(
 )
 
 BEGIN
+  IF (select exists (select 1 from object where hashed_serial_num = p_hashed_serial)) THEN
+    call sp_remove_inventory_item(p_hashed_serial);
+  END IF;
 	REPLACE into object (
         hashed_serial_num,
         name,

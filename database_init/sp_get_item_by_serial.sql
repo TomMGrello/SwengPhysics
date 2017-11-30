@@ -17,9 +17,9 @@ BEGIN
           item_locations.shelf,
           invoice.invoice_id,
           object_invoice.object_price FROM object
-  INNER JOIN item_locations on object.serial_num = item_locations.serial_num
+  INNER JOIN item_locations on object.hashed_serial_num = item_locations.hashed_serial_num
   INNER JOIN location on item_locations.location_id = location.location_id
-  INNER JOIN object_invoice on object.serial_num = object_invoice.serial_num
+  INNER JOIN object_invoice on object.hashed_serial_num = object_invoice.hashed_serial_num
   INNER JOIN invoice on object_invoice.invoice_id = invoice.invoice_id
   WHERE object.hashed_serial_num = p_hashed_serial_num;
 END $$
