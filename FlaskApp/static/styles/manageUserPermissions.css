@@ -20,6 +20,44 @@ h3.text-center.text-primary.panel-title{
   font-size:20px;
 }
 
+table{
+  width:100%;
+}
+
+
+
+thead, tbody, tr, td, th{
+  display:block;
+}
+
+
+
+tr:after{
+  content:' ';
+  display:block;
+  visibility:hidden;
+  clear:both;
+}
+
+thead th{
+  height:40px;
+}
+
+
+
+tbody{
+  height:450px;
+  overflow-y:auto;
+}
+
+thead{
+}
+
+tbody td, thead th{
+  width:12.2%;
+  float:left;
+}
+
 p.lead.text-right.text-success{
   width:50%;
   float:right;

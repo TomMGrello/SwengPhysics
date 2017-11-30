@@ -503,7 +503,7 @@ def getFilteredInventory():
 	result = cursor.fetchall()
 	cursor.close()
 	return jsonify(result=result)
-#type:filter_type,name:filter_name,topic:filter_topic,concept:filter_concept,subconcept:filter_subconcept
+
 @flask_application.route("/getFilteredLabsDemos",methods=['GET'])
 def getFilteredLabsDemos():
 	conn = get_db()
@@ -615,6 +615,8 @@ def removeLab():
 
 	return jsonify(result=result)
 
+	#Using Google's SMTP server. This requires a "no-reply" account to be created on GMail for our
+	#application to work correctly.
 def sendEmail(toaddr,body,subject):
 	email_server = smtplib.SMTP('smtp.gmail.com',587)
 	email_server.ehlo()
