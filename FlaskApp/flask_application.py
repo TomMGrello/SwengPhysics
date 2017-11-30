@@ -10,6 +10,7 @@ import smtplib
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 import time
+
 ###########################################################################################
 ##################################### ERROR CONSTANTS #####################################
 ###########################################################################################
@@ -377,6 +378,7 @@ def getAllUserRequests():
 
 @flask_application.route("/allUserPermissions",methods=['GET'])
 def allUserPermissions():
+	conn = get_db()
 	cursor = conn.cursor()
 	result = NO_PERMISSIONS
 
@@ -612,6 +614,20 @@ def removeLab():
 
 	return jsonify(result=result)
 
+def sendEmail(toaddr,body,subject):
+	email_server = smtplib.SMTP('smtp.gmail.com',587)
+	email_server.ehlo()
+	email_server.starttls()
+	fromaddr = 'emailtesterphysics@gmail.com'
+	msg = MIMEText(body)
+	msg['From'] = fromaddr
+	msg['To'] = toaddr
+	msg['Subject'] = subject
+	text = msg.as_string()
+	email_server.login("emailtesterphysics@gmail.com","ttteeesssttt")
+	email_server.sendmail(fromaddr,toaddr,text)
+	email_server.quit()
+
 @flask_application.route("/addLabRequest",methods=['GET'])
 def addLabRequest():
 	conn = get_db()
@@ -626,36 +642,32 @@ def addLabRequest():
 	lab_name = request.args.get('lab_name')
 	cursor = conn.cursor()
 
-	result = SUCCESS
+	result = INCORRECT_PERMISSIONS
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
 
-	cursor.callproc('sp_add_lab_request',[lab_id,dates,time_needed,classroom,banner_id,num_teams,notes])
-	cursor.fetchall()
+	user_permissions = cursor.fetchall()[0]
+	can_request_record = user_permissions[CAN_REQUEST_RECORD_INDEX]
 
-	email_server = smtplib.SMTP('smtp.gmail.com',587)
-	email_server.ehlo()
-	email_server.starttls()
-	fromaddr = 'emailtesterphysics@gmail.com'
-	toaddr = session['email']
+	if can_request_record == 1:
+		cursor.callproc('sp_add_lab_request',[lab_id,dates,time_needed,classroom,banner_id,num_teams,notes])
+		cursor.fetchall()
 
-	#get some sort of unique email Subject
-	email_id = toaddr + str(time.time())
-	email_id = str(abs(hash(email_id)))
+		toaddr = session['email']
+		body = 'Your lab/demo request has been received.\nYou will receive a notification when your request is approved or denied.\n\n'
+		lab_info = "TITLE: " + lab_name + "\n"
+		lab_info += "DATE(S) NEEDED: " + dates + "\n"
+		lab_info += "CLASSROOM: " + classroom + "\n"
+		lab_info += "NUMBER OF TEAMS: " + num_teams + "\n"
+		lab_info += "ADDITIONAL NOTES: " + notes + "\n"
+		body += lab_info
 
-	body = 'Your lab/demo request has been received.\nYou will receive a notification when your request is approved or denied.\n\n'
-	lab_info = "TITLE: " + lab_name + "\n"
-	lab_info += "DATE(S) NEEDED: " + dates + "\n"
-	lab_info += "CLASSROOM: " + classroom + "\n"
-	lab_info += "NUMBER OF TEAMS: " + num_teams + "\n"
-	lab_info += "ADDITIONAL NOTES: " + notes + "\n"
-	body += lab_info
-	msg = MIMEText(body)
-	msg['From'] = fromaddr
-	msg['To'] = toaddr
-	msg['Subject'] = 'Physics request #' + email_id
-	text = msg.as_string()
-	email_server.login("emailtesterphysics@gmail.com","ttteeesssttt")
-	email_server.sendmail(fromaddr,toaddr,text)
-	email_server.quit()
+		#get some sort of unique email Subject
+		email_id = toaddr + dates + lab_name
+		email_id = str(abs(hash(email_id)))
+
+		subject = 'Physics request #' + email_id
+		sendEmail(toaddr,body,subject)
 
 	cursor.close()
 	return jsonify(result=result)
@@ -688,17 +700,7 @@ def acceptLabRequest():
 
 		cursor.callproc('sp_get_email',[int(banner_id)])
 
-		email_server = smtplib.SMTP('smtp.gmail.com',587)
-		email_server.ehlo()
-		email_server.starttls()
-		fromaddr = 'emailtesterphysics@gmail.com'
 		toaddr = cursor.fetchall()[0][0]
-
-
-
-		#get some sort of unique email Subject
-		email_id = toaddr + str(time.time())
-		email_id = str(abs(hash(email_id)))
 
 		body = 'Your request for the following lab has been approved:\n\n'
 		lab_info = "TITLE: " + lab_name + "\n"
@@ -706,14 +708,14 @@ def acceptLabRequest():
 		lab_info += "CLASSROOM: " + classroom + "\n"
 		lab_info += "NUMBER OF TEAMS: " + str(num_teams) + "\n"
 		body += lab_info
-		msg = MIMEText(body)
-		msg['From'] = fromaddr
-		msg['To'] = toaddr
-		msg['Subject'] = 'Physics request accepted #' + email_id
-		text = msg.as_string()
-		email_server.login("emailtesterphysics@gmail.com","ttteeesssttt")
-		email_server.sendmail(fromaddr,toaddr,text)
-		email_server.quit()
+
+		#get some sort of unique email Subject
+		email_id = toaddr + dates + lab_name
+		email_id = str(abs(hash(email_id)))
+
+		subject = 'Physics request accepted #' + email_id
+		sendEmail(toaddr,body,subject)
+
 		result = SUCCESS
 
 	cursor.close()
@@ -747,32 +749,19 @@ def rejectLabRequest():
 
 		cursor.callproc('sp_get_email',[int(banner_id)])
 
-		email_server = smtplib.SMTP('smtp.gmail.com',587)
-		email_server.ehlo()
-		email_server.starttls()
-		fromaddr = 'emailtesterphysics@gmail.com'
 		toaddr = cursor.fetchall()[0][0]
-
-
-
-		#get some sort of unique email Subject
-		email_id = toaddr + str(time.time())
-		email_id = str(abs(hash(email_id)))
-
 		body = 'Your request for the following lab has been rejected:\n\n'
 		lab_info = "TITLE: " + lab_name + "\n"
 		lab_info += "DATE(S) NEEDED: " + dates + "\n"
 		lab_info += "CLASSROOM: " + classroom + "\n"
 		lab_info += "NUMBER OF TEAMS: " + str(num_teams) + "\n"
 		body += lab_info
-		msg = MIMEText(body)
-		msg['From'] = fromaddr
-		msg['To'] = toaddr
-		msg['Subject'] = 'Physics request rejected #' + email_id
-		text = msg.as_string()
-		email_server.login("emailtesterphysics@gmail.com","ttteeesssttt")
-		email_server.sendmail(fromaddr,toaddr,text)
-		email_server.quit()
+		#get some sort of unique email Subject
+		email_id = toaddr + dates + lab_name
+		email_id = str(abs(hash(email_id)))
+		subject = 'Physics request rejected #' + email_id
+		sendEmail(toaddr,body,subject)
+
 		result = SUCCESS
 
 	cursor.close()
@@ -792,6 +781,165 @@ def getAllLabRequests():
 	can_remove_record = user_permissions[CAN_REMOVE_RECORD_INDEX]
 	if can_remove_record == 1:
 		cursor.callproc('sp_get_all_lab_requests',[])
+		result = cursor.fetchall()
+
+	cursor.close()
+	return jsonify(result=result)
+
+#START Inventory requests
+@flask_application.route("/addInventoryRequest",methods=['GET'])
+def addInventoryRequest():
+	conn = get_db()
+	result = MISSING_INPUT
+	serial_num = request.args.get('serial_num')
+	dates = request.args.get('dates')
+	time_needed = request.args.get('time')
+	classroom = request.args.get('classroom')
+	banner_id = session['banner_id']
+	num_teams = request.args.get('num_teams')
+	notes = request.args.get('notes')
+	item_name = request.args.get('item_name')
+	cursor = conn.cursor()
+
+	result = INCORRECT_PERMISSIONS
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_request_record = user_permissions[CAN_REQUEST_RECORD_INDEX]
+
+	if can_request_record == 1:
+		cursor.callproc('sp_add_inventory_request',[serial_num,dates,time_needed,classroom,banner_id,num_teams,notes])
+		cursor.fetchall()
+
+		toaddr = session['email']
+		body = 'Your item request has been received.\nYou will receive a notification when your request is approved or denied.\n\n'
+		inventory_item_info = "TITLE: " + item_name + "\n"
+		inventory_item_info += "DATE(S) NEEDED: " + dates + "\n"
+		inventory_item_info += "CLASSROOM: " + classroom + "\n"
+		inventory_item_info += "NUMBER OF TEAMS: " + num_teams + "\n"
+		inventory_item_info += "ADDITIONAL NOTES: " + notes + "\n"
+		body += inventory_item_info
+
+		#get some sort of unique email Subject
+		email_id = toaddr + dates + item_name
+		email_id = str(abs(hash(email_id)))
+
+		subject = 'Physics request #' + email_id
+		sendEmail(toaddr,body,subject)
+
+	cursor.close()
+	return jsonify(result=result)
+
+@flask_application.route("/acceptInventoryRequest",methods=['GET'])
+def acceptInventoryRequest():
+	conn = get_db()
+	result = MISSING_INPUT
+	request_id = request.args.get('request_id')
+	cursor = conn.cursor()
+
+	result = INCORRECT_PERMISSIONS
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_remove_record = user_permissions[CAN_REMOVE_RECORD_INDEX]
+	if can_remove_record == 1:
+		cursor.callproc('sp_get_inventory_request_by_id',[request_id])
+		request_data = cursor.fetchall()[0]
+		dates = request_data[2]
+		time_needed = request_data[3]
+		classroom = request_data[4]
+		banner_id = request_data[5]
+		num_teams = request_data[6]
+		item_name = request_data[10]
+		cursor.callproc('sp_delete_inventory_item_request',[request_id])
+		cursor.fetchall()
+		result = SUCCESS
+
+		cursor.callproc('sp_get_email',[int(banner_id)])
+
+		toaddr = cursor.fetchall()[0][0]
+
+		body = 'Your request for the following item has been approved:\n\n'
+		inventory_item_info = "TITLE: " + item_name + "\n"
+		inventory_item_info += "DATE(S) NEEDED: " + dates + "\n"
+		inventory_item_info += "CLASSROOM: " + classroom + "\n"
+		inventory_item_info += "NUMBER OF TEAMS: " + str(num_teams) + "\n"
+		body += inventory_item_info
+
+		#get some sort of unique email Subject
+		email_id = toaddr + dates + item_name
+		email_id = str(abs(hash(email_id)))
+
+		subject = 'Physics request accepted #' + email_id
+		sendEmail(toaddr,body,subject)
+
+		result = SUCCESS
+
+	cursor.close()
+	return jsonify(result=result)
+
+@flask_application.route("/rejectInventoryRequest",methods=['GET'])
+def rejectInventoryRequest():
+	conn = get_db()
+	result = MISSING_INPUT
+	request_id = request.args.get('request_id')
+	cursor = conn.cursor()
+
+	result = INCORRECT_PERMISSIONS
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_remove_record = user_permissions[CAN_REMOVE_RECORD_INDEX]
+	if can_remove_record == 1:
+		cursor.callproc('sp_get_inventory_request_by_id',[request_id])
+		request_data = cursor.fetchall()[0]
+		dates = request_data[2]
+		time_needed = request_data[3]
+		classroom = request_data[4]
+		banner_id = request_data[5]
+		num_teams = request_data[6]
+		item_name = request_data[10]
+		cursor.callproc('sp_delete_inventory_request',[request_id])
+		cursor.fetchall()
+		result = SUCCESS
+
+		cursor.callproc('sp_get_email',[int(banner_id)])
+
+		toaddr = cursor.fetchall()[0][0]
+		body = 'Your request for the following item has been rejected:\n\n'
+		inventory_item_info = "TITLE: " + item_name + "\n"
+		inventory_item_info += "DATE(S) NEEDED: " + dates + "\n"
+		inventory_item_info += "CLASSROOM: " + classroom + "\n"
+		inventory_item_info += "NUMBER OF TEAMS: " + str(num_teams) + "\n"
+		body += inventory_item_info
+		#get some sort of unique email Subject
+		email_id = toaddr + dates + item_name
+		email_id = str(abs(hash(email_id)))
+		subject = 'Physics request rejected #' + email_id
+		sendEmail(toaddr,body,subject)
+
+		result = SUCCESS
+
+	cursor.close()
+	return jsonify(result=result)
+
+@flask_application.route("/getAllInventoryRequests",methods=['GET'])
+def getAllInventoryRequests():
+	conn = get_db()
+	result = MISSING_INPUT
+	cursor = conn.cursor()
+
+	result = INCORRECT_PERMISSIONS
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_remove_record = user_permissions[CAN_REMOVE_RECORD_INDEX]
+	if can_remove_record == 1:
+		cursor.callproc('sp_get_all_inventory_requests',[])
 		result = cursor.fetchall()
 
 	cursor.close()
