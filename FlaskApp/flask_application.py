@@ -126,9 +126,9 @@ def mainInventoryView():
 		return render_template("new_nonadmin_inventory.html")
 
 
-@flask_application.route("/PermissionsForAdminPage",methods=['GET'])
-def PermissionsForAdminPage():
-	return render_template("PermissionsForAdminPage.html");
+@flask_application.route("/manageUserPermissions",methods=['GET'])
+def manageUserPermissions():
+	return render_template("manageUserPermissions.html");
 
 @flask_application.route("/labsAndDemos",methods=['GET'])
 def labsAndDemos():
