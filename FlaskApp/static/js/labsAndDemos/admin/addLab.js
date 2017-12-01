@@ -1,6 +1,6 @@
 $(function() {
 
-    document.getElementById('new_lab_btn').addEventListener('click', function(e) {
+    /*document.getElementById('new_lab_btn').addEventListener('click', function(e) {
         //e.preventDefault();
         var name = document.getElementById('input_name').value;
         var topic = document.getElementById('input_topic').value;
@@ -20,6 +20,6 @@ $(function() {
         }, function(data) {
             return false;
         });
-    });
+    });*/
 
 });

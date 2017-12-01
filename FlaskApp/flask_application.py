@@ -582,30 +582,6 @@ def getFilteredLabsDemos():
 	cursor.close()
 	return jsonify(result=result)
 
-@flask_application.route("/addLab",methods=['GET'])
-def addLab():
-	conn = get_db()
-	cursor = conn.cursor()
-
-	input_type = request.args.get('type')
-	name = request.args.get('name')
-	topic = request.args.get('topic')
-	concept = request.args.get('concept')
-	subconcept = request.args.get('subconcept')
-	lab_id = request.args.get('lab_id')
-
-	result = INCORRECT_PERMISSIONS
-	banner_id = session['banner_id']
-	cursor.callproc('sp_get_permissions',[banner_id])
-
-	user_permissions = cursor.fetchall()[0]
-	can_add_record = user_permissions[CAN_ADD_RECORD_INDEX]
-	if can_add_record == 1:
-		cursor.callproc('sp_add_lab',[input_type,name,topic,concept,subconcept,lab_id])
-		result = cursor.fetchall()
-
-	return jsonify(result=result)
-
 @flask_application.route("/addItemToLab",methods=['GET'])
 def addItemToLab():
 	conn = get_db()
@@ -827,16 +803,47 @@ def getAllLabRequests():
 def uploadFile():
 	if request.method == 'POST':
 		f = request.files['file']
-		filename = request.args['name']
-		filename = filename.replace(" ","")
-		filename = filename.lower()
+
+		name = request.form['name']
+		input_type = request.form['type']
+		topic = request.form['topic']
+		concept = request.form['concept']
+		subconcept = request.form['subconcept']
+
+		#This may or may not be null, depending on if they're editing or adding
+		lab_id = request.form['lab_id']
+
+		#The result will be the newly added lab_id
+		addResult = addLab(input_type,name,topic,concept,subconcept,lab_id)
+
+		try:
+			int(addResult[0])
+		except ValueError:
+			return "Add failed"
+
+		filename = addResult[0] + ".pdf"
 		print "FILENAME: " + filename
 		if f and allowed_file(f.filename):
-			f.save(os.path.join(flask_application.config['UPLOAD_FOLDER'], filename + ".pdf"))
+			f.save(os.path.join(flask_application.config['UPLOAD_FOLDER'], filename))
 			return 'file uploaded successfully'
 		return 'file type not supported. try again with a PDF'
 	return "<br>".join(os.listdir(flask_application.config['UPLOAD_FOLDER'],))
 
+def addLab(name,input_type,topic,concept,subconcept,lab_id):
+	conn = get_db()
+	cursor = conn.cursor()
+
+	result = INCORRECT_PERMISSIONS
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_add_record = user_permissions[CAN_ADD_RECORD_INDEX]
+	if can_add_record == 1:
+		cursor.callproc('sp_add_lab',[input_type,name,topic,concept,subconcept,lab_id])
+		result = cursor.fetchall()
+
+	return jsonify(result=result)
 
 #START Inventory requests
 @flask_application.route("/addInventoryRequest",methods=['GET'])
