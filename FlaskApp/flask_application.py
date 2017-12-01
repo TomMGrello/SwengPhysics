@@ -861,33 +861,6 @@ def addInventoryRequest():
 	cursor.callproc('sp_get_permissions',[banner_id])
 
 	user_permissions = cursor.fetchall()[0]
-	can_add_record = user_permissions[CAN_ADD_RECORD_INDEX]
-	if can_add_record == 1:
-		cursor.callproc('sp_add_lab',[input_type,name,topic,concept,subconcept,lab_id])
-		result = cursor.fetchall()
-
-	return jsonify(result=result)
-
-#START Inventory requests
-@flask_application.route("/addInventoryRequest",methods=['GET'])
-def addInventoryRequest():
-	conn = get_db()
-	result = MISSING_INPUT
-	serial_num = request.args.get('serial_num')
-	dates = request.args.get('dates')
-	time_needed = request.args.get('time')
-	classroom = request.args.get('classroom')
-	banner_id = session['banner_id']
-	num_teams = request.args.get('num_teams')
-	notes = request.args.get('notes')
-	item_name = request.args.get('item_name')
-	cursor = conn.cursor()
-
-	result = INCORRECT_PERMISSIONS
-	banner_id = session['banner_id']
-	cursor.callproc('sp_get_permissions',[banner_id])
-
-	user_permissions = cursor.fetchall()[0]
 	can_request_record = user_permissions[CAN_REQUEST_RECORD_INDEX]
 
 	if can_request_record == 1:
