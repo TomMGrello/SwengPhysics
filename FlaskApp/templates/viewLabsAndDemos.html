@@ -111,30 +111,30 @@
                         <form action = "uploadFile" method = "POST" enctype="multipart/form-data">
                            <div class="form-group">
                               <label for="text">Name:</label>
-                              <input  name="name" type="text" class="form-control" placeholder="name for lab/demo" >
+                              <input id="input_name" name="name" type="text" class="form-control" placeholder="name for lab/demo" >
                            </div>
                            <div class="form-group">
                               <label for="pwd">Topic:</label>
-                              <input name="topic"  type="text" class="form-control" placeholder="topic name">
+                              <input name="topic" id="input_topic" type="text" class="form-control" placeholder="topic name">
                            </div>
                            <div class="form-group">
                               <label for="text">Concept:</label>
-                              <input name = "concept" type="text" class="form-control" placeholder="concept for lab/demo">
+                              <input name = "concept" id="input_concept" type="text" class="form-control" placeholder="concept for lab/demo">
                            </div>
                            <div class="form-group">
                               <label for="text">Subconcept</label>
-                              <input name="subconcept"  type="text" class="form-control" placeholder="subconcept name for lab/demo">
+                              <input name="subconcept" id="input_subconcept" type="text" class="form-control" placeholder="subconcept name for lab/demo">
                            </div>
                            <div class="form-group">
                               <label for="text">Category</label>
                               <label class="radio-inline">
-                              <input value="LAB" name="type"  type="radio" > Lab
+                              <input value="LAB" name="type" id="input_lab" type="radio" > Lab
                               </label>
                               <label class="radio-inline">
-                              <input value="DEMO" name="type"  type="radio">Demo
+                              <input value="DEMO" name="type" id="input_demo" type="radio">Demo
                               </label>
                            </div>
-                           <div class="input-group input-file" name="Fichier1">
+                           <div class="input-group input-file">
                               <input id="file_upload" type="file" name="file" class="form-control" />
                               <span class="input-group-btn">
                               <button onclick="document.getElementById('file_upload').click();" class="btn btn-default btn-choose" type="button">Choose</button>
