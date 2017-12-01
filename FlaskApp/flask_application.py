@@ -386,8 +386,10 @@ def addInventoryItem():
 	user_permissions = cursor.fetchall()[0]
 	canAddRecord = user_permissions[CAN_ADD_RECORD_INDEX];
 	if int(canAddRecord) == 1:
-		name = request.args.get('name') #char
-		serial = request.args.get('serial_num') #int
+		name = request.args.get('name')
+		serial = request.args.get('serial_num')
+		hashed_serial = hash(serial)
+		print(hashed_serial)
 		invoice_id = request.args.get('invoice_id') #int
 		purchase_date = request.args.get('purchase_date')
 		price = request.args.get('price') #float
@@ -396,7 +398,8 @@ def addInventoryItem():
 		room_num = request.args.get('room_num')
 		shelf = request.args.get('shelf')
 		quantity = request.args.get('quantity') #int
-		cursor.callproc('sp_add_inventory_item',[name, int(serial), int(invoice_id), purchase_date, float(price), vendor_name, building, room_num, shelf, int(quantity)])
+		cursor.callproc('sp_add_inventory_item',[name, serial, int(hashed_serial), int(invoice_id), purchase_date, float(price), vendor_name, building, room_num, shelf, int(quantity)])
+		cursor.fetchall()
 		result = SUCCESS
 	cursor.close()
 	return jsonify(result=result)
@@ -455,15 +458,10 @@ def modifyInventoryItem():
 	if int(canModifyRecord) == 1:
 		name = request.args.get('name')
 		serial = request.args.get('serial_num')
-		invoice_id = request.args.get('invoice_id')
-		purchase_date = request.args.get('purchase_date')
-		price = request.args.get('price')
-		vendor_name = request.args.get('vendor_name')
+		hashed_serial = hash(serial)
 		building = request.args.get('building')
-		room_num = request.args.get('room_num')
-		shelf = request.args.get('shelf')
 		quantity = request.args.get('quantity')
-		cursor.callproc('sp_add_inventory_item',[name, int(serial), int(invoice_id), purchase_date, float(price), vendor_name, building, room_num, shelf, int(quantity)])
+		cursor.callproc('sp_add_inventory_item',[name, serial, int(hashed_serial), None, None, None, None, building, None, None, int(quantity)])
 		result = SUCCESS
 	cursor.close()
 	return jsonify(result=result)
@@ -481,7 +479,8 @@ def removeInventoryItem():
 
 	if int(canRemoveRecord) == 1:
 		serial = request.args.get('serial_num')
-		cursor.callproc('sp_remove_inventory_item', [int(serial)])
+		hashed_serial = hash(serial)
+		cursor.callproc('sp_remove_inventory_item', [int(hashed_serial)])
 		result = SUCCESS
 	cursor.close()
 	return jsonify(result=result)

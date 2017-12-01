@@ -12,7 +12,7 @@ CREATE PROCEDURE `sp_get_items_by_lab_id`(
 
 BEGIN
   SELECT * FROM object_lab_demo
-  INNER JOIN object on object.serial_num = object_lab_demo.serial_num
+  INNER JOIN object on object.hashed_serial_num = object_lab_demo.hashed_serial_num
    WHERE lab_id=p_lab_id;
 END $$
 
