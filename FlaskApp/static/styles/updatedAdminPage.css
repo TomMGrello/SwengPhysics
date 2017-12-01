@@ -152,4 +152,48 @@ div.modal-body {
 div#filtercont.container {
     width: 100%;
 }
-a {}
+
+/* Adding new CSS for table to make header of the table static. */
+
+@media (min-width:1200px) {
+  table{
+    width:100%;
+  }
+}
+
+@media (min-width:1200px) {
+  thead, tbody, tr, td, th{
+    display:block;
+  }
+}
+
+@media (min-width:1200px) {
+  tr:after{
+    content:' ';
+    display:block;
+    visibility:hidden;
+    clear:both;
+  }
+}
+
+@media (min-width:1200px) {
+  thead th{
+    height:40px;
+  }
+}
+
+@media (min-width:1200px) {
+  tbody{
+    height:450px;
+    overflow-y:auto;
+  }
+}
+
+@media (min-width:1200px) {
+  tbody td, thead th{
+    width:12.2%;
+    float:left;
+  }
+}
+
+/*New change for static header ends here.*/
