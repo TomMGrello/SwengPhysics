@@ -59,6 +59,20 @@ CREATE TABLE `physics`.`user_permissions`(
      `num_teams` SMALLINT(5),
      `notes` VARCHAR(250) NULL,
      PRIMARY KEY(`lab_request_id`));
+     
+-- create object requests table
+CREATE TABLE `physics`.`object_requests`(
+		  `object_request_id` INT (36) auto_increment,
+            `hashed_serial_num` INT (60),
+            `dates` VARCHAR (60),
+            `time_needed` VARCHAR (60),
+            `classroom` VARCHAR (45),
+            `banner_id` INT(9),
+            `num_items` INT (36),
+            `notes` VARCHAR (250) NULL,
+            PRIMARY KEY(`object_request_id`));
+            
+
 
 source sp_add_user.sql;
 source sp_change_permissions.sql;
