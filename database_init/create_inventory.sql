@@ -1,6 +1,6 @@
 CREATE TABLE `physics`.`object`(
      `object_id` int(36) auto_increment,
-     `hashed_serial_num` INT(200) NULL,
+     `hashed_serial_num` BIGINT(200) NULL,
      `name` VARCHAR(60) NULL,
      `serial_num` VARCHAR(45) NULL,
      PRIMARY KEY(`object_id`),
@@ -23,7 +23,7 @@ CREATE TABLE `physics`.`invoice`(
 CREATE TABLE `physics`.`object_invoice`(
     `object_invoice_id` int(36) auto_increment,
     `invoice_id` int(36) NULL,
-    `hashed_serial_num` INT(200) NULL,
+    `hashed_serial_num` BIGINT(200) NULL,
     `object_price` float(10) NULL,
     PRIMARY KEY(`object_invoice_id`));
 
@@ -39,7 +39,7 @@ CREATE TABLE `physics`.`lab_demo`(
 
 CREATE TABLE `physics`.`object_lab_demo`(
   `object_lab_demo_id` int(36) auto_increment,
-  `hashed_serial_num` INT(200) NULL,
+  `hashed_serial_num` BIGINT(200) NULL,
   `lab_id` int(36) NULL,
   `quantity` int(20) NULL,
   PRIMARY KEY(`object_lab_demo_id`));
@@ -47,7 +47,7 @@ CREATE TABLE `physics`.`object_lab_demo`(
 CREATE TABLE `physics`.`item_locations`(
     `item_locations_id` int(36) auto_increment,
     `location_id` int(36) NULL,
-    `hashed_serial_num` INT(200) NULL,
+    `hashed_serial_num` BIGINT(200) NULL,
     `quantity` int(10) NULL,
     `shelf` VARCHAR(10) NULL,
     PRIMARY KEY(`item_locations_id`),
