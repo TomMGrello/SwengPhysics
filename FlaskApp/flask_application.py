@@ -1023,25 +1023,6 @@ def importInventory():
 def upload():
    return render_template('upload.html')
 
-@flask_application.route("/getAllInventoryRequests",methods=['GET'])
-def getAllInventoryRequests():
-	conn = get_db()
-	result = MISSING_INPUT
-	cursor = conn.cursor()
-
-	result = INCORRECT_PERMISSIONS
-	banner_id = session['banner_id']
-	cursor.callproc('sp_get_permissions',[banner_id])
-
-	user_permissions = cursor.fetchall()[0]
-	can_remove_record = user_permissions[CAN_REMOVE_RECORD_INDEX]
-	if can_remove_record == 1:
-		cursor.callproc('sp_get_all_inventory_requests',[])
-		result = cursor.fetchall()
-
-	cursor.close()
-	return jsonify(result=result)
-
 @flask_application.route("/importInventory",methods=['GET'])
 def importInventory():
  	conn = get_db()
