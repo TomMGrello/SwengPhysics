@@ -16,6 +16,7 @@ MISSING_INPUT = 'INPUT_NOT_SUPPLIED'
 NO_REQUESTS = 'NO_REQUESTS'
 INCORRECT_PERMISSIONS = 'INCORRECT_PERMISSIONS'
 ERROR = 'ERROR'
+NO_PERMISSIONS = 'NO PERMISSIONS FOUND'
 
 ###########################################################################################
 ##################################### PERMS INDECES #######################################
@@ -365,6 +366,7 @@ def getAllUserRequests():
 
 @flask_application.route("/allUserPermissions",methods=['GET'])
 def allUserPermissions():
+	conn = get_db()
 	cursor = conn.cursor()
 	result = NO_PERMISSIONS
 
@@ -372,6 +374,18 @@ def allUserPermissions():
 	all_permissions = cursor.fetchall()
 
 	result = jsonify(result=all_permissions)
+	print(result)
+	cursor.close()
+	return result
+
+@flask_application.route("/getAllUsers",methods=['GET'])
+def getAllUsers():
+	conn = get_db()
+	cursor = conn.cursor()
+	result = NO_USERS
+	cursor.callproc('sp_get_all_users')
+	all_users = cursor.fetchall()
+	result = jsonify(result=all_users)
 	cursor.close()
 	return result
 

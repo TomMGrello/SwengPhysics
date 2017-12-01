@@ -1,149 +1,356 @@
 <!DOCTYPE html>
 <html>
-   <head>
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-      <link rel="stylesheet" href="static/styles/AdminPageStylesheet.css">
-      <link rel="stylesheet" href="static/styles/addItemStyleSheet.css">
-      <link rel="icon" href="static/images/favicon.ico" type="image/x-icon"/>
-      <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon"/>
-      <script type="text/javascript">
-         function display_c(){
-         var refresh=1000; // Refresh rate in milli seconds
-         mytime=setTimeout('display_ct()',refresh)
-         }
 
-         function display_ct() {
-         var strcount
-         var x = new Date()
-         var x1=x.toUTCString();// changing the display to UTC string
-         document.getElementById('ct').innerHTML = x1;
-         tt=display_c();
-         }
-         // Get the modal
-         var modal = document.getElementById('id01');
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>redesigned-Manage permissions page</title>
+    <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/styles/adminPermissionsPage.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+</head>
 
-         // When the user clicks anywhere outside of the modal, close it
-         window.onclick = function(event) {
-             if (event.target == modal) {
-                 modal.style.display = "none";
-             }
-         }
-         function setURL(url){
-             document.getElementById('iframe').src = url;
-         }
-      </script>
-   </head>
-   <div id="container">
-      <div id="header">
-         <div class = "makeItCenter">
-            <header>
-               <div class="rowanLogo">
-                  <img src="static/images/RULogo.png" alt="Rowan Logo"   width="300" height="45">
-                  <div class = "timeDisplay">
-                     <body onload=display_ct();>
-                        <span id='ct' ></span>
-                     </body>
-                  </div>
-               </div>
-            </header>
-            <div class="navbar">
-               <a href="/adminPage">View Inventory</a>
-               <a href="#news">Account Setting</a>
-               <div class="dropdown">
-                  <!--Drop down for Manage -->
-                  <button class="dropbtn">Manage
-                  <i class="fa fa-caret-down"></i>
-                  </button>
-                  <div class="dropdown-content">
-                     <a href = "onclick=">Users</a>
-                     <a href="#">Requests</a>
-                  </div>
-               </div>
-               <!--Drop down for Database -->
-               <div class="dropdown">
-                  <button class="dropbtn">Database
-                  <i class="fa fa-caret-down"></i>
-                  </button>
-                  <div class="dropdown-content">
-                     <a href="#">View Database</a>
-                     <a href="#">Manage Database</a>
-                  </div>
-               </div>
-               <div class = "logoutButton">
-                  <a href="#news">Logout</a>
-               </div>
+<body><img src="static/images/RULogo.png">
+    <p class="lead text-right text-success">Welcome, Admin</p>
+    <nav class="navbar navbar-default" id="mainnavbar">
+    <div class="container-fluid">
+        <div class="navbar-header"><a href="#" class="navbar-brand visible-xs-block navbar-link">Menu </a>
+            <button data-toggle="collapse" data-target="#navcol-1" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+        </div>
+        <div class="collapse navbar-collapse" id="navcol-1">
+            <ul class="nav navbar-nav">
+                <li class="dropdown"><a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">View <span class="caret"></span></a>
+                    <ul role="menu" class="dropdown-menu">
+                        <li role="presentation"><a href="#">Inventory </a></li>
+                        <li role="presentation"><a href="#">Labs &amp; Demos</a></li>
+                    </ul>
+                </li>
+                <li role="presentation"><a href="#">Manage Users</a></li>
+                <li class="dropdown"><a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Manage <span class="caret"></span></a>
+                    <ul role="menu" class="dropdown-menu">
+                        <li role="presentation"><a href="#">First Item</a></li>
+                        <li role="presentation"><a href="#">Second Item</a></li>
+                        <li role="presentation"><a href="#">Third Item</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">Log Out</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+    <div class="col-lg-2 col-lg-offset-0 col-md-3 col-sm-4">
+        <nav class="navbar navbar-default" id="sidenavbar">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button data-toggle="collapse" data-target="#navcol-2" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+        </div>
+        <div class="collapse navbar-collapse" id="navcol-2">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="text-center">
+                    <button class="btn btn-success navbar-btn " type="button"  href="#myModal" data-toggle="modal">Add User</button>
+                    </div>
+                </div>
             </div>
-         </div>
-         <hr>
-         <div id="body">
-            <div class="sidenav">
-               <button onclick = "document.getElementById('id01').style.display='block'" style="width:auto;"  class="button button2">Add Item</button>
-               <div class="searchDesign">
-                  <div class="search">
-                     <input type="text" class="searchTerm" placeholder="Search..">
-                     <button type="submit" class="searchButton">
-                     <i class="fa fa-search"></i>
-                     </button>
-                  </div>
-               </div>
+        <!--Search Code starts here-->
+        <div class="input-group">
+			<input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">
+			<div class="input-group-btn">
+				<button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+			</div>
+		</div>
+
+        <!--Search Code Ends here-->
+
+        </div>
+
+    </div>
+     <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Add User</h4>
+        </div>
+        <div class="modal-body">
+          <form >
+            <div class="form-group">
+              <label for="email">First Name:</label>
+              <input type="email" class="form-control" id="itemcode" placeholder="first name" name="firstname">
             </div>
-            <div class="main">
+            <div class="form-group">
+              <label for="pwd">Middle Name:</label>
+              <input type="password" class="form-control" id="itemname" placeholder="middle name" name="middlename">
             </div>
-         </div>
-         <div id="id01" class="modal">
-            <form  >
-               <div class="signUpBox">
-                  <h2>Add Item!</h2>
-            <form class="modal-content animate" >
-            <p>Object Name</p>
-            <input type="text" name="" placeholder="name">
-            <div class="maxl">
-            <p> Location(Lab):
-            <label class="radio inline">
-            <input type="radio">
-            <span>136</span>
-            </label>
-            <label class="radio inline">
-            <input type="radio"  >
-            <span>146</span>
-            </label>
-            <label class="radio inline">
-            <input type="radio">
-            <span>149 </span>
-            </label>
-            <label class="radio inline">
-            <input type="radio">
-            <span>152 </span>
-            </label>
-            </p>
+            <div class="form-group">
+              <label for="email">Last Name:</label>
+              <input type="email" class="form-control" id="quantity" placeholder="last name" name="lastname">
             </div>
-            <p></p>
-            <p>Quantity: </p>
-            <input type="text" placeholder="How many?">
-            <p>Topic: </p>
-            <input type="text" placeholder="topic">
-            <p>Concept: </p>
-            <input type="text" placeholder="concept">
-            <p>Subconcept: </p>
-            <input type="text" name="" placeholder="subconcept">
-            <p>Serial No.: </p>
-            <input type="text" name="" placeholder="1XzzY">
-            <!-- Code for Submit button -->
-            <input type="submit" value="Submit">
-            <!-- Code for cancel button -->
-            <input type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn" value="Cancel">
-            </form>
+              <div class="form-group">
+              <label for="email">Email:</label>
+              <input type="email" class="form-control" id="quantity" placeholder="someone@rowan.edu or someone@students.rowan.edu" name="email">
             </div>
-            </form>
-         </div>
-         <div id="footer">
-            <div class = "imageContainer">
-               <img src="static/images/RULogo.png" alt="Rowan Logo" width="200" height="30" >
+
+            <div class="form-group">
+              <label for="email">Role:</label>
+                <label class="radio-inline">
+                <input type="radio" name="optradio"> Professor
+              </label>
+              <label class="radio-inline">
+                <input type="radio" name="optradio">Student
+              </label>
+              <label class="radio-inline">
+                <input type="radio" name="optradio">Lab Admin
+              </label>
             </div>
-            <div class = "streetAddress">
-               <p> Rowan University • 201 Mullica Hill Road • Glassboro, New Jersey 08028 • 856-256-4000 </p>
-            </div>
-         </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
       </div>
-   </div>
+    </div>
+  </div>
+
+</nav>
+    </div>
+    <div class="col-lg-10 col-lg-offset-0 col-md-9 col-sm-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="text-center text-primary panel-title"><strong>Manage Users Permissions</strong></h3></div>
+            <div class="panel-body">
+                <div class="table-responsive">
+    <div class="row">
+
+
+        <div class="col-md-12">
+        <div class="table-responsive">
+
+
+              <table id="mytable" class="table table-bordred table-striped">
+
+                   <thead>
+
+                   <th><input type="checkbox" id="checkall" /></th>
+                   <th>#</th>
+                    <th>First Name</th>
+                     <th>Middle Name</th>
+                     <th>last Name</th>
+                     <th>Username</th>
+                      <th>Edit Permissions</th>
+                      <th>Delete</th>
+                   </thead>
+    <tbody id="tablebody">
+
+    <tr>
+    <td><input type="checkbox" class="checkthis" /></td>
+    <td>01</td>
+    <td>Dharmik</td>
+    <td>-</td>
+    <td>Pandya</td>
+    <td>pandyad0</td>
+    <td><p data-placement="top" data-toggle="tooltip" title="Edit Permissions"><button class="btn btn-primary  btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+    <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
+    </tr>
+
+    <tr>
+    <td><input type="checkbox" class="checkthis" /></td>
+    <td>02</td>
+    <td>Tom</td>
+    <td>-</td>
+    <td>Grello</td>
+    <td>grellot0</td>
+    <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+    <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
+    </tr>
+
+    <tr>
+    <td><input type="checkbox" class="checkthis" /></td>
+    <td>03</td>
+    <td>Connor      </td>
+    <td>-</td>
+    <td>Snee</td>
+    <td>sneec0</td>
+    <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+    <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
+    </tr>
+
+    <tr>
+    <td><input type="checkbox" class="checkthis" /></td>
+    <td>04</td>
+    <td>Brennan</td>
+    <td>-</td>
+    <td>Ringel</td>
+    <td>ringelb0</td>
+    <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+    <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
+    </tr>
+
+    <tr>
+    <td><input type="checkbox" class="checkthis" /></td>
+    <td>05</td>
+    <td>Ryan</td>
+    <td>-</td>
+    <td>Bell</td>
+    <td>bellr3</td>
+    <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+    <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
+    </tr>
+
+    <tr>
+    <td><input type="checkbox" class="checkthis" /></td>
+    <td>06</td>
+    <td>Jared</td>
+    <td>-</td>
+    <td>hamlin</td>
+    <td>hamlinj9</td>
+    <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+    <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
+    </tr>
+
+
+
+    </tbody>
+
+</table>
+
+<div class="clearfix"></div>
+<ul class="pagination pull-right">
+  <li class="disabled"><a href="#"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+  <li class="active"><a href="#">1</a></li>
+
+  <li><a href="#"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
+</ul>
+
+            </div>
+
+        </div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+      <div class="modal-dialog">
+    <div class="modal-content">
+          <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+        <h4 class="modal-title custom_align" id="Heading">Edit Permissions for $User</h4>
+      </div>
+          <div class="modal-body">
+          <div class="form-group">
+      </div>
+       <!--toggle switch code starts here-->
+      <h3>Permission 1
+        <label class="switch">
+          <input type="checkbox">
+            <span class="slider"></span>
+        </label>
+          <hr>
+       </h3>
+
+       <h3>Permission 2
+        <label class="switch">
+          <input type="checkbox">
+            <span class="slider"></span>
+        </label>
+          <hr>
+      </h3>
+
+      <h3>Permission 3
+        <label class="switch">
+          <input type="checkbox">
+            <span class="slider"></span>
+        </label>
+          <hr>
+       </h3>
+
+       <h3>Permission 4
+        <label class="switch">
+          <input type="checkbox">
+            <span class="slider"></span>
+        </label>
+          <hr>
+      </h3>
+
+      <h3>Permission 5
+        <label class="switch">
+          <input type="checkbox">
+            <span class="slider"></span>
+        </label>
+          <hr>
+       </h3>
+
+       <h3>Permission 6
+        <label class="switch">
+          <input type="checkbox">
+            <span class="slider"></span>
+        </label>
+          <hr>
+      </h3>
+
+      <h3>Permission 7
+        <label class="switch">
+          <input type="checkbox">
+            <span class="slider"></span>
+        </label>
+          <hr>
+       </h3>
+
+       <h3>Permission 8
+        <label class="switch">
+          <input type="checkbox">
+            <span class="slider"></span>
+        </label>
+          <hr>
+      </h3>
+
+      </div>
+          <div class="modal-footer ">
+        <button type="button" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span> Update</button>
+      </div>
+        </div>
+    <!-- /.modal-content -->
+  </div>
+      <!-- /.modal-dialog -->
+    </div>
+
+
+
+    <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+      <div class="modal-dialog">
+    <div class="modal-content">
+          <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+        <h4 class="modal-title custom_align" id="Heading">Delete this User?</h4>
+      </div>
+          <div class="modal-body">
+
+       <div class="alert alert-danger"><span class="glyphicon glyphicon-warning-sign"></span> Are you sure you want to delete this user?</div>
+
+      </div>
+        <div class="modal-footer ">
+        <button type="button" class="btn btn-success" ><span class="glyphicon glyphicon-ok-sign"></span> Yes</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> No</button>
+      </div>
+        </div>
+    <!-- /.modal-content -->
+  </div>
+</div>
+            </div>
+        </div>
+    </div>
+    <script src="static/js/jQuery.js"></script>
+    <script src="static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="static/js/permissions/onPageLoad.js"></script>
+    <script src="static/js/permissions/getUserPermissions.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
+</body>
+
 </html>
