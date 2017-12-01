@@ -10,7 +10,7 @@ import smtplib
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 import time
-#import spreadsheet
+import spreadsheet
 
 ###########################################################################################
 ##################################### ERROR CONSTANTS #####################################
@@ -42,10 +42,8 @@ CAN_RESTORE_DATABASE_INDEX = CAN_BACKUP_DATABASE_INDEX + 1
 
 flask_application = Flask(__name__)
 mysql = MySQL()
-
 flask_application.config['UPLOAD_FOLDER'] = '/var/www/FlaskApp/static/lab_pdfs/'
 ALLOWED_EXTENSIONS = set(['pdf'])
-
 flask_application.config['MYSQL_DATABASE_USER'] = 'root'
 
 flask_application.config['MYSQL_DATABASE_PASSWORD'] = 'rowanphysicssweng'   # todo, change back to rowanphysicssweng for push, change to personal password for dev work
@@ -53,8 +51,6 @@ flask_application.config['MYSQL_DATABASE_PASSWORD'] = 'rowanphysicssweng'   # to
 flask_application.config['MYSQL_DATABASE_DB'] = 'physics'
 flask_application.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(flask_application)
-
-#conn = mysql.connect()
 
 def connect_db():
 	conn = mysql.connect()
@@ -71,8 +67,8 @@ def close_db(_):
         g.physics.close()
 
 def allowed_file(filename):
-	return '.' in filename and \
-          filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 ###########################################################################################
 ############################   WEBPAGE ENDPOINTS   ########################################
@@ -865,6 +861,33 @@ def addInventoryRequest():
 	cursor.callproc('sp_get_permissions',[banner_id])
 
 	user_permissions = cursor.fetchall()[0]
+	can_add_record = user_permissions[CAN_ADD_RECORD_INDEX]
+	if can_add_record == 1:
+		cursor.callproc('sp_add_lab',[input_type,name,topic,concept,subconcept,lab_id])
+		result = cursor.fetchall()
+
+	return jsonify(result=result)
+
+#START Inventory requests
+@flask_application.route("/addInventoryRequest",methods=['GET'])
+def addInventoryRequest():
+	conn = get_db()
+	result = MISSING_INPUT
+	serial_num = request.args.get('serial_num')
+	dates = request.args.get('dates')
+	time_needed = request.args.get('time')
+	classroom = request.args.get('classroom')
+	banner_id = session['banner_id']
+	num_teams = request.args.get('num_teams')
+	notes = request.args.get('notes')
+	item_name = request.args.get('item_name')
+	cursor = conn.cursor()
+
+	result = INCORRECT_PERMISSIONS
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
 	can_request_record = user_permissions[CAN_REQUEST_RECORD_INDEX]
 
 	if can_request_record == 1:
@@ -1020,7 +1043,42 @@ def importInventory():
 	cursor.close()
  	return redirect(url_for('mainInventoryView'))
 
-if __name__ == "__main__":
-	flask_application.debug = True
-	flask_application.secret_key = 'rowanphysicssweng'
-	flask_application.run(host=os.getenv('LISTEN', '0.0.0.0'))
+	cursor.close()
+	return jsonify(result=result)
+
+@flask_application.route('/upload')
+def upload():
+   return render_template('upload.html')
+
+@flask_application.route("/getAllInventoryRequests",methods=['GET'])
+def getAllInventoryRequests():
+	conn = get_db()
+	result = MISSING_INPUT
+	cursor = conn.cursor()
+
+	result = INCORRECT_PERMISSIONS
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_remove_record = user_permissions[CAN_REMOVE_RECORD_INDEX]
+	if can_remove_record == 1:
+		cursor.callproc('sp_get_all_inventory_requests',[])
+		result = cursor.fetchall()
+
+	cursor.close()
+	return jsonify(result=result)
+
+@flask_application.route("/importInventory",methods=['GET'])
+def importInventory():
+ 	conn = get_db()
+ 	cursor = conn.cursor()
+ 	importedData = spreadsheet.importInventorySheet()
+ 	numData = len(importedData)
+
+ 	for entry in range(0, numData):
+ 		importedEntry = importedData[entry]
+ 		cursor.callproc('sp_add_inventory_item',[importedEntry[0],importedEntry[1],int(importedEntry[2]),int(importedEntry[3]),importedEntry[4], float(importedEntry[5]),importedEntry[6],importedEntry[7],importedEntry[8],importedEntry[9],int(importedEntry[10])])
+ 	cursor.close()
+ 	#return jsonify(importedData=importedData)
+	return redirect(url_for('mainInventoryView'))
