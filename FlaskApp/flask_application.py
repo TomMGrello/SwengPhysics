@@ -42,7 +42,8 @@ CAN_RESTORE_DATABASE_INDEX = CAN_BACKUP_DATABASE_INDEX + 1
 
 flask_application = Flask(__name__)
 mysql = MySQL()
-
+flask_application.config['UPLOAD_FOLDER'] = '/var/www/FlaskApp/static/lab_pdfs/'
+ALLOWED_EXTENSIONS = set(['pdf'])
 flask_application.config['MYSQL_DATABASE_USER'] = 'root'
 
 flask_application.config['MYSQL_DATABASE_PASSWORD'] = 'rowanphysicssweng'   # todo, change back to rowanphysicssweng for push, change to personal password for dev work
@@ -65,6 +66,10 @@ def close_db(_):
     if hasattr(g, 'physics'):
         g.physics.close()
 
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+	
 ###########################################################################################
 ############################   WEBPAGE ENDPOINTS   ########################################
 ###########################################################################################
@@ -954,6 +959,24 @@ def rejectInventoryRequest():
 
 	cursor.close()
 	return jsonify(result=result)
+
+@flask_application.route('/upload')
+def upload():
+   return render_template('upload.html')
+
+@flask_application.route("/uploadFile",methods=['GET', 'POST'])
+def uploadFile():
+	if request.method == 'POST':
+      		f = request.files['file']
+		if f and allowed_file(f.filename):
+      			f.save(os.path.join(flask_application.config['UPLOAD_FOLDER'], f.filename))
+      			return 'file uploaded successfully'
+		return 'file type not supported. try again with a PDF'
+	return "<br>".join(os.listdir(flask_application.config['UPLOAD_FOLDER'],))
+	#if request.method == 'POST':
+	#	newFile = request.files['file']
+	#	filename = request.args['lab_id']
+	#	return "2. FILENAME: " + str(filename)
 
 @flask_application.route("/getAllInventoryRequests",methods=['GET'])
 def getAllInventoryRequests():
