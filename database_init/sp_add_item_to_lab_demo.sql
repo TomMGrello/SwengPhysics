@@ -2,7 +2,7 @@ USE physics;
 DELIMITER $$
 CREATE PROCEDURE `sp_add_item_to_lab_demo`(
   IN p_lab_id int(36),
-  IN p_hashed_serial int(36),
+  IN p_hashed_serial BIGINT(60),
   IN p_quantity int(20)
 )
 

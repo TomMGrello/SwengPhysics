@@ -43,6 +43,9 @@ CAN_RESTORE_DATABASE_INDEX = CAN_BACKUP_DATABASE_INDEX + 1
 flask_application = Flask(__name__)
 mysql = MySQL()
 
+flask_application.config['UPLOAD_FOLDER'] = '/var/www/FlaskApp/static/lab_pdfs/'
+ALLOWED_EXTENSIONS = set(['pdf'])
+
 flask_application.config['MYSQL_DATABASE_USER'] = 'root'
 
 flask_application.config['MYSQL_DATABASE_PASSWORD'] = 'rowanphysicssweng'   # todo, change back to rowanphysicssweng for push, change to personal password for dev work
@@ -66,6 +69,10 @@ def get_db():
 def close_db(_):
     if hasattr(g, 'physics'):
         g.physics.close()
+
+def allowed_file(filename):
+	return '.' in filename and \
+          filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 ###########################################################################################
 ############################   WEBPAGE ENDPOINTS   ########################################
@@ -816,6 +823,20 @@ def getAllLabRequests():
 	cursor.close()
 	return jsonify(result=result)
 
+@flask_application.route("/uploadFile",methods=['GET', 'POST'])
+def uploadFile():
+	if request.method == 'POST':
+		f = request.files['file']
+		filename = request.args['name']
+		filename = filename.replace(" ","")
+		filename = filename.lower()
+		print "FILENAME: " + filename
+		if f and allowed_file(f.filename):
+			f.save(os.path.join(flask_application.config['UPLOAD_FOLDER'], filename + ".pdf"))
+			return 'file uploaded successfully'
+		return 'file type not supported. try again with a PDF'
+	return "<br>".join(os.listdir(flask_application.config['UPLOAD_FOLDER'],))
+
 
 #START Inventory requests
 @flask_application.route("/addInventoryRequest",methods=['GET'])
@@ -840,7 +861,7 @@ def addInventoryRequest():
 	can_request_record = user_permissions[CAN_REQUEST_RECORD_INDEX]
 
 	if can_request_record == 1:
-		cursor.callproc('sp_add_inventory_request',[serial_num,dates,time_needed,classroom,banner_id,num_teams,notes])
+		cursor.callproc('sp_add_object_request',[hash(serial_num),dates,time_needed,classroom,banner_id,num_teams,notes])
 		cursor.fetchall()
 
 		toaddr = session['email']
@@ -876,7 +897,7 @@ def acceptInventoryRequest():
 	user_permissions = cursor.fetchall()[0]
 	can_remove_record = user_permissions[CAN_REMOVE_RECORD_INDEX]
 	if can_remove_record == 1:
-		cursor.callproc('sp_get_inventory_request_by_id',[request_id])
+		cursor.callproc('sp_get_object_request_by_id',[request_id])
 		request_data = cursor.fetchall()[0]
 		dates = request_data[2]
 		time_needed = request_data[3]
@@ -884,7 +905,7 @@ def acceptInventoryRequest():
 		banner_id = request_data[5]
 		num_teams = request_data[6]
 		item_name = request_data[10]
-		cursor.callproc('sp_delete_inventory_item_request',[request_id])
+		cursor.callproc('sp_delete_object_item_request',[request_id])
 		cursor.fetchall()
 		result = SUCCESS
 
@@ -925,7 +946,7 @@ def rejectInventoryRequest():
 	user_permissions = cursor.fetchall()[0]
 	can_remove_record = user_permissions[CAN_REMOVE_RECORD_INDEX]
 	if can_remove_record == 1:
-		cursor.callproc('sp_get_inventory_request_by_id',[request_id])
+		cursor.callproc('sp_get_object_request_by_id',[request_id])
 		request_data = cursor.fetchall()[0]
 		dates = request_data[2]
 		time_needed = request_data[3]
@@ -933,7 +954,7 @@ def rejectInventoryRequest():
 		banner_id = request_data[5]
 		num_teams = request_data[6]
 		item_name = request_data[10]
-		cursor.callproc('sp_delete_inventory_request',[request_id])
+		cursor.callproc('sp_delete_object_request',[request_id])
 		cursor.fetchall()
 		result = SUCCESS
 
@@ -970,14 +991,14 @@ def getAllInventoryRequests():
 	user_permissions = cursor.fetchall()[0]
 	can_remove_record = user_permissions[CAN_REMOVE_RECORD_INDEX]
 	if can_remove_record == 1:
-		cursor.callproc('sp_get_all_inventory_requests',[])
+		cursor.callproc('sp_get_all_object_requests',[])
 		result = cursor.fetchall()
 
 	cursor.close()
 	return jsonify(result=result)
 
 @flask_application.route("/importInventory",methods=['GET'])
- def importInventory():
+def importInventory():
  	conn = get_db()
  	cursor = conn.cursor()
  	importedData = spreadsheet.importInventorySheet()

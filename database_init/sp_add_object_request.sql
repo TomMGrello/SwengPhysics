@@ -2,7 +2,7 @@ USE physics;
 -- add lab request stored procedure
 DELIMITER $$
 CREATE PROCEDURE `sp_add_object_request`(
-    IN p_hashed_serial_num INT(60),
+    IN p_hashed_serial_num BIGINT(60),
     IN p_dates VARCHAR(60),
     IN p_time_needed VARCHAR(60),
     IN p_classroom VARCHAR(45),

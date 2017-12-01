@@ -4,7 +4,7 @@ DELIMITER $$
 -- stored procedure to remove an inventory item
 CREATE PROCEDURE `sp_remove_inventory_item`(
 
-        IN p_hashed_serial int(60)
+        IN p_hashed_serial BIGINT(60)
 	)
 
 BEGIN

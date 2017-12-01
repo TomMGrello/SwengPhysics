@@ -4,10 +4,10 @@ var populateInventoryFields = function() {
         serial_num: serial_num
     }, function(data) {
         console.log(data.result);
-        var inventory = document.getElementById('inventory');
+        var inventory = document.getElementById('item_name');
         var data_array = data.result;
         var inventory_data = data_array[0];
 
-        inventory.value = inventory_data[2];
+        inventory.value = inventory_data[0];
     });
 }

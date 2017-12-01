@@ -1,6 +1,6 @@
 CREATE TABLE `physics`.`object`(
      `object_id` int(36) auto_increment,
-     `hashed_serial_num` int(60) NULL,
+     `hashed_serial_num` BIGINT(60) NULL,
      `name` VARCHAR(60) NULL,
      `serial_num` VARCHAR(45) NULL,
      PRIMARY KEY(`object_id`),
@@ -23,7 +23,7 @@ CREATE TABLE `physics`.`invoice`(
 CREATE TABLE `physics`.`object_invoice`(
     `object_invoice_id` int(36) auto_increment,
     `invoice_id` int(36) NULL,
-    `hashed_serial_num` int(60) NULL,
+    `hashed_serial_num` BIGINT(60) NULL,
     `object_price` float(10) NULL,
     PRIMARY KEY(`object_invoice_id`));
 
@@ -39,7 +39,7 @@ CREATE TABLE `physics`.`lab_demo`(
 
 CREATE TABLE `physics`.`object_lab_demo`(
   `object_lab_demo_id` int(36) auto_increment,
-  `hashed_serial_num` int(60) NULL,
+  `hashed_serial_num` BIGINT(60) NULL,
   `lab_id` int(36) NULL,
   `quantity` int(20) NULL,
   PRIMARY KEY(`object_lab_demo_id`));
@@ -47,7 +47,7 @@ CREATE TABLE `physics`.`object_lab_demo`(
 CREATE TABLE `physics`.`item_locations`(
     `item_locations_id` int(36) auto_increment,
     `location_id` int(36) NULL,
-    `hashed_serial_num` int(60) NULL,
+    `hashed_serial_num` BIGINT(60) NULL,
     `quantity` int(10) NULL,
     `shelf` VARCHAR(10) NULL,
     PRIMARY KEY(`item_locations_id`),
@@ -69,6 +69,10 @@ source sp_add_lab_request.sql;
 source sp_delete_lab_request.sql;
 source sp_get_all_lab_requests.sql;
 source sp_get_lab_request_by_id.sql;
+source sp_add_object_request.sql;
+source sp_delete_object_request.sql;
+source sp_get_object_request_by_id.sql;
+source sp_get_all_object_requests.sql;
 
 
 --                          name            serial invoice date      price  vendor        building   room shelf quantity
