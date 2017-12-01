@@ -6,7 +6,7 @@ USE physics;
 --    call sp_get_all_inventory_items_with_filters(NULL,NULL,NULL,NULL,NULL,NULL)
 DELIMITER $$
 CREATE PROCEDURE `sp_get_item_by_serial`(
-  IN p_hashed_serial_num int(36)
+  IN p_hashed_serial_num INT(200)
 )
 
 BEGIN

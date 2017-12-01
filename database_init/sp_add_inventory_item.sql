@@ -4,7 +4,7 @@ DELIMITER $$
 CREATE PROCEDURE `sp_add_inventory_item`(
     IN p_name VARCHAR(60),
     IN p_serial VARCHAR(45),
-    IN p_hashed_serial BIGINT(60),
+    IN p_hashed_serial INT(200),
     IN p_invoice_id int(25),
     IN p_purchase_date varchar(20),
     IN p_price float(10),

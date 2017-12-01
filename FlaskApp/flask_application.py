@@ -807,7 +807,7 @@ def uploadFile():
 		subconcept = request.form['subconcept']
 
 		#This may or may not be null, depending on if they're editing or adding
-		lab_id = request.form['lab_id']
+		#lab_id = request.form['lab_id']
 
 		#The result will be the newly added lab_id
 		addResult = addLab(input_type,name,topic,concept,subconcept,lab_id)
