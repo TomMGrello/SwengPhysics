@@ -1011,11 +1011,14 @@ def importInventory():
  	importedData = spreadsheet.importInventorySheet()
  	numData = len(importedData)
 
- 	for entry in range(0, numData):
- 		importedEntry = importedData[entry]
- 		cursor.callproc('sp_add_inventory_item',[importedEntry[0],importedEntry[1],int(importedEntry[2]),int(importedEntry[3]),importedEntry[4], float(importedEntry[5]),importedEntry[6],importedEntry[7],importedEntry[8],importedEntry[9],int(importedEntry[10])])
- 	cursor.close()
- 	return jsonify(importedData=importedData)
+ 	importedData = spreadsheet.importInventorySheet()
+	numData = len(importedData)
+
+	for entry in range(0, numData):
+		importedEntry = importedData[entry]
+		cursor.callproc('sp_add_inventory_item',[importedEntry[0],importedEntry[1],int(importedEntry[2]),int(importedEntry[3]),importedEntry[4], float(importedEntry[5]),importedEntry[6],importedEntry[7],importedEntry[8],importedEntry[9],int(importedEntry[10])])
+	cursor.close()
+ 	return redirect(url_for('mainInventoryView'))
 
 if __name__ == "__main__":
 	flask_application.debug = True
