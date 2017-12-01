@@ -1,82 +1,112 @@
 <!DOCTYPE html>
 <html>
-   <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>redesigned-upload database file</title>
-      <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
-      <link rel="stylesheet" href="static/styles/uploadDatabaseStyle.css">
-      <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
-   </head>
-   <body>
-      <img src="assets/img/RULogo.png">
-      <p class="lead text-right text-success">Welcome, Admin</p>
-      <nav class="navbar navbar-default" id="mainnavbar">
-         <div class="container-fluid">
-            <div class="navbar-header"><a href="#" class="navbar-brand visible-xs-block navbar-link">Menu </a>
-               <button data-toggle="collapse" data-target="#navcol-1" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
-            </div>
-            <div class="collapse navbar-collapse" id="navcol-1">
-               <ul class="nav navbar-nav">
-                  <li class="dropdown">
-                     <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">View <span class="caret"></span></a>
-                     <ul role="menu" class="dropdown-menu">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batch Importing</title>
+    <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/styles/uploadDatabaseStyle.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+</head>
+
+<body><img src="static/images/RULogo.png">
+    <nav class="navbar navbar-default" id="mainnavbar">
+    <div class="container-fluid">
+        <div class="navbar-header"><a href="#" class="navbar-brand visible-xs-block navbar-link">Menu </a>
+            <button data-toggle="collapse" data-target="#navcol-1" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+        </div>
+        <div class="collapse navbar-collapse" id="navcol-1">
+            <ul class="nav navbar-nav">
+                <li class="dropdown"><a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">View <span class="caret"></span></a>
+                    <ul role="menu" class="dropdown-menu">
                         <li role="presentation"><a href="/inventory">Inventory </a></li>
                         <li role="presentation"><a href="/labsAndDemos">Labs &amp; Demos</a></li>
-                     </ul>
-                  </li>
-                  <li class="dropdown">
+                    </ul>
+                </li>
+                <li class="dropdown">
                      <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Manage <span class="caret"></span></a>
                      <ul role="menu" class="dropdown-menu">
                         <li role="presentation"><a href="/manageUserRequests">User Requests</a></li>
                         <li role="presentation"><a href="/PermissionsForAdminPage">User Permissions</a></li>
                         <li role="presentation"><a href="/manageLabRequest">Lab/Demo Rquests</a></li>
                      </ul>
-                  <li class="dropdown">
-                     <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Database <span class="caret"></span></a>
-                     <ul role="menu" class="dropdown-menu">
-                        <li role="presentation"><a href="/uploadDatabase">Import database</a></li>
-                     </ul>
-                  </li>
-               </ul>
-               <ul class="nav navbar-nav navbar-right">
-                  <li><a id="signout" href="#">Log out</a></li>
-               </ul>
+		</li>
+                <li class="dropdown"><a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Database <span class="caret"></span></a>
+                    <ul role="menu" class="dropdown-menu">
+                        <li role="presentation"><a href="/uploadDatabase">Import</a></li>
+                        
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                    <li><a href="signout">Log Out</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+    <div class="col-lg-10 col-lg-offset-1 col-md-12">
+        <div>
+            <ul class="nav nav-tabs nav-justified">
+                <li class="active"><a href="#tab-1" role="tab" data-toggle="tab"><strong>Batch Import Inventory </strong></a></li>
+                <li><a class="text-primary" href="#tab-2" role="tab" data-toggle="tab">Batch Import Labs/Demos </a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade in active" role="tabpanel" id="tab-1">
+                    <p>
+                        <!--This code is for BATCH IMPORT INVENTORY-->
+<div class="container-fluid">
+<div class="col-md-8 col-md-offset-2">
+<form method="POST" action="#" enctype="multipart/form-data">
+	<!-- COMPONENT START -->
+	<div class="form-group">
+		<div class="input-group input-file" name="Fichier1">
+        </div>
+        <div id = "uploadbuttons"class="form-group">
+		<a target="_blank" href="https://docs.google.com/a/students.rowan.edu/spreadsheets/d/1I4d5vY20A4lX3UGbamvTNCTdueZVRSBzf2gGb5XVV5A/edit?usp=sharing" class="btn btn-primary ">Open Google Sheets</a>
+		<a href="/importInventory" class="btn btn-danger pull-right">Import</a>
+	</div>
+	</div>
+	<!-- COMPONENT END -->
+	
+</form>
+</div>
+</div>
+                    </p>
+                </div>
+                <div class="tab-pane fade" role="tabpanel" id="tab-2">
+                    <p>
+                        <!--This code is for BATCH IPORT LAB/DEMO-->
+<div class="container-fluid">
+<div class="col-md-8 col-md-offset-2">
+<form method="POST" action="#" enctype="multipart/form-data">
+	<!-- COMPONENT START -->
+	<div class="form-group">
+		<div class="input-group input-file" name="Fichier1">
+        </div>
+        <div id = "uploadbuttons"class="form-group">
+		<button type="submit" class="btn btn-primary ">Open Google Sheets</button>
+		<button type="reset" class="btn btn-danger pull-right">Import</button>
+	</div>
+	</div>
+	<!-- COMPONENT END -->
+	
+</form>
+</div>
+</div>
+                    </p>
+                </div>
+                <div class="tab-pane fade" role="tabpanel" id="tab-3">
+                    <p>Third tab content.</p>
+                </div>
             </div>
-         </div>
-      </nav>
-      <div class="col-lg-10 col-lg-offset-1 col-md-12">
-         <div class="panel panel-default">
-            <div class="panel-heading">
-               <h3 class="text-center text-primary panel-title"><strong>Import Inventory </strong></h3>
-            </div>
-            <div class="panel-body">
-               <div class="container-fluid">
-                  <div class="col-md-8 col-md-offset-2">
-                     <h3>Upload your database file here..</h3>
-                     <form method="POST" action="#" enctype="multipart/form-data">
-                        <!-- COMPONENT START -->
-                        <div class="form-group">
-                           <div class="input-group input-file" name="Fichier1">
-                              <input type="text" class="form-control" placeholder='Choose a file...' />
-                              <span class="input-group-btn">
-                              <button class="btn btn-default btn-choose" type="button">Choose</button>
-                              </span>
-                           </div>
-                           <div id = "uploadbuttons"class="form-group">
-                              <button type="submit" class="btn btn-primary pull-right">Submit</button>
-                           </div>
-                        </div>
-                        <!-- COMPONENT END -->
-                     </form>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
-      <script src="static/js/jquery.js"></script>
-      <script src="static/bootstrap/js/bootstrap.min.js"></script>
-      <script src="static/js/signout.js"></script>
-      <script src="static/js/batchImport/choosefile.js"></script>
-   </body>
+        </div>
+    </div>
+    <script src="static/js/jquery.js"></script>
+    <script src="static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
+    <script src="static/js/signout.js"></script>
+</body>
+
 </html>
