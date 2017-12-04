@@ -10,7 +10,7 @@ import smtplib
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 import time
-import spreadsheet
+#import spreadsheet
 
 ###########################################################################################
 ##################################### ERROR CONSTANTS #####################################
@@ -42,7 +42,7 @@ CAN_RESTORE_DATABASE_INDEX = CAN_BACKUP_DATABASE_INDEX + 1
 
 flask_application = Flask(__name__)
 mysql = MySQL()
-flask_application.config['UPLOAD_FOLDER'] = '/var/www/FlaskApp/static/lab_pdfs/'
+#flask_application.config['UPLOAD_FOLDER'] = '/var/www/FlaskApp/static/lab_pdfs/'
 ALLOWED_EXTENSIONS = set(['pdf'])
 flask_application.config['MYSQL_DATABASE_USER'] = 'root'
 
@@ -802,6 +802,7 @@ def uploadFile():
 
 		name = request.form['name']
 		input_type = request.form['type']
+		#input_type = 'LAB'
 		topic = request.form['topic']
 		concept = request.form['concept']
 		subconcept = request.form['subconcept']
@@ -810,15 +811,15 @@ def uploadFile():
 		#lab_id = request.form['lab_id']
 
 		#The result will be the newly added lab_id
-		addResult = addLab(input_type,name,topic,concept,subconcept,lab_id)
+		addResult = addLab(input_type,name,topic,concept,subconcept,None)
 
 		try:
-			int(addResult[0])
+			int(addResult[0][0])
 		except ValueError:
 			return "Add failed"
 
-		filename = addResult[0] + ".pdf"
-		print "FILENAME: " + filename
+		filename = str(addResult[0][0]) + ".pdf"
+		#print "FILENAME: " + filename
 		if f and allowed_file(f.filename):
 			f.save(os.path.join(flask_application.config['UPLOAD_FOLDER'], filename))
 			return 'file uploaded successfully'
@@ -839,7 +840,7 @@ def addLab(name,input_type,topic,concept,subconcept,lab_id):
 		cursor.callproc('sp_add_lab',[input_type,name,topic,concept,subconcept,lab_id])
 		result = cursor.fetchall()
 
-	return jsonify(result=result)
+	return result
 
 #START Inventory requests
 @flask_application.route("/addInventoryRequest",methods=['GET'])
@@ -1007,32 +1008,17 @@ def importInventory():
  	importedData = spreadsheet.importInventorySheet()
  	numData = len(importedData)
 
- 	importedData = spreadsheet.importInventorySheet()
-	numData = len(importedData)
-
 	for entry in range(0, numData):
 		importedEntry = importedData[entry]
 		cursor.callproc('sp_add_inventory_item',[importedEntry[0],importedEntry[1],int(importedEntry[2]),int(importedEntry[3]),importedEntry[4], float(importedEntry[5]),importedEntry[6],importedEntry[7],importedEntry[8],importedEntry[9],int(importedEntry[10])])
 	cursor.close()
  	return redirect(url_for('mainInventoryView'))
 
-	cursor.close()
-	return jsonify(result=result)
-
 @flask_application.route('/upload')
 def upload():
    return render_template('upload.html')
 
-@flask_application.route("/importInventory",methods=['GET'])
-def importInventory():
- 	conn = get_db()
- 	cursor = conn.cursor()
- 	importedData = spreadsheet.importInventorySheet()
- 	numData = len(importedData)
-
- 	for entry in range(0, numData):
- 		importedEntry = importedData[entry]
- 		cursor.callproc('sp_add_inventory_item',[importedEntry[0],importedEntry[1],int(importedEntry[2]),int(importedEntry[3]),importedEntry[4], float(importedEntry[5]),importedEntry[6],importedEntry[7],importedEntry[8],importedEntry[9],int(importedEntry[10])])
- 	cursor.close()
- 	#return jsonify(importedData=importedData)
-	return redirect(url_for('mainInventoryView'))
+if __name__ == "__main__":
+	flask_application.debug = True
+	flask_application.secret_key = 'rowanphysicssweng'
+	flask_application.run(host=os.getenv('LISTEN', '0.0.0.0'))
