@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Request Inventory</title>
+      <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+      <link rel="stylesheet" href="static/styles/requestLabsStyle.css">
+      <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+   </head>
+   <body>
+      <img src="static/images/RULogo.png">
+      <div class="col-lg-10 col-lg-offset-1 col-md-12">
+         <div class="panel panel-default">
+            <div class="panel-heading">
+               <h3 class="text-center text-primary panel-title"><strong>Request Form</strong></h3>
+            </div>
+            <div class="panel-body">
+               <div class="col-md-5">
+                  <div id = "filtercont" class="container-fluid">
+                     <div class="row">
+                        <form class="form">
+                           <div class="form-group">
+                              <label class="" for="orderBy">Choose the Inventory Item * </label>
+                              <input type="text" class="form-control" id="item_name" placeholder="e.g. Hooke's Law Lab" required>
+                           </div>
+                           <div class="form-group">
+                              <label class="" for="orderBy">Date(s) needed *</label>
+                              <input type="text" class="form-control" id="date" placeholder="e.g. 09/24/2017 or 09/24/2017-09/30/2017" required>
+                           </div>
+                           <div class="form-group">
+                              <label class="" for="startTime">Time of class *</label>
+                              <input type="text" class="form-control" id="startTime" placeholder="start time">
+                              <div class="form-group">
+                                 <label class="" for="orderBy">Lab Classroom *</label>
+                                 <input type="text" class="form-control" id="room" placeholder="e.g. Science 138" required>
+
+                              </div>
+                              <div class="form-group">
+                                 <label class="" for="orderBy">Number of Items * </label>
+                                 <input type="text" class="form-control" id="numItems" placeholder="8" required>
+
+                              </div>
+                              <label class="" for="startDate">Instructor(s)*</label>
+                              <input type="text" class="form-control" id="professor" placeholder="Prof. X" required>
+                              <label class="" for="startDate">Notes:</label>
+                              <textarea id="notes" name="textarea" class="form-control" cols="40" rows="5" placeholder="optional" ></textarea>
+                           </div>
+                           <button id="btn_submit" type="submit" class="btn btn-default">Submit</button>
+                        </form>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <script src="static/js/jquery.js"></script>
+      <script src="static/js/requestInventory/populateInventoryFields.js"></script>
+      <script src="static/js/requestInventory/addInventoryRequest.js"></script>
+      <script src="static/js/requestInventory/onPageLoad.js"></script>
+      <script src="static/bootstrap/js/bootstrap.min.js"></script>
+   </body>
+</html>

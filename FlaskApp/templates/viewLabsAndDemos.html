@@ -29,7 +29,7 @@
                      <ul role="menu" class="dropdown-menu">
                         <li role="presentation"><a href="/manageUserRequests">User Requests</a></li>
                         <li role="presentation"><a href="/PermissionsForAdminPage">User Permissions</a></li>
-                        <li role="presentation"><a href="/manageLabRequest">Lab/Demo Rquests</a></li>
+                        <li role="presentation"><a href="/manageLabRequest">Lab/Demo Requests</a></li>
                      </ul>
                   </li>
                   <li class="dropdown">
@@ -108,33 +108,39 @@
                         <h4 class="modal-title">Add Lab/Demo</h4>
                      </div>
                      <div class="modal-body">
-                        <form >
+                        <form action = "uploadFile" method = "POST" enctype="multipart/form-data">
                            <div class="form-group">
                               <label for="text">Name:</label>
-                              <input id="input_name" type="text" class="form-control" id="itemcode" placeholder="name for lab/demo" name="firstname">
+                              <input id="name" name="name" type="text" class="form-control" placeholder="name for lab/demo" >
                            </div>
                            <div class="form-group">
                               <label for="pwd">Topic:</label>
-                              <input id="input_topic" type="text" class="form-control" id="itemname" placeholder="topic name" name="middlename">
+                              <input name="topic" id="topic" type="text" class="form-control" placeholder="topic name">
                            </div>
                            <div class="form-group">
                               <label for="text">Concept:</label>
-                              <input id="input_concept" type="text" class="form-control" id="quantity" placeholder="concept for lab/demo" name="lastname">
+                              <input name = "concept" id="concept" type="text" class="form-control" placeholder="concept for lab/demo">
                            </div>
                            <div class="form-group">
                               <label for="text">Subconcept</label>
-                              <input id="input_subconcept" type="text" class="form-control" id="quantity" placeholder="subconcept name for lab/demo" name="text">
+                              <input name="subconcept" id="subconcept" type="text" class="form-control" placeholder="subconcept name for lab/demo">
                            </div>
                            <div class="form-group">
                               <label for="text">Category</label>
                               <label class="radio-inline">
-                              <input id="input_lab" type="radio" name="optradio"> Lab
+                              <input value="LAB" name="type" id="type" type="radio" > Lab
                               </label>
                               <label class="radio-inline">
-                              <input id="input_demo" type="radio" name="optradio">Demo
+                              <input value="DEMO" name="type" id="type" type="radio">Demo
                               </label>
                            </div>
-                           <button id="new_lab_btn" type="submit" class="btn btn-default">Submit</button>
+                           <div class="input-group input-file" name="Fichier1">
+                              <input id="file_upload" type="file" name="file" class="form-control" />
+                              <span class="input-group-btn">
+                              <button onclick="document.getElementById('file_upload').click();" class="btn btn-default btn-choose" type="button">Choose</button>
+                              </span>
+                           </div>
+                           <input id="new_lab_btn" type="submit" class="btn btn-default"></input>
                         </form>
                      </div>
                      <div class="modal-footer">

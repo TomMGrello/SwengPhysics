@@ -69,7 +69,7 @@ def close_db(_):
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
-	
+
 ###########################################################################################
 ############################   WEBPAGE ENDPOINTS   ########################################
 ###########################################################################################
@@ -578,30 +578,6 @@ def getFilteredLabsDemos():
 	cursor.close()
 	return jsonify(result=result)
 
-@flask_application.route("/addLab",methods=['GET'])
-def addLab():
-	conn = get_db()
-	cursor = conn.cursor()
-
-	input_type = request.args.get('type')
-	name = request.args.get('name')
-	topic = request.args.get('topic')
-	concept = request.args.get('concept')
-	subconcept = request.args.get('subconcept')
-	lab_id = request.args.get('lab_id')
-
-	result = INCORRECT_PERMISSIONS
-	banner_id = session['banner_id']
-	cursor.callproc('sp_get_permissions',[banner_id])
-
-	user_permissions = cursor.fetchall()[0]
-	can_add_record = user_permissions[CAN_ADD_RECORD_INDEX]
-	if can_add_record == 1:
-		cursor.callproc('sp_add_lab',[input_type,name,topic,concept,subconcept,lab_id])
-		result = cursor.fetchall()
-
-	return jsonify(result=result)
-
 @flask_application.route("/addItemToLab",methods=['GET'])
 def addItemToLab():
 	conn = get_db()
@@ -819,6 +795,52 @@ def getAllLabRequests():
 	cursor.close()
 	return jsonify(result=result)
 
+@flask_application.route("/uploadFile",methods=['GET', 'POST'])
+def uploadFile():
+	if request.method == 'POST':
+		f = request.files['file']
+
+		name = request.form['name']
+		#input_type = request.form['type']
+		input_type = 'LAB'
+		topic = request.form['topic']
+		concept = request.form['concept']
+		subconcept = request.form['subconcept']
+
+		#This may or may not be null, depending on if they're editing or adding
+		#lab_id = request.form['lab_id']
+
+		#The result will be the newly added lab_id
+		addResult = addLab(input_type,name,topic,concept,subconcept,None)
+
+		try:
+			int(addResult[0][0])
+		except ValueError:
+			return "Add failed"
+
+		filename = str(addResult[0][0]) + ".pdf"
+		#print "FILENAME: " + filename
+		if f and allowed_file(f.filename):
+			f.save(os.path.join(flask_application.config['UPLOAD_FOLDER'], filename))
+			return 'file uploaded successfully'
+		return 'file type not supported. try again with a PDF'
+	return "<br>".join(os.listdir(flask_application.config['UPLOAD_FOLDER'],))
+
+def addLab(name,input_type,topic,concept,subconcept,lab_id):
+	conn = get_db()
+	cursor = conn.cursor()
+
+	result = INCORRECT_PERMISSIONS
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_add_record = user_permissions[CAN_ADD_RECORD_INDEX]
+	if can_add_record == 1:
+		cursor.callproc('sp_add_lab',[input_type,name,topic,concept,subconcept,lab_id])
+		result = cursor.fetchall()
+
+	return result
 
 #START Inventory requests
 @flask_application.route("/addInventoryRequest",methods=['GET'])
@@ -843,7 +865,7 @@ def addInventoryRequest():
 	can_request_record = user_permissions[CAN_REQUEST_RECORD_INDEX]
 
 	if can_request_record == 1:
-		cursor.callproc('sp_add_inventory_request',[serial_num,dates,time_needed,classroom,banner_id,num_teams,notes])
+		cursor.callproc('sp_add_object_request',[hash(serial_num),dates,time_needed,classroom,banner_id,num_teams,notes])
 		cursor.fetchall()
 
 		toaddr = session['email']
@@ -879,7 +901,7 @@ def acceptInventoryRequest():
 	user_permissions = cursor.fetchall()[0]
 	can_remove_record = user_permissions[CAN_REMOVE_RECORD_INDEX]
 	if can_remove_record == 1:
-		cursor.callproc('sp_get_inventory_request_by_id',[request_id])
+		cursor.callproc('sp_get_object_request_by_id',[request_id])
 		request_data = cursor.fetchall()[0]
 		dates = request_data[2]
 		time_needed = request_data[3]
@@ -887,7 +909,7 @@ def acceptInventoryRequest():
 		banner_id = request_data[5]
 		num_teams = request_data[6]
 		item_name = request_data[10]
-		cursor.callproc('sp_delete_inventory_item_request',[request_id])
+		cursor.callproc('sp_delete_object_item_request',[request_id])
 		cursor.fetchall()
 		result = SUCCESS
 
@@ -928,7 +950,7 @@ def rejectInventoryRequest():
 	user_permissions = cursor.fetchall()[0]
 	can_remove_record = user_permissions[CAN_REMOVE_RECORD_INDEX]
 	if can_remove_record == 1:
-		cursor.callproc('sp_get_inventory_request_by_id',[request_id])
+		cursor.callproc('sp_get_object_request_by_id',[request_id])
 		request_data = cursor.fetchall()[0]
 		dates = request_data[2]
 		time_needed = request_data[3]
@@ -936,7 +958,7 @@ def rejectInventoryRequest():
 		banner_id = request_data[5]
 		num_teams = request_data[6]
 		item_name = request_data[10]
-		cursor.callproc('sp_delete_inventory_request',[request_id])
+		cursor.callproc('sp_delete_object_request',[request_id])
 		cursor.fetchall()
 		result = SUCCESS
 
@@ -960,24 +982,6 @@ def rejectInventoryRequest():
 	cursor.close()
 	return jsonify(result=result)
 
-@flask_application.route('/upload')
-def upload():
-   return render_template('upload.html')
-
-@flask_application.route("/uploadFile",methods=['GET', 'POST'])
-def uploadFile():
-	if request.method == 'POST':
-      		f = request.files['file']
-		if f and allowed_file(f.filename):
-      			f.save(os.path.join(flask_application.config['UPLOAD_FOLDER'], f.filename))
-      			return 'file uploaded successfully'
-		return 'file type not supported. try again with a PDF'
-	return "<br>".join(os.listdir(flask_application.config['UPLOAD_FOLDER'],))
-	#if request.method == 'POST':
-	#	newFile = request.files['file']
-	#	filename = request.args['lab_id']
-	#	return "2. FILENAME: " + str(filename)
-
 @flask_application.route("/getAllInventoryRequests",methods=['GET'])
 def getAllInventoryRequests():
 	conn = get_db()
@@ -991,7 +995,7 @@ def getAllInventoryRequests():
 	user_permissions = cursor.fetchall()[0]
 	can_remove_record = user_permissions[CAN_REMOVE_RECORD_INDEX]
 	if can_remove_record == 1:
-		cursor.callproc('sp_get_all_inventory_requests',[])
+		cursor.callproc('sp_get_all_object_requests',[])
 		result = cursor.fetchall()
 
 	cursor.close()
@@ -1004,10 +1008,12 @@ def importInventory():
  	importedData = spreadsheet.importInventorySheet()
  	numData = len(importedData)
 
- 	for entry in range(0, numData):
- 		importedEntry = importedData[entry]
- 		cursor.callproc('sp_add_inventory_item',[importedEntry[0],importedEntry[1],int(importedEntry[2]),int(importedEntry[3]),importedEntry[4], float(importedEntry[5]),importedEntry[6],importedEntry[7],importedEntry[8],importedEntry[9],int(importedEntry[10])])
- 	cursor.close()
- 	#return jsonify(importedData=importedData)
-	return redirect(url_for('mainInventoryView'))
-	
+	for entry in range(0, numData):
+		importedEntry = importedData[entry]
+		cursor.callproc('sp_add_inventory_item',[importedEntry[0],importedEntry[1],int(importedEntry[2]),int(importedEntry[3]),importedEntry[4], float(importedEntry[5]),importedEntry[6],importedEntry[7],importedEntry[8],importedEntry[9],int(importedEntry[10])])
+	cursor.close()
+ 	return redirect(url_for('mainInventoryView'))
+
+@flask_application.route('/upload')
+def upload():
+   return render_template('upload.html')
