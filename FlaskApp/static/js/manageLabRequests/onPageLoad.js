@@ -1,0 +1,4 @@
+$(function() {
+    getAllRequests();
+    return false;
+});
