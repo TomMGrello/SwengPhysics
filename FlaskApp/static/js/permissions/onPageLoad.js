@@ -1,0 +1,5 @@
+$(function() {
+    getUserPermissions();
+    
+    return false;
+});

@@ -47,7 +47,7 @@ CREATE TABLE `physics`.`user_permissions`(
      `role` VARCHAR(45) NULL,
      `email` VARCHAR(60) NULL,
      PRIMARY KEY(`user_request_id`));
-     
+
  -- create lab requests table
  CREATE TABLE `physics`.`lab_requests`(
      `lab_request_id` INT(36) auto_increment,
@@ -59,7 +59,7 @@ CREATE TABLE `physics`.`user_permissions`(
      `num_teams` SMALLINT(5),
      `notes` VARCHAR(250) NULL,
      PRIMARY KEY(`lab_request_id`));
-     
+
 -- create object requests table
 CREATE TABLE `physics`.`object_requests`(
 		  `object_request_id` INT (36) auto_increment,
@@ -71,7 +71,7 @@ CREATE TABLE `physics`.`object_requests`(
             `num_items` INT (36),
             `notes` VARCHAR (250) NULL,
             PRIMARY KEY(`object_request_id`));
-            
+
 
 
 source sp_add_user.sql;
@@ -85,6 +85,7 @@ source sp_add_user_request.sql;
 source sp_delete_user_request.sql;
 source sp_get_all_user_requests.sql;
 source sp_get_email.sql;
+source sp_get_all_users.sql;
 
 /*Following lines are for development purposes only
 They add 4 basic users for the 4 different pre-defined roles. Can be used for testing physics.*/
