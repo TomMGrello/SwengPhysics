@@ -191,7 +191,7 @@ div#filtercont.container {
 
 @media (min-width:1200px) {
   tbody td, thead th{
-    width:12.2%;
+    width:11%;
     float:left;
   }
 }
