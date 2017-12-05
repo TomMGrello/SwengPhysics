@@ -78,8 +78,4 @@ var getUserPermissions = function() {
             table.appendChild(newRow);
         }
     });
-    $.getJSON('/allUserPermissions', function(data){
-        var data_array = data.result;
-        console.log(data_array);
-    });
 }
