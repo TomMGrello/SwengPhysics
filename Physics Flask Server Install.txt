@@ -39,8 +39,11 @@ cd /etc/httpd/conf.d
 ls
 nano flaskAppSSL.conf
 yum install mod_ssl
+yum install php
 chown -R apache:apache FlaskApp
 pip install flask-mysql
+pip install pyopenssl
+pip install gspread
 service httpd restart
   
 
