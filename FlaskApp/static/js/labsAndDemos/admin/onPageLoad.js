@@ -32,7 +32,6 @@ $(function() {
     });
     document.getElementById('edit_update_btn').addEventListener('click', function() {
         editLabDemo();
-        location.reload();
     });
     document.getElementById('remove_ok').addEventListener('click', function() {
         removeLab();

@@ -169,10 +169,6 @@ def labsAndDemos():
 	conn = get_db()
 	cursor = conn.cursor()
 
-
-	if session.has_key('banner_id') == False:
-		return render_template("index.html")
-
 	banner_id = session['banner_id']
 	cursor.callproc('sp_get_permissions',[banner_id])
 
@@ -861,9 +857,6 @@ def uploadFile():
 		concept = request.form['concept']
 		subconcept = request.form['subconcept']
 
-		#This may or may not be null, depending on if they're editing or adding
-		#lab_id = request.form['lab_id']
-
 		#The result will be the newly added lab_id
 		addResult = addLab(input_type,name,topic,concept,subconcept,None)
 
@@ -879,6 +872,21 @@ def uploadFile():
 			return 'file uploaded successfully'
 		return 'file type not supported. try again with a PDF'
 	return "<br>".join(os.listdir(flask_application.config['UPLOAD_FOLDER'],))
+
+@flask_application.route("/editLab",methods=['GET'])
+def editLab():
+	name = request.args.get('name')
+	input_type = request.args.get('type')
+	topic = request.args.get('topic')
+	concept = request.args.get('concept')
+	subconcept = request.args.get('subconcept')
+	lab_id = request.args.get('lab_id')
+	result = addLab(name,input_type,topic,concept,subconcept,lab_id)
+	try:
+		int(result[0][0])
+	except ValueError:
+		return "Add failed"
+	return jsonify(result=result)
 
 def addLab(name,input_type,topic,concept,subconcept,lab_id):
 	conn = get_db()

@@ -44,9 +44,47 @@ var getFilteredLabsDemos = function(order_by) {
                 var subconcept_td = document.createElement("td");
                 subconcept_td.innerHTML = subconcept;
 
-                newRow.setAttribute('data-title', 'Info');
-                newRow.setAttribute('data-toggle', 'modal');
-                newRow.setAttribute('data-target', '#info');
+                //Do e.stopPropagation() was not working, so I had to do this.
+                //Also couldn't put all the elements inside a span or div, since that messes up the
+                //table columns
+
+                //This prevents the "edit" and "delete" buttons from also opening up the Info modal
+                rowIndex.setAttribute('data-title', 'Info');
+                rowIndex.setAttribute('data-toggle', 'modal');
+                rowIndex.setAttribute('data-target', '#info');
+
+                type_td.setAttribute('data-title', 'Info');
+                type_td.setAttribute('data-toggle', 'modal');
+                type_td.setAttribute('data-target', '#info');
+
+                name_td.setAttribute('data-title', 'Info');
+                name_td.setAttribute('data-toggle', 'modal');
+                name_td.setAttribute('data-target', '#info');
+
+                topic_td.setAttribute('data-title', 'Info');
+                topic_td.setAttribute('data-toggle', 'modal');
+                topic_td.setAttribute('data-target', '#info');
+
+                concept_td.setAttribute('data-title', 'Info');
+                concept_td.setAttribute('data-toggle', 'modal');
+                concept_td.setAttribute('data-target', '#info');
+
+                subconcept_td.setAttribute('data-title', 'Info');
+                subconcept_td.setAttribute('data-toggle', 'modal');
+                subconcept_td.setAttribute('data-target', '#info');
+
+                var moreinfo_td = document.createElement('td');
+ 				       var moreinfo_p = document.createElement('p');
+ 			          moreinfo_p.setAttribute('data-placement', 'top');
+                 moreinfo_p.setAttribute('data-toggle', 'tooltip');
+                 moreinfo_p.setAttribute('title', 'Information');
+ 				        var moreinfo_btn = document.createElement('button');
+                 moreinfo_btn.setAttribute('class', 'btn btn-info btn-xs');
+                 var moreinfo_span = document.createElement('span');
+ 				        moreinfo_span.setAttribute('class', 'glyphicon glyphicon-exclamation-sign');
+                 moreinfo_btn.appendChild(moreinfo_span);
+                 moreinfo_p.appendChild(moreinfo_btn);
+                 moreinfo_td.appendChild(moreinfo_p);
 
                 newRow.appendChild(rowIndex);
                 newRow.appendChild(type_td);
@@ -54,43 +92,15 @@ var getFilteredLabsDemos = function(order_by) {
                 newRow.appendChild(topic_td);
                 newRow.appendChild(concept_td);
                 newRow.appendChild(subconcept_td);
+                newRow.appendChild(moreinfo_td);
 
-
-                var edit_td = document.createElement('td');
-                var edit_p = document.createElement('p');
-                edit_p.setAttribute('data-placement', 'top');
-                edit_p.setAttribute('data-toggle', 'tooltip');
-                edit_p.setAttribute('title', 'Edit');
-                var edit_btn = document.createElement('button');
-                edit_btn.setAttribute('class', 'btn btn-primary btn-xs');
-                edit_btn.setAttribute('data-title', 'Edit');
-                edit_btn.setAttribute('data-toggle', 'modal');
-                edit_btn.setAttribute('data-target', '#edit');
-                var edit_span = document.createElement('span');
-                edit_span.setAttribute('class', 'glyphicon glyphicon-pencil');
-                edit_btn.appendChild(edit_span);
-                edit_p.appendChild(edit_btn);
-                edit_td.appendChild(edit_p);
-
-                var delete_td = document.createElement('td');
-                var delete_p = document.createElement('p');
-                delete_p.setAttribute('data-placement', 'top');
-                delete_p.setAttribute('data-toggle', 'tooltip');
-                delete_p.setAttribute('title', 'Edit');
-                var delete_btn = document.createElement('button');
-                delete_btn.setAttribute('class', 'btn btn-danger btn-xs');
-                delete_btn.setAttribute('data-title', 'Delete');
-                delete_btn.setAttribute('data-toggle', 'modal');
-                delete_btn.setAttribute('data-target', '#delete');
-                var delete_span = document.createElement('span');
-                delete_span.setAttribute('class', 'glyphicon glyphicon-trash');
-
-                delete_btn.appendChild(delete_span);
-                delete_p.appendChild(delete_btn);
-                delete_td.appendChild(delete_p);
 
                 newRow.onclick = function() {
                   populateInfoModal(this);
+                };
+
+                moreinfo_btn.onclick = function(e){
+                  openPDFTab(this);
                 };
 
                 table.appendChild(newRow);
