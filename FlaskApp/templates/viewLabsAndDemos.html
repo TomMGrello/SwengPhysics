@@ -128,7 +128,7 @@
                            <div class="form-group">
                               <label for="text">Category</label>
                               <label class="radio-inline">
-                              <input value="LAB" name="type" id="type" type="radio" > Lab
+                              <input value="LAB" name="type" id="type" type="radio" >Lab
                               </label>
                               <label class="radio-inline">
                               <input value="DEMO" name="type" id="type" type="radio">Demo
@@ -137,10 +137,11 @@
                            <div class="input-group input-file" name="Fichier1">
                               <input id="file_upload" type="file" name="file" class="form-control" />
                               <span class="input-group-btn">
-                              <button onclick="document.getElementById('file_upload').click();" class="btn btn-default btn-choose" type="button">Choose</button>
+                              <button onclick="document.getElementById('file_upload').click();" class="btn btn-default btn-choose" type="button" style = "margin-bottom: 25%;">Upload</button>
                               </span>
                            </div>
-                           <input id="new_lab_btn" type="submit" class="btn btn-default"></input>
+						   <input id="new_lab_btn" type="submit" class="btn btn-default"></input>
+						   
                         </form>
                      </div>
                      <div class="modal-footer">
@@ -215,8 +216,15 @@
                                  <input id="edit_demo_rad" type="radio" name="optradio">Demo
                                  </label>
                               </div>
+							  <div class="input-group input-file" name="Fichier1">
+                              <input id="file_upload" type="file" name="file" class="form-control" />
+                              <span class="input-group-btn">
+                              <button onclick="document.getElementById('file_upload').click();" class="btn btn-default btn-choose" type="button">Upload</button>
+                              </span>
+                           </div>
                               <button id="modal_add_item" data-target="#additem" data-dismiss="modal" class="btn btn-success navbar-btn " type="button"  href="#myModal" data-toggle="modal">Add Item</button>
-                           </form>
+								
+						   </form>
                         </div>
                         <div class="modal-footer ">
                            <button id="edit_update_btn" type="button" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span> Update</button>
