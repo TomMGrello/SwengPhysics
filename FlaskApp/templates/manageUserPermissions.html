@@ -10,37 +10,40 @@
    </head>
    <body>
       <img src="static/images/RULogo.png">
-      <p class="lead text-right text-success">Welcome, Admin</p>
       <nav class="navbar navbar-default" id="mainnavbar">
          <div class="container-fluid">
-            <div class="navbar-header"><a href="#" class="navbar-brand visible-xs-block navbar-link">Menu </a>
-               <button data-toggle="collapse" data-target="#navcol-1" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+            <div class="navbar-header"><a class="navbar-brand visible-xs-block navbar-link" href="#">Menu </a>
+               <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
             </div>
             <div class="collapse navbar-collapse" id="navcol-1">
                <ul class="nav navbar-nav">
                   <li class="dropdown">
                      <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">View <span class="caret"></span></a>
                      <ul role="menu" class="dropdown-menu">
-                        <li role="presentation"><a href="#">Inventory </a></li>
-                        <li role="presentation"><a href="#">Labs &amp; Demos</a></li>
+                        <li role="presentation"><a href="/inventory">Inventory </a></li>
+                        <li role="presentation"><a href="/labsAndDemos">Labs &amp; Demos</a></li>
                      </ul>
                   </li>
-                  <li role="presentation"><a href="#">Manage Users</a></li>
                   <li class="dropdown">
                      <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Manage <span class="caret"></span></a>
                      <ul role="menu" class="dropdown-menu">
-                        <li role="presentation"><a href="#">First Item</a></li>
-                        <li role="presentation"><a href="#">Second Item</a></li>
-                        <li role="presentation"><a href="#">Third Item</a></li>
+                        <li role="presentation"><a href="/manageUserRequests">User Requests</a></li>
+                        <li role="presentation"><a href="/manageUserPermissions">User Permissions</a></li>
+                        <li role="presentation"><a href="/manageLabRequest">Lab/Demo Rquests</a></li>
+                     </ul>
+                  <li class="dropdown">
+                     <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Database <span class="caret"></span></a>
+                     <ul role="menu" class="dropdown-menu">
+                        <li role="presentation"><a href="/uploadDatabase">Import Database</a></li>
                      </ul>
                   </li>
                </ul>
                <ul class="nav navbar-nav navbar-right">
-                  <li><a href="#">Log Out</a></li>
+                  <li><a id = "signout" href="#">Log out</a></li>
                </ul>
             </div>
          </div>
-      </nav>
+      </nav>	
       
        <!-- Modal -->
             <div class="modal fade" id="myModal" role="dialog">
@@ -92,13 +95,12 @@
             </div>
          </nav>
       </div>
-      <div class="col-lg-10 col-lg-offset-0 col-md-9 col-sm-8">
+      <div class="col-lg-10 col-lg-offset-1 col-md-9 col-sm-8">
          <div class="panel panel-default">
             <div class="panel-heading">
                <h3 class="text-center text-primary panel-title"><strong>Manage Users Permissions</strong></h3>
             </div>
             <div class="panel-body">
-               <div class="table-responsive">
                   <div class="row">
                      <div class="col-md-12">
                         <div class="table-responsive">
@@ -119,7 +121,6 @@
                         </div>
                      </div>
                   </div>
-               </div>
                <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
                   <div class="modal-dialog">
                      <div class="modal-content">

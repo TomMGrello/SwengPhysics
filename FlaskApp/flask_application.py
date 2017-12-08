@@ -185,7 +185,7 @@ def labsAndDemos():
 
 @flask_application.route("/manageUserRequests",methods=['GET'])
 def ManageUser():
-	return render_template("ManageUser.html");
+	return render_template("manageUserRequests.html");
 
 @flask_application.route("/requestAccess",methods=['GET'])
 def RequestAccess():
