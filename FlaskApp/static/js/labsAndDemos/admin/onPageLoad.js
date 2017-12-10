@@ -24,18 +24,14 @@ $(function() {
         e.preventDefault();
         getFilteredLabsAdmin("subconcept");
     });
-    document.getElementById('modal_add_item').addEventListener('click', function() {
-        editLabDemo();
-    });
     document.getElementById('btn_add_item_to_lab').addEventListener('click', function() {
         addItemToLab();
     });
     document.getElementById('edit_update_btn').addEventListener('click', function() {
-        editLabDemo();
+      //editLabDemo();
     });
     document.getElementById('remove_ok').addEventListener('click', function() {
         removeLab();
-        location.reload();
     });
     return false;
 });

@@ -13,10 +13,11 @@ var populateEditModal = function(button) {
         var edit_subconcept = document.getElementById('edit_subconcept');
         var edit_lab_rad = document.getElementById('edit_lab_rad');
         var edit_demo_rad = document.getElementById('edit_demo_rad');
+        var edit_id = document.getElementById('edit_id');
 
         var data_array = data.result;
         var lab_data = data_array[0];
-
+        edit_id.value = lab_data[0];
         edit_name.value = lab_data[2];
         edit_topic.value = lab_data[3];
         edit_concept.value = lab_data[4];

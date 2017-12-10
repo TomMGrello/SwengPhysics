@@ -45,7 +45,7 @@ CAN_RESTORE_DATABASE_INDEX = CAN_BACKUP_DATABASE_INDEX + 1
 
 flask_application = Flask(__name__)
 mysql = MySQL()
-#flask_application.config['UPLOAD_FOLDER'] = '/var/www/FlaskApp/static/lab_pdfs/'
+flask_application.config['UPLOAD_FOLDER'] = 'G:\Documents\GitHub\Sweng\SwengPhysics\FlaskApp\static\lab_pdfs'
 ALLOWED_EXTENSIONS = set(['pdf'])
 flask_application.config['MYSQL_DATABASE_USER'] = 'root'
 
@@ -852,13 +852,13 @@ def uploadFile():
 
 		name = request.form['name']
 		input_type = request.form['type']
-		#input_type = 'LAB'
 		topic = request.form['topic']
 		concept = request.form['concept']
 		subconcept = request.form['subconcept']
+		lab_id = request.form['lab_id']
 
 		#The result will be the newly added lab_id
-		addResult = addLab(input_type,name,topic,concept,subconcept,None)
+		addResult = addLab(input_type,name,topic,concept,subconcept,lab_id)
 
 		try:
 			int(addResult[0][0])
@@ -866,29 +866,14 @@ def uploadFile():
 			return "Add failed"
 
 		filename = str(addResult[0][0]) + ".pdf"
-		#print "FILENAME: " + filename
+
 		if f and allowed_file(f.filename):
 			f.save(os.path.join(flask_application.config['UPLOAD_FOLDER'], filename))
 			return 'file uploaded successfully'
 		return 'file type not supported. try again with a PDF'
 	return "<br>".join(os.listdir(flask_application.config['UPLOAD_FOLDER'],))
 
-@flask_application.route("/editLab",methods=['GET'])
-def editLab():
-	name = request.args.get('name')
-	input_type = request.args.get('type')
-	topic = request.args.get('topic')
-	concept = request.args.get('concept')
-	subconcept = request.args.get('subconcept')
-	lab_id = request.args.get('lab_id')
-	result = addLab(name,input_type,topic,concept,subconcept,lab_id)
-	try:
-		int(result[0][0])
-	except ValueError:
-		return "Add failed"
-	return jsonify(result=result)
-
-def addLab(name,input_type,topic,concept,subconcept,lab_id):
+def addLab(input_type,name,topic,concept,subconcept,lab_id):
 	conn = get_db()
 	cursor = conn.cursor()
 

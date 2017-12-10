@@ -3,6 +3,7 @@ var removeLab = function() {
   $.getJSON('/removeLab', {
       lab_id:lab_id
   }, function(data) {
+      location.reload();
       return false;
   });
 }
