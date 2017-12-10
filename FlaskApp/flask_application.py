@@ -867,9 +867,12 @@ def uploadFile():
 
 		filename = str(addResult[0][0]) + ".pdf"
 
+		if f.filename == '': #no change made to file, don't save any files
+			return redirect(url_for('labsAndDemos'))
+
 		if f and allowed_file(f.filename):
 			f.save(os.path.join(flask_application.config['UPLOAD_FOLDER'], filename))
-			return 'file uploaded successfully'
+			return redirect(url_for('labsAndDemos'))
 		return 'file type not supported. try again with a PDF'
 	return "<br>".join(os.listdir(flask_application.config['UPLOAD_FOLDER'],))
 
