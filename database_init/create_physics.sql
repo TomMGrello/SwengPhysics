@@ -54,7 +54,7 @@ CREATE TABLE `physics`.`user_permissions`(
      `lab_id` INT(36),
      `dates` VARCHAR(60),
      `time_needed` VARCHAR(60),
-     `classroom_id` INT(36),
+     `location_id` INT(36),
      `banner_id` INT(9),
      `num_teams` SMALLINT(5),
      `notes` VARCHAR(250) NULL,

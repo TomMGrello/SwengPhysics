@@ -697,7 +697,7 @@ def addLabRequest():
 	lab_id = request.args.get('lab_id')
 	dates = request.args.get('dates')
 	time_needed = request.args.get('time')
-	classroom_id = request.args.get('classroom_id')
+	location_id = request.args.get('location_id')
 	classroom = request.args.get('classroom')
 	banner_id = session['banner_id']
 	num_teams = request.args.get('num_teams')
@@ -713,7 +713,7 @@ def addLabRequest():
 	can_request_record = user_permissions[CAN_REQUEST_RECORD_INDEX]
 
 	if can_request_record == 1:
-		cursor.callproc('sp_add_lab_request',[lab_id,dates,time_needed,classroom_id,banner_id,num_teams,notes])
+		cursor.callproc('sp_add_lab_request',[lab_id,dates,time_needed,location_id,banner_id,num_teams,notes])
 		cursor.fetchall()
 
 		toaddr = session['email']
