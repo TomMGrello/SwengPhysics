@@ -9,7 +9,7 @@ var editLabDemo = function() {
     var type = "LAB";
     if (demo.checked)
         type = "DEMO";
-    $.getJSON('/addLab', {
+    $.getJSON('/editLab', {
         lab_id: lab_id,
         type: type,
         name: name,
@@ -18,6 +18,7 @@ var editLabDemo = function() {
         subconcept: subconcept
     }, function(data) {
         console.log("EDITED");
+        location.reload();
         return false;
     });
 }

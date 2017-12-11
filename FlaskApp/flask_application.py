@@ -45,7 +45,7 @@ CAN_RESTORE_DATABASE_INDEX = CAN_BACKUP_DATABASE_INDEX + 1
 
 flask_application = Flask(__name__)
 mysql = MySQL()
-#flask_application.config['UPLOAD_FOLDER'] = '/var/www/FlaskApp/static/lab_pdfs/'
+flask_application.config['UPLOAD_FOLDER'] = 'G:\Documents\GitHub\Sweng\SwengPhysics\FlaskApp\static\lab_pdfs'
 ALLOWED_EXTENSIONS = set(['pdf'])
 flask_application.config['MYSQL_DATABASE_USER'] = 'root'
 
@@ -169,10 +169,6 @@ def labsAndDemos():
 	conn = get_db()
 	cursor = conn.cursor()
 
-
-	if session.has_key('banner_id') == False:
-		return render_template("index.html")
-
 	banner_id = session['banner_id']
 	cursor.callproc('sp_get_permissions',[banner_id])
 
@@ -185,7 +181,7 @@ def labsAndDemos():
 
 @flask_application.route("/manageUserRequests",methods=['GET'])
 def ManageUser():
-	return render_template("ManageUser.html");
+	return render_template("manageUserRequests.html");
 
 @flask_application.route("/requestAccess",methods=['GET'])
 def RequestAccess():
@@ -873,16 +869,13 @@ def uploadFile():
 
 		name = request.form['name']
 		input_type = request.form['type']
-		#input_type = 'LAB'
 		topic = request.form['topic']
 		concept = request.form['concept']
 		subconcept = request.form['subconcept']
-
-		#This may or may not be null, depending on if they're editing or adding
-		#lab_id = request.form['lab_id']
+		lab_id = request.form['lab_id']
 
 		#The result will be the newly added lab_id
-		addResult = addLab(input_type,name,topic,concept,subconcept,None)
+		addResult = addLab(input_type,name,topic,concept,subconcept,lab_id)
 
 		try:
 			int(addResult[0][0])
@@ -890,14 +883,17 @@ def uploadFile():
 			return "Add failed"
 
 		filename = str(addResult[0][0]) + ".pdf"
-		#print "FILENAME: " + filename
+
+		if f.filename == '': #no change made to file, don't save any files
+			return redirect(url_for('labsAndDemos'))
+
 		if f and allowed_file(f.filename):
 			f.save(os.path.join(flask_application.config['UPLOAD_FOLDER'], filename))
-			return 'file uploaded successfully'
+			return redirect(url_for('labsAndDemos'))
 		return 'file type not supported. try again with a PDF'
 	return "<br>".join(os.listdir(flask_application.config['UPLOAD_FOLDER'],))
 
-def addLab(name,input_type,topic,concept,subconcept,lab_id):
+def addLab(input_type,name,topic,concept,subconcept,lab_id):
 	conn = get_db()
 	cursor = conn.cursor()
 

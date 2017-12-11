@@ -42,6 +42,7 @@ var getFilteredLabsAdmin = function(order_by) {
                 var subconcept_td = document.createElement("td");
                 subconcept_td.innerHTML = subconcept;
 
+
                 //Do e.stopPropagation() was not working, so I had to do this.
                 //Also couldn't put all the elements inside a span or div, since that messes up the
                 //table columns
@@ -78,6 +79,19 @@ var getFilteredLabsAdmin = function(order_by) {
                 newRow.appendChild(concept_td);
                 newRow.appendChild(subconcept_td);
 
+				       var moreinfo_td = document.createElement('td');
+				       var moreinfo_p = document.createElement('p');
+			          moreinfo_p.setAttribute('data-placement', 'top');
+                moreinfo_p.setAttribute('data-toggle', 'tooltip');
+                moreinfo_p.setAttribute('title', 'Information');
+				        var moreinfo_btn = document.createElement('button');
+                moreinfo_btn.setAttribute('class', 'btn btn-info btn-xs');
+                var moreinfo_span = document.createElement('span');
+				        moreinfo_span.setAttribute('class', 'glyphicon glyphicon-exclamation-sign');
+                moreinfo_btn.appendChild(moreinfo_span);
+                moreinfo_p.appendChild(moreinfo_btn);
+                moreinfo_td.appendChild(moreinfo_p);
+
                 var edit_td = document.createElement('td');
                 var edit_p = document.createElement('p');
                 edit_p.setAttribute('data-placement', 'top');
@@ -113,11 +127,17 @@ var getFilteredLabsAdmin = function(order_by) {
                 delete_p.appendChild(delete_btn);
                 delete_td.appendChild(delete_p);
 
+				        newRow.appendChild(moreinfo_td);
                 newRow.appendChild(edit_td);
                 newRow.appendChild(delete_td);
 
+
                 newRow.onclick = function(e) {
                   populateInfoModal(this);
+                };
+
+                moreinfo_btn.onclick = function(e){
+                  openPDFTab(this);
                 };
 
                 table.appendChild(newRow);

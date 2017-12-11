@@ -18,6 +18,7 @@ var getFilteredInventoryAdmin = function(order_by) {
             table.innerHTML = "";
             for (var curr_item = 0; curr_item < data_array.length; curr_item++) {
               var item = data_array[curr_item];
+              console.log(item);
               var name = item[2];
               var serial_num = item[3];
               var shelf = item[8];
