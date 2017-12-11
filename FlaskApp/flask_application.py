@@ -545,6 +545,23 @@ def removeInventoryItem():
 	cursor.close()
 	return jsonify(result=result)
 
+@flask_application.route("/getUser",methods=['GET'])
+def getUser():
+	conn = get_db()
+	cursor = conn.cursor()
+	result = ERROR
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+	permissions = cursor.fetchall()[0]
+	canModifyPermissions = permissions[CAN_MODIFY_PERMISSIONS_INDEX]
+
+	if int(canModifyPermissions) == 1:
+		userBanner = request.args.get('banner_id')
+		cursor.callproc('sp_get_permissions', [int(userBanner)])
+		user_permissions = cursor.fetchall()
+		result = jsonify(result=user_permissions)
+	cursor.close()
+	return result
 
 @flask_application.route("/getFilteredInventory",methods=['GET'])
 def getFilteredInventory():

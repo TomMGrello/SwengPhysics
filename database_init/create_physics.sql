@@ -93,6 +93,7 @@ source sp_get_all_users.sql;
 source sp_add_course.sql;
 source sp_get_all_courses.sql;
 source sp_delete_course.sql;
+source sp_remove_user.sql;
 
 
 /*Following lines are for development purposes only
