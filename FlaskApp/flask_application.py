@@ -45,7 +45,7 @@ CAN_RESTORE_DATABASE_INDEX = CAN_BACKUP_DATABASE_INDEX + 1
 
 flask_application = Flask(__name__)
 mysql = MySQL()
-#flask_application.config['UPLOAD_FOLDER'] = '/var/www/FlaskApp/static/lab_pdfs/'
+flask_application.config['UPLOAD_FOLDER'] = 'G:\Documents\GitHub\Sweng\SwengPhysics\FlaskApp\static\lab_pdfs'
 ALLOWED_EXTENSIONS = set(['pdf'])
 flask_application.config['MYSQL_DATABASE_USER'] = 'root'
 
@@ -169,10 +169,6 @@ def labsAndDemos():
 	conn = get_db()
 	cursor = conn.cursor()
 
-
-	if session.has_key('banner_id') == False:
-		return render_template("index.html")
-
 	banner_id = session['banner_id']
 	cursor.callproc('sp_get_permissions',[banner_id])
 
@@ -185,7 +181,7 @@ def labsAndDemos():
 
 @flask_application.route("/manageUserRequests",methods=['GET'])
 def ManageUser():
-	return render_template("ManageUser.html");
+	return render_template("manageUserRequests.html");
 
 @flask_application.route("/requestAccess",methods=['GET'])
 def RequestAccess():
@@ -450,18 +446,17 @@ def addInventoryItem():
 		name = request.args.get('name')
 		serial = request.args.get('serial_num')
 		hashed_serial = hash(serial)
-		print(hashed_serial)
 		invoice_id = request.args.get('invoice_id') #int
 		purchase_date = request.args.get('purchase_date')
 		price = request.args.get('price') #float
 		vendor_name = request.args.get('vendor_name')
-		building = request.args.get('building')
-		room_num = request.args.get('room_num')
+		location_id = request.args.get('location_id')
 		shelf = request.args.get('shelf')
 		quantity = request.args.get('quantity') #int
-		cursor.callproc('sp_add_inventory_item',[name, serial, int(hashed_serial), int(invoice_id), purchase_date, float(price), vendor_name, building, room_num, shelf, int(quantity)])
+		cursor.callproc('sp_add_inventory_item',[name, serial, int(hashed_serial), int(invoice_id), purchase_date, float(price), vendor_name, location_id, shelf, int(quantity)])
 		cursor.fetchall()
 		result = SUCCESS
+
 	cursor.close()
 	return jsonify(result=result)
 
@@ -520,9 +515,13 @@ def modifyInventoryItem():
 		name = request.args.get('name')
 		serial = request.args.get('serial_num')
 		hashed_serial = hash(serial)
-		building = request.args.get('building')
+		location_id = request.args.get('location_id')
 		quantity = request.args.get('quantity')
-		cursor.callproc('sp_add_inventory_item',[name, serial, int(hashed_serial), None, None, None, None, building, None, None, int(quantity)])
+		shelf = request.args.get('shelf')
+		invoice_id = request.args.get('invoice_id')
+		price = request.args.get('price')
+
+		cursor.callproc('sp_add_inventory_item',[name, serial, int(hashed_serial), int(invoice_id), None, float(price), None, location_id, shelf, int(quantity)])
 		result = SUCCESS
 	cursor.close()
 	return jsonify(result=result)
@@ -698,6 +697,7 @@ def addLabRequest():
 	lab_id = request.args.get('lab_id')
 	dates = request.args.get('dates')
 	time_needed = request.args.get('time')
+	location_id = request.args.get('location_id')
 	classroom = request.args.get('classroom')
 	banner_id = session['banner_id']
 	num_teams = request.args.get('num_teams')
@@ -713,7 +713,7 @@ def addLabRequest():
 	can_request_record = user_permissions[CAN_REQUEST_RECORD_INDEX]
 
 	if can_request_record == 1:
-		cursor.callproc('sp_add_lab_request',[lab_id,dates,time_needed,classroom,banner_id,num_teams,notes])
+		cursor.callproc('sp_add_lab_request',[lab_id,dates,time_needed,location_id,banner_id,num_teams,notes])
 		cursor.fetchall()
 
 		toaddr = session['email']
@@ -751,9 +751,10 @@ def acceptLabRequest():
 	if can_remove_record == 1:
 		cursor.callproc('sp_get_lab_request_by_id',[request_id])
 		request_data = cursor.fetchall()[0]
+		print request_data
 		dates = request_data[2]
 		time_needed = request_data[3]
-		classroom = request_data[4]
+		classroom = request_data[15] + " " + request_data[16]
 		banner_id = request_data[5]
 		num_teams = request_data[6]
 		lab_name = request_data[10]
@@ -802,7 +803,7 @@ def rejectLabRequest():
 		request_data = cursor.fetchall()[0]
 		dates = request_data[2]
 		time_needed = request_data[3]
-		classroom = request_data[4]
+		classroom = request_data[15] + " " + request_data[16]
 		banner_id = request_data[5]
 		num_teams = request_data[6]
 		lab_name = request_data[10]
@@ -856,16 +857,13 @@ def uploadFile():
 
 		name = request.form['name']
 		input_type = request.form['type']
-		#input_type = 'LAB'
 		topic = request.form['topic']
 		concept = request.form['concept']
 		subconcept = request.form['subconcept']
-
-		#This may or may not be null, depending on if they're editing or adding
-		#lab_id = request.form['lab_id']
+		lab_id = request.form['lab_id']
 
 		#The result will be the newly added lab_id
-		addResult = addLab(input_type,name,topic,concept,subconcept,None)
+		addResult = addLab(input_type,name,topic,concept,subconcept,lab_id)
 
 		try:
 			int(addResult[0][0])
@@ -873,14 +871,17 @@ def uploadFile():
 			return "Add failed"
 
 		filename = str(addResult[0][0]) + ".pdf"
-		#print "FILENAME: " + filename
+
+		if f.filename == '': #no change made to file, don't save any files
+			return redirect(url_for('labsAndDemos'))
+
 		if f and allowed_file(f.filename):
 			f.save(os.path.join(flask_application.config['UPLOAD_FOLDER'], filename))
-			return 'file uploaded successfully'
+			return redirect(url_for('labsAndDemos'))
 		return 'file type not supported. try again with a PDF'
 	return "<br>".join(os.listdir(flask_application.config['UPLOAD_FOLDER'],))
 
-def addLab(name,input_type,topic,concept,subconcept,lab_id):
+def addLab(input_type,name,topic,concept,subconcept,lab_id):
 	conn = get_db()
 	cursor = conn.cursor()
 
@@ -1071,6 +1072,78 @@ def importInventory():
 @flask_application.route('/upload')
 def upload():
    return render_template('upload.html')
+
+@flask_application.route('/addLocation')
+def addLocation():
+	conn = get_db()
+	cursor = conn.cursor()
+	building = request.args.get('building')
+	room_num = request.args.get('room_num')
+	input_type = request.args.get('type')
+	cursor.callproc('sp_add_location',[building,room_num,input_type])
+	result = cursor.fetchall()
+	cursor.close()
+	return jsonify(result = result)
+
+@flask_application.route('/removeLocation')
+def removeLocation():
+	conn = get_db()
+	cursor = conn.cursor()
+	location_id = request.args.get('location_id')
+	cursor.callproc('sp_delete_location',[location_id])
+	result = cursor.fetchall()
+	cursor.close()
+	return jsonify(result = result)
+
+@flask_application.route('/getLocations')
+def getLocations():
+	conn = get_db()
+	cursor = conn.cursor()
+	input_type = request.args.get('type')
+	cursor.callproc('sp_get_all_locations_by_type',[input_type])
+	result = cursor.fetchall()
+	cursor.close()
+	return jsonify(result = result)
+
+@flask_application.route('/getAllCourses')
+def getAllCourses():
+	conn = get_db()
+	cursor = conn.cursor()
+	cursor.callproc('sp_get_all_courses',[])
+	result = cursor.fetchall()
+	cursor.close()
+	return jsonify(result = result)
+
+@flask_application.route('/addCourse')
+def addCourse():
+	conn = get_db()
+	cursor = conn.cursor()
+	name = request.args.get('name')
+	cursor.callproc('sp_add_course',[name])
+	result = cursor.fetchall()
+	cursor.close()
+	return jsonify(result = result)
+
+@flask_application.route('/removeCourse')
+def removeCourse():
+	conn = get_db()
+	cursor = conn.cursor()
+	course_id = request.args.get('course_id')
+	cursor.callproc('sp_delete_course',[course_id])
+	result = cursor.fetchall()
+	cursor.close()
+	return jsonify(result = result)
+
+
+@flask_application.route('/populateTestData')
+def testData():
+	conn = get_db()
+	cursor = conn.cursor()
+	for i in range(1,25):
+		cursor.callproc('sp_add_inventory_item',['TEST OBJECT ' + str(i),str(i),hash(str(i)),i,'09/24/1995',50.0+i,'Verilog',(i%4)+1,'A' + str((i%4)+1),i])
+	result = 'FINISHED'
+	cursor.close()
+	return jsonify(result=result)
 
 if __name__ == "__main__":
 	flask_application.debug = True

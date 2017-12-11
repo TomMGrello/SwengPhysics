@@ -5,7 +5,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Inventory</title>
       <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
-      <link rel="stylesheet" href="static/styles/updatedAdminPage.css">
+      <link rel="stylesheet" href="static/styles/updatedAdminPageNonAdmin.css">
       <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
    </head>
    <body>
@@ -39,7 +39,7 @@
                </div>
                <div class="collapse navbar-collapse" id="navcol-2">
                   <!--Search Code starts here-->
-                  <div class="input-group">
+                  <div class="input-group" style = "padding-top: 20%;">
                      <input id="search_input" type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">
                      <div class="input-group-btn">
                         <button id="btn_search" class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
@@ -68,7 +68,7 @@
                                  <input type="text" class="form-control" id="vendor_input" placeholder="Vendor...">
                               </div>
                            </div>
-                           <button id="btn_filter" type="submit" class="btn btn-default">Filter</button>
+                           <button id="btn_filter" type="submit" class="btn btn-default" style =" margin-bottom : 10%;" >Filter</button>
                         </form>
                      </div>
                   </div>
@@ -83,7 +83,6 @@
                <h3 class="text-center text-primary panel-title"><strong>Inventory</strong></h3>
             </div>
             <div class="panel-body">
-               <div class="table-responsive">
                   <div class="row">
                      <div class="col-md-12">
                         <div class="table-responsive">
@@ -101,15 +100,10 @@
                               </tbody>
                            </table>
                            <div class="clearfix"></div>
-                           <ul class="pagination pull-right">
-                              <li class="disabled"><a href="#"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
-                              <li class="active"><a href="#">1</a></li>
-                              <li><a href="#"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
-                           </ul>
                         </div>
                      </div>
                   </div>
-               </div>
+
                <div class="modal fade" id="info" tabindex="-1" role="dialog" aria-labelledby="info" aria-hidden="true">
                   <div class="modal-dialog">
                      <div class="modal-content">
@@ -128,7 +122,9 @@
                            </div>
                            <div class="form-group">
                              <span><label for="info_invoice_id">Invoice ID: </label></span><span><input id="info_invoice_id" class="form-control " type="text" placeholder="Invoice ID"><span>
-                             <span><label for="info_invoice_price">Price: </label></span><span><input id="info_invoice_price" class="form-control " type="text" placeholder="Invoice Price"><span>
+                               <span><label for="info_invoice_price">Price: </label></span><span><input id="info_invoice_price" class="form-control " type="text" placeholder="Invoice Price"><span>
+                                 <span><label for="info_vendor_name">Vendor: </label></span><span><input id="info_vendor_name" class="form-control " type="text" placeholder="Vendor Name"><span>
+                                   <span><label for="info_purchase_date">Purchase Date: </label></span><span><input id="info_purchase_date" class="form-control " type="text" placeholder="Purchase Date"><span>
                            </div>
                            <div class="form-group">
                              <select id="info_associated_labs" class="form-control">

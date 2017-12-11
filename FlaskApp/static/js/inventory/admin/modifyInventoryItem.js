@@ -1,9 +1,12 @@
-function modifyInventoryItem(serial_num, name, quantity, building) {
+function modifyInventoryItem(name, serial_num, invoice_id, price, location_id, shelf, quantity) {
     $.getJSON('/modifyInventoryItem', {
-            serial_num: serial_num,
             name: name,
-            quantity: quantity,
-            building: building
+            serial_num: serial_num,
+            invoice_id: invoice_id,
+            price: price,
+            location_id:location_id,
+            shelf: shelf,
+            quantity: quantity
         },
         function(data) {
             location.reload();

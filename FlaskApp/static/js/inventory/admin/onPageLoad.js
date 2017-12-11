@@ -37,10 +37,16 @@ $(function() {
     });
     document.getElementById('add_item_submit').addEventListener('click', function(e) {
         e.preventDefault();
-        addInventoryItem(document.getElementById('add_name').value, document.getElementById('add_serial').value, document.getElementById('add_invoice_id').value, document.getElementById('add_purchase_date').value, document.getElementById('add_price').value, document.getElementById('add_vendor').value, document.getElementById('add_building').value, document.getElementById('add_room_number').value, document.getElementById('add_shelf').value, document.getElementById('add_quantity').value);
+        var location_select = document.getElementById('add_location');
+        var selected_location = location_select.options[location_select.selectedIndex].value;
+        addInventoryItem(document.getElementById('add_name').value, document.getElementById('add_serial').value, document.getElementById('add_invoice_id').value, document.getElementById('add_purchase_date').value, document.getElementById('add_price').value, document.getElementById('add_vendor').value, selected_location, document.getElementById('add_shelf').value, document.getElementById('add_quantity').value);
     });
     document.getElementById('update_btn').addEventListener('click', function() {
-        modifyInventoryItem(document.getElementById('modify_serial').value, document.getElementById('modify_name').value, document.getElementById('modify_quantity').value, document.getElementById('modify_location').value);
+        var location_select = document.getElementById('modify_location');
+        var selected_location = location_select.options[location_select.selectedIndex].value;
+        alert(selected_location);
+        modifyInventoryItem(document.getElementById('modify_name').value, document.getElementById('modify_serial').value, document.getElementById('modify_invoice_id').value, document.getElementById('modify_price').value, selected_location, document.getElementById('modify_shelf').value, document.getElementById('modify_quantity').value);
     });
+    populateInventoryLocations();
     return false;
 });

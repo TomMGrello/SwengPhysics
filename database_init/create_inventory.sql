@@ -10,6 +10,7 @@ CREATE TABLE `physics`.`location`(
     `location_id` int(36) auto_increment,
     `building` VARCHAR(60) NULL,
     `room_num` VARCHAR(45) NULL,
+    `type` VARCHAR(10) NULL,
     PRIMARY KEY(`location_id`));
 
 CREATE TABLE `physics`.`invoice`(
@@ -73,14 +74,45 @@ source sp_add_object_request.sql;
 source sp_delete_object_request.sql;
 source sp_get_object_request_by_id.sql;
 source sp_get_all_object_requests.sql;
+source sp_create_sample_inventory.sql;
+source sp_add_location.sql;
+source sp_get_all_locations_by_type.sql;
+source sp_delete_location.sql;
+
+call sp_add_location("Science","135","inventory");
+call sp_add_location("Science","139","inventory");
+call sp_add_location("Science","136","inventory");
+call sp_add_location("Science","140","inventory");
+call sp_add_location("Science","134","classroom");
+call sp_add_location("Science","138","classroom");
+call sp_add_location("Science","144","classroom");
+call sp_add_location("Science","148","classroom");
+call sp_add_location("Science","149","classroom");
+call sp_add_location("Science","150","classroom");
+call sp_add_location("Science","151","classroom");
+call sp_add_location("Science","128","classroom");
 
 
---                          name            serial invoice date      price  vendor        building   room shelf quantity
-call sp_add_inventory_item("TEST OBJECT 1", 123456,-656774501,555888,"09/24/95",106.35,"TEST VENDOR","ROBINSON","223","A-1",5);
-call sp_add_inventory_item("TEST OBJECT 2", 638854, 181160456,555888,"09/24/95",56.87,"TEST VENDOR","SCIENCE","223","A-1",8);
+/*call sp_create_sample_inventory(25); THIS IS ONLY USED FOR FRONT END TESTING. HASHED SERIAL NUMBERS WILL NOT BE ACCURATE AND WILL CAUSE BACK END FUNCTIONS TO FAIL*/
+
+
 call sp_add_lab("LAB", "LAB1", "TOPIC1", "CONCEPT1", "SUBCONCEPT1",NULL);
 call sp_add_lab("LAB", "LAB2", "TOPIC2", "CONCEPT1", "SUBCONCEPT2",NULL);
 call sp_add_lab("DEMO", "DEMO1", "TOPIC2", "CONCEPT2", "SUBCONCEPT1",NULL);
 call sp_add_lab("DEMO", "DEMO2", "TOPIC1", "CONCEPT2", "SUBCONCEPT2",NULL);
-call sp_add_item_to_lab_demo(1,-656774501,5);
-call sp_add_item_to_lab_demo(1,181160456,20);
+call sp_add_lab("LAB", "LAB1", "TOPIC1", "CONCEPT1", "SUBCONCEPT1",NULL);
+call sp_add_lab("LAB", "LAB2", "TOPIC2", "CONCEPT1", "SUBCONCEPT2",NULL);
+call sp_add_lab("DEMO", "DEMO1", "TOPIC2", "CONCEPT2", "SUBCONCEPT1",NULL);
+call sp_add_lab("DEMO", "DEMO2", "TOPIC1", "CONCEPT2", "SUBCONCEPT2",NULL);
+call sp_add_lab("LAB", "LAB1", "TOPIC1", "CONCEPT1", "SUBCONCEPT1",NULL);
+call sp_add_lab("LAB", "LAB2", "TOPIC2", "CONCEPT1", "SUBCONCEPT2",NULL);
+call sp_add_lab("DEMO", "DEMO1", "TOPIC2", "CONCEPT2", "SUBCONCEPT1",NULL);
+call sp_add_lab("DEMO", "DEMO2", "TOPIC1", "CONCEPT2", "SUBCONCEPT2",NULL);
+call sp_add_lab("LAB", "LAB1", "TOPIC1", "CONCEPT1", "SUBCONCEPT1",NULL);
+call sp_add_lab("LAB", "LAB2", "TOPIC2", "CONCEPT1", "SUBCONCEPT2",NULL);
+call sp_add_lab("DEMO", "DEMO1", "TOPIC2", "CONCEPT2", "SUBCONCEPT1",NULL);
+call sp_add_lab("DEMO", "DEMO2", "TOPIC1", "CONCEPT2", "SUBCONCEPT2",NULL);
+call sp_add_lab("LAB", "LAB1", "TOPIC1", "CONCEPT1", "SUBCONCEPT1",NULL);
+call sp_add_lab("LAB", "LAB2", "TOPIC2", "CONCEPT1", "SUBCONCEPT2",NULL);
+call sp_add_lab("DEMO", "DEMO1", "TOPIC2", "CONCEPT2", "SUBCONCEPT1",NULL);
+call sp_add_lab("DEMO", "DEMO2", "TOPIC1", "CONCEPT2", "SUBCONCEPT2",NULL);

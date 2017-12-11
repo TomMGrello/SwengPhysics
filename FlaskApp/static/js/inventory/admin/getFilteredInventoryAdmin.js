@@ -18,6 +18,7 @@ var getFilteredInventoryAdmin = function(order_by) {
             table.innerHTML = "";
             for (var curr_item = 0; curr_item < data_array.length; curr_item++) {
               var item = data_array[curr_item];
+              console.log(item);
               var name = item[2];
               var serial_num = item[3];
               var shelf = item[8];
@@ -25,8 +26,8 @@ var getFilteredInventoryAdmin = function(order_by) {
               var room_num = item[11];
               var invoice_id = item[13];
               var price = item[15];
-              var date = item[18];
-              var vendor = item[19];
+              var date = item[19];
+              var vendor = item[20];
               var quantity = item[7];
 
                 var newRow = document.createElement("tr");
@@ -170,6 +171,10 @@ var getFilteredInventoryAdmin = function(order_by) {
 
                 delete_btn.onclick = function() {
                     setSerialNumToRemove(this);
+                };
+
+                edit_btn.onclick = function(){
+                  populateEditModal(this);
                 };
 
                 newRow.onclick = function(e) {
