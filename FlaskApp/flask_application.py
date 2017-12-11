@@ -751,9 +751,10 @@ def acceptLabRequest():
 	if can_remove_record == 1:
 		cursor.callproc('sp_get_lab_request_by_id',[request_id])
 		request_data = cursor.fetchall()[0]
+		print request_data
 		dates = request_data[2]
 		time_needed = request_data[3]
-		classroom = request_data[4]
+		classroom = request_data[15] + " " + request_data[16]
 		banner_id = request_data[5]
 		num_teams = request_data[6]
 		lab_name = request_data[10]
@@ -802,7 +803,7 @@ def rejectLabRequest():
 		request_data = cursor.fetchall()[0]
 		dates = request_data[2]
 		time_needed = request_data[3]
-		classroom = request_data[4]
+		classroom = request_data[15] + " " + request_data[16]
 		banner_id = request_data[5]
 		num_teams = request_data[6]
 		lab_name = request_data[10]

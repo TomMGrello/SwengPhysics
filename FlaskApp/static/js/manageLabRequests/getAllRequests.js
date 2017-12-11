@@ -8,11 +8,10 @@ var getAllRequests = function() {
       var request_id =curr_data[0];
       var dates = curr_data[2];
       var time_needed = curr_data[3];
-      var classroom = curr_data[4];
+      var classroom = curr_data[23] + " " + curr_data[24];
       var num_groups = curr_data[6];
       var lab_name = curr_data[10];
       var username = curr_data[19];
-      console.log(curr_data);
 
       var newRow = document.createElement('tr');
       newRow.id = request_id;
