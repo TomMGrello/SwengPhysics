@@ -39,7 +39,8 @@ $(function() {
         e.preventDefault();
         addInventoryItem(document.getElementById('add_name').value, document.getElementById('add_serial').value, document.getElementById('add_invoice_id').value, document.getElementById('add_purchase_date').value, document.getElementById('add_price').value, document.getElementById('add_vendor').value, document.getElementById('add_building').value, document.getElementById('add_room_number').value, document.getElementById('add_shelf').value, document.getElementById('add_quantity').value);
     });
-    document.getElementById('update_btn').addEventListener('click', function() {
+    document.getElementById('update_btn').addEventListener('click', function(e) {
+        e.preventDefault();
         modifyInventoryItem(document.getElementById('modify_serial').value, document.getElementById('modify_name').value, document.getElementById('modify_quantity').value, document.getElementById('modify_location').value);
     });
     return false;

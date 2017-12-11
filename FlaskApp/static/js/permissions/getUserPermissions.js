@@ -5,10 +5,11 @@ var getUserPermissions = function() {
         var table = document.getElementById('tablebody');
         for (var curr_item = 0; curr_item < data_array.length; curr_item++) {
             var user = data_array[curr_item];
-            var first = user[0];
-            var middle = user[1];
-            var last = user[2];
-            var uname = user[3];
+            var banner_id = user[1];
+            var first = user[2];
+            var middle = user[3];
+            var last = user[4];
+            var uname = user[5];
 
             var newRow = document.createElement("tr");
 
@@ -24,6 +25,9 @@ var getUserPermissions = function() {
             var lastNameTd = document.createElement("td");
             lastNameTd.id = "last_name";
             lastNameTd.innerHTML = last;
+            var bannerIdTd = document.createElement("td");
+            bannerIdTd.id = "banner_id";
+            bannerIdTd.innerHTML = banner_id;
             var unameTd = document.createElement("td");
             unameTd.id = "uname";
             unameTd.innerHTML = uname;
@@ -32,6 +36,7 @@ var getUserPermissions = function() {
             newRow.appendChild(firstNameTd);
             newRow.appendChild(middleNameTd);
             newRow.appendChild(lastNameTd);
+            newRow.appendChild(bannerIdTd);
             newRow.appendChild(unameTd);
 
             var edit_td = document.createElement('td');
