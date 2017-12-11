@@ -54,7 +54,7 @@ CREATE TABLE `physics`.`user_permissions`(
      `lab_id` INT(36),
      `dates` VARCHAR(60),
      `time_needed` VARCHAR(60),
-     `classroom` VARCHAR(45),
+     `classroom_id` INT(36),
      `banner_id` INT(9),
      `num_teams` SMALLINT(5),
      `notes` VARCHAR(250) NULL,
@@ -72,6 +72,10 @@ CREATE TABLE `physics`.`object_requests`(
             `notes` VARCHAR (250) NULL,
             PRIMARY KEY(`object_request_id`));
 
+CREATE TABLE `physics`.`course`(
+      `course_id` INT(36) auto_increment,
+      `name` VARCHAR(80),
+      PRIMARY KEY(`course_id`));
 
 
 source sp_add_user.sql;
@@ -86,6 +90,10 @@ source sp_delete_user_request.sql;
 source sp_get_all_user_requests.sql;
 source sp_get_email.sql;
 source sp_get_all_users.sql;
+source sp_add_course.sql;
+source sp_get_all_courses.sql;
+source sp_delete_course.sql;
+
 
 /*Following lines are for development purposes only
 They add 4 basic users for the 4 different pre-defined roles. Can be used for testing physics.*/
@@ -102,5 +110,21 @@ call sp_add_user_request(555555555,'Tom','M','Grello','tomgrello','student','tes
 call sp_add_user_request(666666666,'Ryan',' ','Bell','ryanbell','professor','test@test.com');
 call sp_add_user_request(777777777,'Connor', ' ', 'Snee','connorsnee','lab_admin','test@test.com');
 call sp_add_user_request(888888888,'Dharmik',' ','Pandya','dharmikpandya','sys_admin','test@test.com');
+
+/*Test course data for request Form*/
+call sp_add_course('Introduction to Mechanics');
+call sp_add_course('Introduction to Electricity and Magnetism');
+call sp_add_course('Thermal/Fluids/Waves/Optics');
+call sp_add_course('Physics I w/o Calculus');
+call sp_add_course('Physics II w/o Calculus');
+call sp_add_course('Physics for Everyday Life');
+call sp_add_course('Patterns in Nature II');
+call sp_add_course('Modern Physics');
+call sp_add_course('Physics of Sound and Music');
+call sp_add_course('Introduction to Astronomy');
+call sp_add_course('Optics and Light');
+call sp_add_course('LAB CANCELLATION (Include Note)');
+
+
 
 source create_inventory.sql;
