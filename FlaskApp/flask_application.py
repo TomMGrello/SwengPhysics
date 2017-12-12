@@ -78,19 +78,26 @@ def allowed_file(filename):
 ###########################################################################################
 
 @flask_application.route("/")
+@flask_application.route("/index")
 def main():
 	return render_template("index.html")
 
 @flask_application.route("/showPermissions",methods=['GET'])
 def showPermissions():
+	if session.has_key('banner_id') == False:
+		return redirect(url_for('main'))
 	return render_template("showPermissions.html");
 
 @flask_application.route("/manageLabRequest",methods=['GET'])
 def manageLabRequest():
+	if session.has_key('banner_id') == False:
+		return redirect(url_for('main'))
 	return render_template("labsDemosRequests.html");
 
 @flask_application.route("/requestLab",methods=['GET'])
 def requestLab():
+	if session.has_key('banner_id') == False:
+		return redirect(url_for('main'))
 	return render_template("requestLab.html");
 
 @flask_application.route("/uploadDatabase",methods=['GET'])
@@ -100,7 +107,7 @@ def uploadDatabase():
 
 
 	if session.has_key('banner_id') == False:
-		return render_template("index.html")
+		return redirect(url_for('main'))
 
 	banner_id = session['banner_id']
 	cursor.callproc('sp_get_permissions',[banner_id])
@@ -113,6 +120,8 @@ def uploadDatabase():
 
 @flask_application.route("/manageInventoryRequests",methods=['GET'])
 def manageInventoryRequests():
+	if session.has_key('banner_id') == False:
+		return redirect(url_for('main'))
 	conn = get_db()
 	cursor = conn.cursor()
 
@@ -127,6 +136,8 @@ def manageInventoryRequests():
 
 @flask_application.route("/requestInventory",methods=['GET'])
 def requestInventory():
+	if session.has_key('banner_id') == False:
+		return redirect(url_for('main'))
 	conn = get_db()
 	cursor = conn.cursor()
 
@@ -141,6 +152,8 @@ def requestInventory():
 
 @flask_application.route("/inventory",methods=['GET'])
 def mainInventoryView():
+	if session.has_key('banner_id') == False:
+		return redirect(url_for('main'))
 	conn = get_db()
 	cursor = conn.cursor()
 
@@ -162,10 +175,14 @@ def mainInventoryView():
 
 @flask_application.route("/manageUserPermissions",methods=['GET'])
 def manageUserPermissions():
+	if session.has_key('banner_id') == False:
+		return redirect(url_for('main'))
 	return render_template("manageUserPermissions.html");
 
 @flask_application.route("/labsAndDemos",methods=['GET'])
 def labsAndDemos():
+	if session.has_key('banner_id') == False:
+		return redirect(url_for('main'))
 	conn = get_db()
 	cursor = conn.cursor()
 
@@ -181,10 +198,14 @@ def labsAndDemos():
 
 @flask_application.route("/manageUserRequests",methods=['GET'])
 def ManageUser():
+	if session.has_key('banner_id') == False:
+		return redirect(url_for('main'))
 	return render_template("manageUserRequests.html");
 
 @flask_application.route("/requestAccess",methods=['GET'])
 def RequestAccess():
+	if session.has_key('banner_id') == False:
+		return redirect(url_for('main'))
 	return render_template("RequestAccess.html");
 
 @flask_application.route("/test",methods=['GET'])
@@ -545,23 +566,6 @@ def removeInventoryItem():
 	cursor.close()
 	return jsonify(result=result)
 
-@flask_application.route("/getUser",methods=['GET'])
-def getUser():
-	conn = get_db()
-	cursor = conn.cursor()
-	result = ERROR
-	banner_id = session['banner_id']
-	cursor.callproc('sp_get_permissions',[banner_id])
-	permissions = cursor.fetchall()[0]
-	canModifyPermissions = permissions[CAN_MODIFY_PERMISSIONS_INDEX]
-
-	if int(canModifyPermissions) == 1:
-		userBanner = request.args.get('banner_id')
-		cursor.callproc('sp_get_permissions', [int(userBanner)])
-		user_permissions = cursor.fetchall()
-		result = jsonify(result=user_permissions)
-	cursor.close()
-	return result
 
 @flask_application.route("/getFilteredInventory",methods=['GET'])
 def getFilteredInventory():

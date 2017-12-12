@@ -9,6 +9,7 @@ var populateLabFields = function() {
         var lab_data = data_array[0];
 
         lab.value = lab_data[2];
+        getCourses();
         getLabClassrooms();
         return false;
     });
@@ -34,3 +35,19 @@ var getLabClassrooms = function(){
       return false;
   });
 }
+
+  var getCourses = function() {
+    $.getJSON('/getAllCourses', {}, function(data) {
+        console.log(data.result);
+        var course_select = document.getElementById('course');
+        var data_array = data.result;
+        for(var i = 0; i < data_array.length; i++){
+          var course_name = data_array[i][1];
+          var option = document.createElement('option');
+          option.value = course_name;
+          option.text = course_name;
+          course_select.appendChild(option);
+        }
+        return false;
+    });
+  }

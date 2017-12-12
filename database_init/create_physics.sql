@@ -2,6 +2,14 @@ DROP database physics;
 
 CREATE DATABASE physics;
 
+CREATE TABLE `physics`.`constants`(
+  `constant_id` INT(36) auto_increment,
+  `auto_accept` BOOLEAN,
+  `required_num_teams` INT(10),
+  `semester_start_date` VARCHAR(45),
+  `semester_end_date` VARCHAR(45),
+  PRIMARY KEY(`constant_id`));
+
 CREATE TABLE `physics`.`user`(
      `user_id` int(36) auto_increment,
      `banner_id` int(9) NULL,
@@ -94,7 +102,20 @@ source sp_add_course.sql;
 source sp_get_all_courses.sql;
 source sp_delete_course.sql;
 source sp_remove_user.sql;
+source sp_update_constants.sql;
 
+
+INSERT INTO constants(
+  auto_accept,
+  required_num_teams,
+  semester_start_date,
+  semester_end_date
+) values (
+  0,
+  8,
+  "09/05/2017",
+  "12/20/2017"
+);
 
 /*Following lines are for development purposes only
 They add 4 basic users for the 4 different pre-defined roles. Can be used for testing physics.*/
