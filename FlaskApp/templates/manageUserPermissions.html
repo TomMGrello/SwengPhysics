@@ -138,7 +138,7 @@
                            <h3>
                               Can Accept User
                               <label class="switch">
-                              <input type="checkbox">
+                              <input id="accept_user_check" type="checkbox">
                               <span class="slider"></span>
                               </label>
                               <hr>
@@ -146,7 +146,7 @@
                            <h3>
                               Can Remove User
                               <label class="switch">
-                              <input type="checkbox">
+                              <input id="remove_user_check" type="checkbox">
                               <span class="slider"></span>
                               </label>
                               <hr>
@@ -154,7 +154,7 @@
                            <h3>
                               Can Modify Permissions
                               <label class="switch">
-                              <input type="checkbox">
+                              <input id="modify_permissions_check" type="checkbox">
                               <span class="slider"></span>
                               </label>
                               <hr>
@@ -162,7 +162,7 @@
                            <h3>
                               Can Request Equipment/Labs
                               <label class="switch">
-                              <input type="checkbox">
+                              <input id="request_equipment_check" type="checkbox">
                               <span class="slider"></span>
                               </label>
                               <hr>
@@ -170,7 +170,7 @@
                            <h3>
                               Can Add Inventory Record
                               <label class="switch">
-                              <input type="checkbox">
+                              <input id="add_inventory_check" type="checkbox">
                               <span class="slider"></span>
                               </label>
                               <hr>
@@ -178,7 +178,7 @@
                            <h3>
                               Can Remove Inventory Record
                               <label class="switch">
-                              <input type="checkbox">
+                              <input id="remove_inventory_check" type="checkbox">
                               <span class="slider"></span>
                               </label>
                               <hr>
@@ -186,7 +186,7 @@
                            <h3>
                               Can Modify Inventory Record
                               <label class="switch">
-                              <input type="checkbox">
+                              <input id="modify_inventory_check" type="checkbox">
                               <span class="slider"></span>
                               </label>
                               <hr>
@@ -194,7 +194,7 @@
                            <h3>
                               Can Backup Database
                               <label class="switch">
-                              <input type="checkbox">
+                              <input id="backup_database_check" type="checkbox">
                               <span class="slider"></span>
                               </label>
                               <hr>
@@ -202,14 +202,14 @@
                            <h3>
                               Can Restore Database
                               <label class="switch">
-                              <input type="checkbox">
+                              <input id="restore_database_check" type="checkbox">
                               <span class="slider"></span>
                               </label>
                               <hr>
                            </h3>
                         </div>
                         <div class="modal-footer ">
-                           <button type="button" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span> Update</button>
+                           <button id="update_btn" type="button" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span> Update</button>
                         </div>
                      </div>
                      <!-- /.modal-content -->
@@ -241,5 +241,9 @@
       <script src="static/bootstrap/js/bootstrap.min.js"></script>
       <script src="static/js/permissions/onPageLoad.js"></script>
       <script src="static/js/permissions/getUserPermissions.js"></script>
+      <script src="static/js/permissions/populateUserPermissions.js"></script>
+      <script src="static/js/permissions/removeUser.js"></script>
+      <script src="static/js/permissions/setBannerIdToRemove.js"></script>
+      <script src="static/js/permissions/changePermissions.js"></script>
    </body>
 </html>

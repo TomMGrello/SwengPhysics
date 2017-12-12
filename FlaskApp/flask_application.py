@@ -361,7 +361,6 @@ def changePermissions():
 
 	user_permissions = cursor.fetchall()[0]
 	can_modify_permissions = user_permissions[CAN_MODIFY_PERMISSIONS_INDEX]
-
 	if can_modify_permissions == 1:
 		result = MISSING_INPUT
 		banner_id = request.args.get('banner_id')
@@ -555,7 +554,7 @@ def removeInventoryItem():
 	cursor.callproc('sp_get_permissions',[banner_id])
 
 	user_permissions = cursor.fetchall()[0]
-	canRemoveRecord = user_permissions[CAN_REMOVE_RECORD_INDEX];
+	canRemoveRecord = user_permissions[CAN_REMOVE_RECORD_INDEX]
 
 	if int(canRemoveRecord) == 1:
 		serial = request.args.get('serial_num')
@@ -565,6 +564,24 @@ def removeInventoryItem():
 	cursor.close()
 	return jsonify(result=result)
 
+
+@flask_application.route("/removeUser",methods=['GET'])
+def removeUser():
+	conn = get_db()
+	cursor = conn.cursor()
+	result = ERROR
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	canRemoveUser = user_permissions[CAN_REMOVE_USER_INDEX]
+
+	if int(canRemoveUser) == 1:
+		banner_id = request.args.get('banner_id')
+		cursor.callproc('sp_remove_user', [int(banner_id)])
+		result = SUCCESS
+	cursor.close()
+	return jsonify(result=result)
 
 @flask_application.route("/getFilteredInventory",methods=['GET'])
 def getFilteredInventory():
