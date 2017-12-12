@@ -733,34 +733,38 @@ def addLabRequest():
 	user_permissions = cursor.fetchall()[0]
 	can_request_record = user_permissions[CAN_REQUEST_RECORD_INDEX]
 
+	cursor.callproc('sp_get_all_constants',[])
+	auto_accept = cursor.fetchall()[0][1]
+	print "AUTO ACCEPT: " + str(auto_accept)
 	if can_request_record == 1:
 		cursor.callproc('sp_add_lab_request',[lab_id,dates,time_needed,location_id,banner_id,num_teams,notes])
-		cursor.fetchall()
+		request_id = cursor.fetchall()[0][0]
+		print "REQUEST ID: " + str(request_id)
+		result = SUCCESS
+		if auto_accept == 0:
+			toaddr = session['email']
+			body = 'Your lab/demo request has been received.\nYou will receive a notification when your request is approved or denied.\n\n'
+			lab_info = "TITLE: " + lab_name + "\n"
+			lab_info += "DATE(S) NEEDED: " + dates + "\n"
+			lab_info += "CLASSROOM: " + classroom + "\n"
+			lab_info += "NUMBER OF TEAMS: " + num_teams + "\n"
+			lab_info += "ADDITIONAL NOTES: " + notes + "\n"
+			body += lab_info
 
-		toaddr = session['email']
-		body = 'Your lab/demo request has been received.\nYou will receive a notification when your request is approved or denied.\n\n'
-		lab_info = "TITLE: " + lab_name + "\n"
-		lab_info += "DATE(S) NEEDED: " + dates + "\n"
-		lab_info += "CLASSROOM: " + classroom + "\n"
-		lab_info += "NUMBER OF TEAMS: " + num_teams + "\n"
-		lab_info += "ADDITIONAL NOTES: " + notes + "\n"
-		body += lab_info
+			#get some sort of unique email Subject
+			email_id = toaddr + dates + lab_name
+			email_id = str(abs(hash(email_id)))
 
-		#get some sort of unique email Subject
-		email_id = toaddr + dates + lab_name
-		email_id = str(abs(hash(email_id)))
-
-		subject = 'Physics request #' + email_id
-		sendEmail(toaddr,body,subject)
-
+			subject = 'Physics request #' + email_id
+			sendEmail(toaddr,body,subject)
+		else:
+			acceptRequest(request_id)
 	cursor.close()
 	return jsonify(result=result)
 
-@flask_application.route("/acceptLabRequest",methods=['GET'])
-def acceptLabRequest():
+def acceptRequest(request_id):
 	conn = get_db()
 	result = MISSING_INPUT
-	request_id = request.args.get('request_id')
 	cursor = conn.cursor()
 
 	result = INCORRECT_PERMISSIONS
@@ -769,7 +773,11 @@ def acceptLabRequest():
 
 	user_permissions = cursor.fetchall()[0]
 	can_remove_record = user_permissions[CAN_REMOVE_RECORD_INDEX]
-	if can_remove_record == 1:
+
+	cursor.callproc('sp_get_all_constants',[])
+	auto_accept = cursor.fetchall()[0][1]
+
+	if can_remove_record == 1 or auto_accept == 1:
 		cursor.callproc('sp_get_lab_request_by_id',[request_id])
 		request_data = cursor.fetchall()[0]
 		print request_data
@@ -805,6 +813,10 @@ def acceptLabRequest():
 
 	cursor.close()
 	return jsonify(result=result)
+
+@flask_application.route("/acceptLabRequest",methods=['GET'])
+def acceptLabRequest():
+	return acceptRequest(request.args.get('request_id'))
 
 @flask_application.route("/rejectLabRequest",methods=['GET'])
 def rejectLabRequest():
@@ -1155,6 +1167,14 @@ def removeCourse():
 	cursor.close()
 	return jsonify(result = result)
 
+@flask_application.route('/getAllConstants')
+def getAllConstants():
+	conn = get_db()
+	cursor = conn.cursor()
+	cursor.callproc('sp_get_all_constants',[])
+	result = cursor.fetchall()
+	cursor.close()
+	return jsonify(result = result)
 
 @flask_application.route('/populateTestData')
 def testData():

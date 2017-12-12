@@ -11,6 +11,7 @@ var populateLabFields = function() {
         lab.value = lab_data[2];
         getCourses();
         getLabClassrooms();
+        getNumTeams();
         return false;
     });
 }
@@ -48,6 +49,17 @@ var getLabClassrooms = function(){
           option.text = course_name;
           course_select.appendChild(option);
         }
+        return false;
+    });
+  }
+
+  var getNumTeams = function(){
+    $.getJSON('/getAllConstants', {}, function(data) {
+        console.log("CONSTANTS: ")
+        console.log(data.result);
+        var num_teams_field = document.getElementById('numTeams');
+        var data_array = data.result;
+        num_teams_field.value = data_array[0][2];
         return false;
     });
   }

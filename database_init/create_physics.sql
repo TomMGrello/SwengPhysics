@@ -103,6 +103,7 @@ source sp_get_all_courses.sql;
 source sp_delete_course.sql;
 source sp_remove_user.sql;
 source sp_update_constants.sql;
+source sp_get_all_constants.sql;
 
 
 INSERT INTO constants(
