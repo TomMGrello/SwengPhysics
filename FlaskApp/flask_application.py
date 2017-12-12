@@ -575,7 +575,7 @@ def removeUser():
 
 	if int(canRemoveUser) == 1:
 		banner_id = request.args.get('banner_id')
-		#cursor.callproc('sp_remove_user', [int(banner_id)])
+		cursor.callproc('sp_remove_user', [int(banner_id)])
 		result = SUCCESS
 	cursor.close()
 	return jsonify(result=result)
