@@ -12,6 +12,7 @@ var populateLabFields = function() {
         getCourses();
         getLabClassrooms();
         getNumTeams();
+        getWeeks();
         return false;
     });
 }
@@ -60,6 +61,21 @@ var getLabClassrooms = function(){
         var num_teams_field = document.getElementById('numTeams');
         var data_array = data.result;
         num_teams_field.value = data_array[0][2];
+        return false;
+    });
+  }
+
+  var getWeeks = function() {
+    $.getJSON('/remainingWeeks', {}, function(data) {
+        var week_select = document.getElementById('week');
+        var remaining = data.remaining;
+        var total = data.total;
+        for(var week = (total-remaining + 1); week <= total+1; week++){
+          var option = document.createElement('option');
+          option.value = week;
+          option.text = week;
+          week_select.appendChild(option);
+        }
         return false;
     });
   }

@@ -31,11 +31,18 @@
                               <input type="text" class="form-control" id="lab" placeholder="e.g. Hooke's Law Lab" required readonly>
                            </div>
                            <div class="form-group">
-                              <label class="" for="orderBy">Date(s) needed *</label>
-                              <input type="text" class="form-control" id="date" placeholder="e.g. 09/24/2017 or 09/24/2017-09/30/2017" required>
+                              <label class="" for="orderBy">Week for Lab Request *</label>
+                              <select type="text" class="form-control" id="week" required></select>
+                              <label class="" for="orderBy">Day of Week *</label><br>
+                              <input name = "days_of_week" type="checkbox" class="" id="monday" value = "1">Monday </input>
+                              <input name = "days_of_week" type="checkbox" class="" id="tuesday" value = "2">Tuesday </input>
+                              <input name = "days_of_week" type="checkbox" class="" id="wednesday" value = "3">Wednesday </input>
+                              <input name = "days_of_week" type="checkbox" class="" id="thursday" value = "4">Thursday </input>
+                              <input name = "days_of_week" type="checkbox" class="" id="friday" value = "5">Friday </input>
                            </div>
                            <div class="form-group">
-                              <label class="" for="startTime">Time of class *</label>
+                              <label class="" for="startTime">Time(s) Requested *</label>
+                              <p><small>NOTE: If requesting multiple days, please specify both day (MTWRF) and time. ("M @ 8 AM, R @ 2:15 PM")</small></p>
                               <input type="text" class="form-control" id="startTime" placeholder="start time">
                               <div class="form-group">
                                  <label class="" for="orderBy">Lab Classroom *</label>

@@ -10,6 +10,7 @@ import smtplib
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 import time
+from datetime import datetime, timedelta
 #import spreadsheet
 
 ###########################################################################################
@@ -1185,6 +1186,35 @@ def testData():
 	result = 'FINISHED'
 	cursor.close()
 	return jsonify(result=result)
+
+#https://stackoverflow.com/questions/14191832/how-to-calculate-difference-between-two-dates-in-weeks-in-python
+def getWeeksBetweenDates(d1,d2):
+	monday1 = (d1 - timedelta(days=d1.weekday()))
+	monday2 = (d2 - timedelta(days=d2.weekday()))
+	return ((monday1-monday2).days / 7)
+
+@flask_application.route('/remainingWeeks',methods=['GET'])
+def remainingWeeks():
+	current_date = datetime.strptime(datetime.now().strftime('%m/%d/%Y'),'%m/%d/%Y')
+	compare_date = current_date
+
+	conn = get_db()
+	cursor = conn.cursor()
+	cursor.callproc('sp_get_all_constants',[])
+
+	constants = cursor.fetchall()[0]
+	end_date_str = constants[4]
+	start_date_str = constants[3]
+
+	end_date = datetime.strptime(end_date_str,'%m/%d/%Y')
+	start_date = datetime.strptime(start_date_str,'%m/%d/%Y')
+
+	if start_date > current_date:
+		compare_date = start_date
+
+	remaining_weeks = getWeeksBetweenDates(end_date,compare_date)
+	total_weeks = getWeeksBetweenDates(end_date,start_date)
+	return jsonify({'remaining':remaining_weeks,'total':total_weeks})
 
 if __name__ == "__main__":
 	flask_application.debug = True
