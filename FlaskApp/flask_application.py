@@ -46,7 +46,7 @@ CAN_RESTORE_DATABASE_INDEX = CAN_BACKUP_DATABASE_INDEX + 1
 
 flask_application = Flask(__name__)
 mysql = MySQL()
-flask_application.config['UPLOAD_FOLDER'] = 'G:\Documents\GitHub\Sweng\SwengPhysics\FlaskApp\static\lab_pdfs'
+flask_application.config['UPLOAD_FOLDER'] = 'C:\Users\Tom\git\sweng\SwengPhysics\FlaskApp\static\lab_pdfs'
 ALLOWED_EXTENSIONS = set(['pdf'])
 flask_application.config['MYSQL_DATABASE_USER'] = 'root'
 
@@ -205,8 +205,6 @@ def ManageUser():
 
 @flask_application.route("/requestAccess",methods=['GET'])
 def RequestAccess():
-	if session.has_key('banner_id') == False:
-		return redirect(url_for('main'))
 	return render_template("RequestAccess.html");
 
 @flask_application.route("/test",methods=['GET'])
