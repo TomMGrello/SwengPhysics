@@ -9,5 +9,28 @@ var populateLabFields = function() {
         var lab_data = data_array[0];
 
         lab.value = lab_data[2];
+        getLabClassrooms();
+        return false;
     });
+}
+
+var getLabClassrooms = function(){
+  $.getJSON('/getLocations', {
+      type: "classroom"
+  }, function(data) {
+      console.log(data.result);
+      var room_select = document.getElementById('room');
+      var data_array = data.result;
+      for(var i = 0; i < data_array.length; i++){
+        var location = data_array[i];
+        var building = location[1];
+        var room_num = location[2];
+        var location_id = location[0];
+        var option = document.createElement('option');
+        option.value = location_id;
+        option.text = building + " " + room_num;
+        room_select.appendChild(option);
+      }
+      return false;
+  });
 }

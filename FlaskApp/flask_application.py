@@ -445,18 +445,17 @@ def addInventoryItem():
 		name = request.args.get('name')
 		serial = request.args.get('serial_num')
 		hashed_serial = hash(serial)
-		print(hashed_serial)
 		invoice_id = request.args.get('invoice_id') #int
 		purchase_date = request.args.get('purchase_date')
 		price = request.args.get('price') #float
 		vendor_name = request.args.get('vendor_name')
-		building = request.args.get('building')
-		room_num = request.args.get('room_num')
+		location_id = request.args.get('location_id')
 		shelf = request.args.get('shelf')
 		quantity = request.args.get('quantity') #int
-		cursor.callproc('sp_add_inventory_item',[name, serial, int(hashed_serial), int(invoice_id), purchase_date, float(price), vendor_name, building, room_num, shelf, int(quantity)])
+		cursor.callproc('sp_add_inventory_item',[name, serial, int(hashed_serial), int(invoice_id), purchase_date, float(price), vendor_name, location_id, shelf, int(quantity)])
 		cursor.fetchall()
 		result = SUCCESS
+
 	cursor.close()
 	return jsonify(result=result)
 
@@ -515,9 +514,13 @@ def modifyInventoryItem():
 		name = request.args.get('name')
 		serial = request.args.get('serial_num')
 		hashed_serial = hash(serial)
-		building = request.args.get('building')
+		location_id = request.args.get('location_id')
 		quantity = request.args.get('quantity')
-		cursor.callproc('sp_add_inventory_item',[name, serial, int(hashed_serial), None, None, None, None, building, None, None, int(quantity)])
+		shelf = request.args.get('shelf')
+		invoice_id = request.args.get('invoice_id')
+		price = request.args.get('price')
+
+		cursor.callproc('sp_add_inventory_item',[name, serial, int(hashed_serial), int(invoice_id), None, float(price), None, location_id, shelf, int(quantity)])
 		result = SUCCESS
 	cursor.close()
 	return jsonify(result=result)
@@ -728,6 +731,7 @@ def addLabRequest():
 	lab_id = request.args.get('lab_id')
 	dates = request.args.get('dates')
 	time_needed = request.args.get('time')
+	location_id = request.args.get('location_id')
 	classroom = request.args.get('classroom')
 	banner_id = session['banner_id']
 	num_teams = request.args.get('num_teams')
@@ -743,7 +747,7 @@ def addLabRequest():
 	can_request_record = user_permissions[CAN_REQUEST_RECORD_INDEX]
 
 	if can_request_record == 1:
-		cursor.callproc('sp_add_lab_request',[lab_id,dates,time_needed,classroom,banner_id,num_teams,notes])
+		cursor.callproc('sp_add_lab_request',[lab_id,dates,time_needed,location_id,banner_id,num_teams,notes])
 		cursor.fetchall()
 
 		toaddr = session['email']
@@ -781,9 +785,10 @@ def acceptLabRequest():
 	if can_remove_record == 1:
 		cursor.callproc('sp_get_lab_request_by_id',[request_id])
 		request_data = cursor.fetchall()[0]
+		print request_data
 		dates = request_data[2]
 		time_needed = request_data[3]
-		classroom = request_data[4]
+		classroom = request_data[15] + " " + request_data[16]
 		banner_id = request_data[5]
 		num_teams = request_data[6]
 		lab_name = request_data[10]
@@ -832,7 +837,7 @@ def rejectLabRequest():
 		request_data = cursor.fetchall()[0]
 		dates = request_data[2]
 		time_needed = request_data[3]
-		classroom = request_data[4]
+		classroom = request_data[15] + " " + request_data[16]
 		banner_id = request_data[5]
 		num_teams = request_data[6]
 		lab_name = request_data[10]
@@ -1101,6 +1106,78 @@ def importInventory():
 @flask_application.route('/upload')
 def upload():
    return render_template('upload.html')
+
+@flask_application.route('/addLocation')
+def addLocation():
+	conn = get_db()
+	cursor = conn.cursor()
+	building = request.args.get('building')
+	room_num = request.args.get('room_num')
+	input_type = request.args.get('type')
+	cursor.callproc('sp_add_location',[building,room_num,input_type])
+	result = cursor.fetchall()
+	cursor.close()
+	return jsonify(result = result)
+
+@flask_application.route('/removeLocation')
+def removeLocation():
+	conn = get_db()
+	cursor = conn.cursor()
+	location_id = request.args.get('location_id')
+	cursor.callproc('sp_delete_location',[location_id])
+	result = cursor.fetchall()
+	cursor.close()
+	return jsonify(result = result)
+
+@flask_application.route('/getLocations')
+def getLocations():
+	conn = get_db()
+	cursor = conn.cursor()
+	input_type = request.args.get('type')
+	cursor.callproc('sp_get_all_locations_by_type',[input_type])
+	result = cursor.fetchall()
+	cursor.close()
+	return jsonify(result = result)
+
+@flask_application.route('/getAllCourses')
+def getAllCourses():
+	conn = get_db()
+	cursor = conn.cursor()
+	cursor.callproc('sp_get_all_courses',[])
+	result = cursor.fetchall()
+	cursor.close()
+	return jsonify(result = result)
+
+@flask_application.route('/addCourse')
+def addCourse():
+	conn = get_db()
+	cursor = conn.cursor()
+	name = request.args.get('name')
+	cursor.callproc('sp_add_course',[name])
+	result = cursor.fetchall()
+	cursor.close()
+	return jsonify(result = result)
+
+@flask_application.route('/removeCourse')
+def removeCourse():
+	conn = get_db()
+	cursor = conn.cursor()
+	course_id = request.args.get('course_id')
+	cursor.callproc('sp_delete_course',[course_id])
+	result = cursor.fetchall()
+	cursor.close()
+	return jsonify(result = result)
+
+
+@flask_application.route('/populateTestData')
+def testData():
+	conn = get_db()
+	cursor = conn.cursor()
+	for i in range(1,25):
+		cursor.callproc('sp_add_inventory_item',['TEST OBJECT ' + str(i),str(i),hash(str(i)),i,'09/24/1995',50.0+i,'Verilog',(i%4)+1,'A' + str((i%4)+1),i])
+	result = 'FINISHED'
+	cursor.close()
+	return jsonify(result=result)
 
 if __name__ == "__main__":
 	flask_application.debug = True

@@ -44,7 +44,7 @@ var getFilteredLabsDemos = function(order_by) {
                 var subconcept_td = document.createElement("td");
                 subconcept_td.innerHTML = subconcept;
 
-                //Do e.stopPropagation() was not working, so I had to do this.
+                //Doing e.stopPropagation() was not working, so I had to do this.
                 //Also couldn't put all the elements inside a span or div, since that messes up the
                 //table columns
 
@@ -74,17 +74,17 @@ var getFilteredLabsDemos = function(order_by) {
                 subconcept_td.setAttribute('data-target', '#info');
 
                 var moreinfo_td = document.createElement('td');
- 				       var moreinfo_p = document.createElement('p');
- 			          moreinfo_p.setAttribute('data-placement', 'top');
-                 moreinfo_p.setAttribute('data-toggle', 'tooltip');
-                 moreinfo_p.setAttribute('title', 'Information');
- 				        var moreinfo_btn = document.createElement('button');
-                 moreinfo_btn.setAttribute('class', 'btn btn-info btn-xs');
-                 var moreinfo_span = document.createElement('span');
- 				        moreinfo_span.setAttribute('class', 'glyphicon glyphicon-exclamation-sign');
-                 moreinfo_btn.appendChild(moreinfo_span);
-                 moreinfo_p.appendChild(moreinfo_btn);
-                 moreinfo_td.appendChild(moreinfo_p);
+                var moreinfo_p = document.createElement('p');
+                moreinfo_p.setAttribute('data-placement', 'top');
+                moreinfo_p.setAttribute('data-toggle', 'tooltip');
+                moreinfo_p.setAttribute('title', 'Information');
+                var moreinfo_btn = document.createElement('button');
+                moreinfo_btn.setAttribute('class', 'btn btn-info btn-xs');
+                var moreinfo_span = document.createElement('span');
+                moreinfo_span.setAttribute('class', 'glyphicon glyphicon-info-sign');
+                moreinfo_btn.appendChild(moreinfo_span);
+                moreinfo_p.appendChild(moreinfo_btn);
+                moreinfo_td.appendChild(moreinfo_p);
 
                 newRow.appendChild(rowIndex);
                 newRow.appendChild(type_td);
@@ -96,11 +96,11 @@ var getFilteredLabsDemos = function(order_by) {
 
 
                 newRow.onclick = function() {
-                  populateInfoModal(this);
+                    populateInfoModal(this);
                 };
 
-                moreinfo_btn.onclick = function(e){
-                  openPDFTab(this);
+                moreinfo_btn.onclick = function(e) {
+                    openPDFTab(this);
                 };
 
                 table.appendChild(newRow);

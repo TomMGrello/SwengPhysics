@@ -16,7 +16,10 @@ BEGIN
           location.room_num,
           item_locations.shelf,
           invoice.invoice_id,
-          object_invoice.object_price FROM object
+          object_invoice.object_price,
+          invoice.vendor_name,
+          invoice.purchase_date
+        FROM object
   INNER JOIN item_locations on object.hashed_serial_num = item_locations.hashed_serial_num
   INNER JOIN location on item_locations.location_id = location.location_id
   INNER JOIN object_invoice on object.hashed_serial_num = object_invoice.hashed_serial_num

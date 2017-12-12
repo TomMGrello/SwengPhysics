@@ -1,4 +1,4 @@
-function addInventoryItem(name, serial_num, invoice_id, purchase_date, price, vendor_name, building, room_num, shelf, quantity) {
+function addInventoryItem(name, serial_num, invoice_id, purchase_date, price, vendor_name, location_id, shelf, quantity) {
     $.getJSON('/addInventoryItem', {
             name: name,
             serial_num: serial_num,
@@ -6,8 +6,7 @@ function addInventoryItem(name, serial_num, invoice_id, purchase_date, price, ve
             purchase_date: purchase_date,
             price: price,
             vendor_name: vendor_name,
-            building: building,
-            room_num: room_num,
+            location_id:location_id,
             shelf: shelf,
             quantity: quantity
         },
