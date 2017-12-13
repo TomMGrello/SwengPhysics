@@ -205,7 +205,7 @@ def labsAndDemos():
 def ManageUser():
 	if session.has_key('banner_id') == False:
 		return redirect(url_for('main'))
-	return render_template("manageUserRequests.html");
+	return render_template("manageNewUserRequests.html");
 
 @flask_application.route("/requestAccess",methods=['GET'])
 def RequestAccess():

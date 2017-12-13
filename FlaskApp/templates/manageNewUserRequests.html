@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage New Users</title>
+    <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/styles/manageNewUserRequests.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+</head>
+
+<body><img src="static/images/RULogo.png">
+    <p class="lead text-right text-success">Welcome, Admin</p>
+    <nav class="navbar navbar-default" id="mainnavbar">
+        <div class="container-fluid">
+            <div class="navbar-header"><a href="#" class="navbar-brand visible-xs-block navbar-link">Menu </a>
+                <button data-toggle="collapse" data-target="#navcol-1" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+            </div>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown"><a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">View <span class="caret"></span></a>
+                        <ul role="menu" class="dropdown-menu">
+                            <li role="presentation"><a href="#">Inventory </a></li>
+                            <li role="presentation"><a href="#">Labs &amp; Demos</a></li>
+                        </ul>
+                    </li>
+                    <li role="presentation"><a href="#">Manage Users</a></li>
+                    <li class="dropdown"><a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Manage <span class="caret"></span></a>
+                        <ul role="menu" class="dropdown-menu">
+                            <li role="presentation"><a href="#">First Item</a></li>
+                            <li role="presentation"><a href="#">Second Item</a></li>
+                            <li role="presentation"><a href="#">Third Item</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">Log Out</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="col-lg-12 col-lg-offset-0 col-md-9 col-sm-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="text-center text-primary panel-title"><strong>Manage New Users</strong></h3></div>
+            <div class="panel-body">
+                <header></header>
+                <div class="row">
+
+                    <div class="col-md-13">
+                        <div class="table-responsive">
+                            <table id="mytable" class="table table-bordred table-striped ">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 4%;">#</th>
+                                        <th>Name</th>
+                                        <th style="width: 22%;">Email</th>
+                                        <th>Username</th>
+                                        <th>Banner ID</th>
+                                        <th>Requested as</th>
+                                        <th class="text-center">Action</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="requestsTable">
+
+                                </tbody>
+
+                            </table>
+
+                            <div class="clearfix"></div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+        </div>
+    </div>
+    <script src="static/js/jQuery.js"></script>
+    <script src="static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="static/js/manageUserRequests/acceptUserRequest.js"></script>
+    <script src="static/js/signout.js"></script>
+    <script src="static/js/manageUserRequests/deleteUserRequest.js"></script>
+    <script src="static/js/manageUserRequests/getAllUserRequests.js"></script>
+</body>
+
+</html>
