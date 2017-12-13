@@ -1264,12 +1264,12 @@ def addCourse():
 @flask_application.route('/removeCourse')
 def removeCourse():
 	conn = get_db()
-    cursor = conn.cursor()
-    result = INCORRECT_PERMISSIONS
-    banner_id = session['banner_id']
-    cursor.callproc('sp_get_permissions',[banner_id])
-    user_permissions = cursor.fetchall()[0]
-    permission = user_permissions[CAN_REMOVE_RECORD_INDEX]
+	cursor = conn.cursor()
+	result = INCORRECT_PERMISSIONS
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+	user_permissions = cursor.fetchall()[0]
+	permission = user_permissions[CAN_REMOVE_RECORD_INDEX]
 
 	if permission == 1:
 		course_id = request.args.get('course_id')
