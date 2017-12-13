@@ -101,6 +101,10 @@ def requestLab():
 		return redirect(url_for('main'))
 	return render_template("requestLab.html");
 
+@flask_application.route("/systemVariables",methods=['GET'])
+def systemVariables():
+	return render_template("systemVariables.html")
+
 @flask_application.route("/uploadDatabase",methods=['GET'])
 def uploadDatabase():
 	conn = get_db()
