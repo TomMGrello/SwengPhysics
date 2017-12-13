@@ -2,13 +2,11 @@
 <html>
 
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta charset="UTF-8">
-  <meta name="google" content="notranslate">
-  <meta http-equiv="Content-Language" content="en">
-    <title>Batch Importing</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage New Users</title>
     <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="static/styles/uploadDatabaseStyle.css">
+    <link rel="stylesheet" href="static/styles/manageNewUserRequests.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
 </head>
 
@@ -48,67 +46,51 @@
           </div>
       </div>
   </nav>
-    <div class="col-lg-10 col-lg-offset-1 col-md-12">
-        <div>
-            <ul class="nav nav-tabs nav-justified">
-                <li class="active"><a href="#tab-1" role="tab" data-toggle="tab"><strong>Batch Import Inventory </strong></a></li>
-                <li><a class="text-primary" href="#tab-2" role="tab" data-toggle="tab">Batch Import Labs/Demos </a></li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane fade in active" role="tabpanel" id="tab-1">
-                    <p>
-                        <!--This code is for BATCH IMPORT INVENTORY-->
-<div class="container-fluid">
-<div class="col-md-8 col-md-offset-2">
-<form method="POST" action="#" enctype="multipart/form-data">
-	<!-- COMPONENT START -->
-	<div class="form-group">
-		<div class="input-group input-file" name="Fichier1">
-        </div>
-        <div id = "uploadbuttons"class="form-group">
-		<a target="_blank" href="https://docs.google.com/a/students.rowan.edu/spreadsheets/d/1I4d5vY20A4lX3UGbamvTNCTdueZVRSBzf2gGb5XVV5A/edit?usp=sharing" class="btn btn-primary ">Open Google Sheets</a>
-		<a href="/importInventory" class="btn btn-danger pull-right">Import</a>
-	</div>
-	</div>
-	<!-- COMPONENT END -->
+    <div class="col-lg-12 col-lg-offset-0 col-md-9 col-sm-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="text-center text-primary panel-title"><strong>Manage New Users</strong></h3></div>
+            <div class="panel-body">
+                <header></header>
+                <div class="row">
 
-</form>
-</div>
-</div>
-                    </p>
-                </div>
-                <div class="tab-pane fade" role="tabpanel" id="tab-2">
-                    <p>
-                        <!--This code is for BATCH IPORT LAB/DEMO-->
-<div class="container-fluid">
-<div class="col-md-8 col-md-offset-2">
-<form method="POST" action="#" enctype="multipart/form-data">
-	<!-- COMPONENT START -->
-	<div class="form-group">
-		<div class="input-group input-file" name="Fichier1">
-        </div>
-        <div id = "uploadbuttons"class="form-group">
-		<button type="submit" class="btn btn-primary ">Open Google Sheets</button>
-		<button type="reset" class="btn btn-danger pull-right">Import</button>
-	</div>
-	</div>
-	<!-- COMPONENT END -->
+                    <div class="col-md-13">
+                        <div class="table-responsive">
+                            <table id="mytable" class="table table-bordred table-striped ">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 4%;">#</th>
+                                        <th>Name</th>
+                                        <th style="width: 22%;">Email</th>
+                                        <th>Username</th>
+                                        <th>Banner ID</th>
+                                        <th>Requested as</th>
+                                        <th class="text-center">Action</th>
+                                    </tr>
+                                </thead>
 
-</form>
-</div>
-</div>
-                    </p>
+                                <tbody id="requestsTable">
+
+                                </tbody>
+
+                            </table>
+
+                            <div class="clearfix"></div>
+
+                        </div>
+
+                    </div>
                 </div>
-                <div class="tab-pane fade" role="tabpanel" id="tab-3">
-                    <p>Third tab content.</p>
-                </div>
+                <!-- /.modal-dialog -->
             </div>
         </div>
     </div>
     <script src="static/js/jQuery.js"></script>
     <script src="static/bootstrap/js/bootstrap.min.js"></script>
-    <script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
+    <script src="static/js/manageUserRequests/acceptUserRequest.js"></script>
     <script src="static/js/signout.js"></script>
+    <script src="static/js/manageUserRequests/deleteUserRequest.js"></script>
+    <script src="static/js/manageUserRequests/getAllUserRequests.js"></script>
 </body>
 
 </html>

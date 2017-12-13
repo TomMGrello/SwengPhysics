@@ -1,7 +1,6 @@
 var getUserPermissions = function() {
     $.getJSON('/getAllUsers', function(data){
         var data_array = data.result;
-        console.log(data_array);
         var table = document.getElementById('tablebody');
         for (var curr_item = 0; curr_item < data_array.length; curr_item++) {
             var user = data_array[curr_item];
@@ -75,6 +74,14 @@ var getUserPermissions = function() {
             delete_btn.appendChild(delete_span);
             delete_p.appendChild(delete_btn);
             delete_td.appendChild(delete_p);
+
+            delete_btn.onclick = function() {
+              setBannerIdToRemove(this);
+            };
+
+            edit_btn.onclick = function() {
+              populateUserPermissions(this);
+            };
 
             newRow.appendChild(edit_td);
             newRow.appendChild(delete_td);

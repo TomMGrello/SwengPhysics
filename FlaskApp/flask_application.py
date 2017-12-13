@@ -10,6 +10,7 @@ import smtplib
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 import time
+from datetime import datetime, timedelta
 #import spreadsheet
 
 ###########################################################################################
@@ -45,11 +46,11 @@ CAN_RESTORE_DATABASE_INDEX = CAN_BACKUP_DATABASE_INDEX + 1
 
 flask_application = Flask(__name__)
 mysql = MySQL()
-flask_application.config['UPLOAD_FOLDER'] = 'G:\Documents\GitHub\Sweng\SwengPhysics\FlaskApp\static\lab_pdfs'
+flask_application.config['UPLOAD_FOLDER'] = 'C:\Users\Tom\git\sweng\SwengPhysics\FlaskApp\static\lab_pdfs'
 ALLOWED_EXTENSIONS = set(['pdf'])
-flask_application.config['MYSQL_DATABASE_USER'] = 'root'
+flask_application.config['MYSQL_DATABASE_USER'] = 'physics_user'
 
-flask_application.config['MYSQL_DATABASE_PASSWORD'] = 'Phillies20'   # todo, change back to rowanphysicssweng for push, change to personal password for dev work
+flask_application.config['MYSQL_DATABASE_PASSWORD'] = '4GmfPWBC3BA5g7d'   # todo, change back to rowanphysicssweng for push, change to personal password for dev work
 
 flask_application.config['MYSQL_DATABASE_DB'] = 'physics'
 flask_application.config['MYSQL_DATABASE_HOST'] = 'localhost'
@@ -78,20 +79,31 @@ def allowed_file(filename):
 ###########################################################################################
 
 @flask_application.route("/")
+@flask_application.route("/index")
 def main():
 	return render_template("index.html")
 
 @flask_application.route("/showPermissions",methods=['GET'])
 def showPermissions():
+	if session.has_key('banner_id') == False:
+		return redirect(url_for('main'))
 	return render_template("showPermissions.html");
 
 @flask_application.route("/manageLabRequest",methods=['GET'])
 def manageLabRequest():
+	if session.has_key('banner_id') == False:
+		return redirect(url_for('main'))
 	return render_template("labsDemosRequests.html");
 
 @flask_application.route("/requestLab",methods=['GET'])
 def requestLab():
+	if session.has_key('banner_id') == False:
+		return redirect(url_for('main'))
 	return render_template("requestLab.html");
+
+@flask_application.route("/systemVariables",methods=['GET'])
+def systemVariables():
+	return render_template("systemVariables.html")
 
 @flask_application.route("/uploadDatabase",methods=['GET'])
 def uploadDatabase():
@@ -100,7 +112,7 @@ def uploadDatabase():
 
 
 	if session.has_key('banner_id') == False:
-		return render_template("index.html")
+		return redirect(url_for('main'))
 
 	banner_id = session['banner_id']
 	cursor.callproc('sp_get_permissions',[banner_id])
@@ -113,6 +125,8 @@ def uploadDatabase():
 
 @flask_application.route("/manageInventoryRequests",methods=['GET'])
 def manageInventoryRequests():
+	if session.has_key('banner_id') == False:
+		return redirect(url_for('main'))
 	conn = get_db()
 	cursor = conn.cursor()
 
@@ -127,6 +141,8 @@ def manageInventoryRequests():
 
 @flask_application.route("/requestInventory",methods=['GET'])
 def requestInventory():
+	if session.has_key('banner_id') == False:
+		return redirect(url_for('main'))
 	conn = get_db()
 	cursor = conn.cursor()
 
@@ -141,6 +157,8 @@ def requestInventory():
 
 @flask_application.route("/inventory",methods=['GET'])
 def mainInventoryView():
+	if session.has_key('banner_id') == False:
+		return redirect(url_for('main'))
 	conn = get_db()
 	cursor = conn.cursor()
 
@@ -162,10 +180,14 @@ def mainInventoryView():
 
 @flask_application.route("/manageUserPermissions",methods=['GET'])
 def manageUserPermissions():
+	if session.has_key('banner_id') == False:
+		return redirect(url_for('main'))
 	return render_template("manageUserPermissions.html");
 
 @flask_application.route("/labsAndDemos",methods=['GET'])
 def labsAndDemos():
+	if session.has_key('banner_id') == False:
+		return redirect(url_for('main'))
 	conn = get_db()
 	cursor = conn.cursor()
 
@@ -181,7 +203,9 @@ def labsAndDemos():
 
 @flask_application.route("/manageUserRequests",methods=['GET'])
 def ManageUser():
-	return render_template("manageUserRequests.html");
+	if session.has_key('banner_id') == False:
+		return redirect(url_for('main'))
+	return render_template("manageNewUserRequests.html");
 
 @flask_application.route("/requestAccess",methods=['GET'])
 def RequestAccess():
@@ -341,7 +365,6 @@ def changePermissions():
 
 	user_permissions = cursor.fetchall()[0]
 	can_modify_permissions = user_permissions[CAN_MODIFY_PERMISSIONS_INDEX]
-
 	if can_modify_permissions == 1:
 		result = MISSING_INPUT
 		banner_id = request.args.get('banner_id')
@@ -535,7 +558,7 @@ def removeInventoryItem():
 	cursor.callproc('sp_get_permissions',[banner_id])
 
 	user_permissions = cursor.fetchall()[0]
-	canRemoveRecord = user_permissions[CAN_REMOVE_RECORD_INDEX];
+	canRemoveRecord = user_permissions[CAN_REMOVE_RECORD_INDEX]
 
 	if int(canRemoveRecord) == 1:
 		serial = request.args.get('serial_num')
@@ -562,6 +585,24 @@ def getUser():
 		result = jsonify(result=user_permissions)
 	cursor.close()
 	return result
+
+@flask_application.route("/removeUser",methods=['GET'])
+def removeUser():
+	conn = get_db()
+	cursor = conn.cursor()
+	result = ERROR
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	canRemoveUser = user_permissions[CAN_REMOVE_USER_INDEX]
+
+	if int(canRemoveUser) == 1:
+		banner_id = request.args.get('banner_id')
+		cursor.callproc('sp_remove_user', [int(banner_id)])
+		result = SUCCESS
+	cursor.close()
+	return jsonify(result=result)
 
 @flask_application.route("/getFilteredInventory",methods=['GET'])
 def getFilteredInventory():
@@ -648,12 +689,33 @@ def getFilteredLabsDemos():
 
 	return jsonify(result=result)
 
+@flask_application.route("/updateConstants",methods=['GET'])
+def updateConstants():
+	conn = get_db()
+	cursor = conn.cursor()
+	result = ERROR
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	permission = user_permissions[CAN_MODIFY_RECORD_INDEX]
+
+	if int(permission) == 1:
+		auto_accept = request.args.get('auto_accept')
+		required_num_teams = request.args.get('required_num_teams')
+		start_date = request.args.get('semester_start_date')
+		end_date = request.args.get('semester_end_date')
+		cursor.callproc('sp_update_constants', [auto_accept,required_num_teams,start_date,end_date])
+		result = SUCCESS
+	cursor.close()
+	return jsonify(result=result)
+
 @flask_application.route("/addItemToLab",methods=['GET'])
 def addItemToLab():
 	conn = get_db()
 	cursor = conn.cursor()
 
-	quantity = request.args.get('quantity');
+	quantity = request.args.get('quantity')
 	serial_num = request.args.get('serial_num')
 	lab_id = request.args.get('lab_id')
 
@@ -729,34 +791,38 @@ def addLabRequest():
 	user_permissions = cursor.fetchall()[0]
 	can_request_record = user_permissions[CAN_REQUEST_RECORD_INDEX]
 
+	cursor.callproc('sp_get_all_constants',[])
+	auto_accept = cursor.fetchall()[0][1]
+	print "AUTO ACCEPT: " + str(auto_accept)
 	if can_request_record == 1:
 		cursor.callproc('sp_add_lab_request',[lab_id,dates,time_needed,location_id,banner_id,num_teams,notes])
-		cursor.fetchall()
+		request_id = cursor.fetchall()[0][0]
+		print "REQUEST ID: " + str(request_id)
+		result = SUCCESS
+		if auto_accept == 0:
+			toaddr = session['email']
+			body = 'Your lab/demo request has been received.\nYou will receive a notification when your request is approved or denied.\n\n'
+			lab_info = "TITLE: " + lab_name + "\n"
+			lab_info += "DATE(S) NEEDED: " + dates + "\n"
+			lab_info += "CLASSROOM: " + classroom + "\n"
+			lab_info += "NUMBER OF TEAMS: " + num_teams + "\n"
+			lab_info += "ADDITIONAL NOTES: " + notes + "\n"
+			body += lab_info
 
-		toaddr = session['email']
-		body = 'Your lab/demo request has been received.\nYou will receive a notification when your request is approved or denied.\n\n'
-		lab_info = "TITLE: " + lab_name + "\n"
-		lab_info += "DATE(S) NEEDED: " + dates + "\n"
-		lab_info += "CLASSROOM: " + classroom + "\n"
-		lab_info += "NUMBER OF TEAMS: " + num_teams + "\n"
-		lab_info += "ADDITIONAL NOTES: " + notes + "\n"
-		body += lab_info
+			#get some sort of unique email Subject
+			email_id = toaddr + dates + lab_name
+			email_id = str(abs(hash(email_id)))
 
-		#get some sort of unique email Subject
-		email_id = toaddr + dates + lab_name
-		email_id = str(abs(hash(email_id)))
-
-		subject = 'Physics request #' + email_id
-		sendEmail(toaddr,body,subject)
-
+			subject = 'Physics request #' + email_id
+			sendEmail(toaddr,body,subject)
+		else:
+			acceptRequest(request_id)
 	cursor.close()
 	return jsonify(result=result)
 
-@flask_application.route("/acceptLabRequest",methods=['GET'])
-def acceptLabRequest():
+def acceptRequest(request_id):
 	conn = get_db()
 	result = MISSING_INPUT
-	request_id = request.args.get('request_id')
 	cursor = conn.cursor()
 
 	result = INCORRECT_PERMISSIONS
@@ -765,7 +831,11 @@ def acceptLabRequest():
 
 	user_permissions = cursor.fetchall()[0]
 	can_remove_record = user_permissions[CAN_REMOVE_RECORD_INDEX]
-	if can_remove_record == 1:
+
+	cursor.callproc('sp_get_all_constants',[])
+	auto_accept = cursor.fetchall()[0][1]
+
+	if can_remove_record == 1 or auto_accept == 1:
 		cursor.callproc('sp_get_lab_request_by_id',[request_id])
 		request_data = cursor.fetchall()[0]
 		print request_data
@@ -801,6 +871,10 @@ def acceptLabRequest():
 
 	cursor.close()
 	return jsonify(result=result)
+
+@flask_application.route("/acceptLabRequest",methods=['GET'])
+def acceptLabRequest():
+	return acceptRequest(request.args.get('request_id'))
 
 @flask_application.route("/rejectLabRequest",methods=['GET'])
 def rejectLabRequest():
@@ -1151,6 +1225,14 @@ def removeCourse():
 	cursor.close()
 	return jsonify(result = result)
 
+@flask_application.route('/getAllConstants')
+def getAllConstants():
+	conn = get_db()
+	cursor = conn.cursor()
+	cursor.callproc('sp_get_all_constants',[])
+	result = cursor.fetchall()
+	cursor.close()
+	return jsonify(result = result)
 
 @flask_application.route('/populateTestData')
 def testData():
@@ -1161,6 +1243,35 @@ def testData():
 	result = 'FINISHED'
 	cursor.close()
 	return jsonify(result=result)
+
+#https://stackoverflow.com/questions/14191832/how-to-calculate-difference-between-two-dates-in-weeks-in-python
+def getWeeksBetweenDates(d1,d2):
+	monday1 = (d1 - timedelta(days=d1.weekday()))
+	monday2 = (d2 - timedelta(days=d2.weekday()))
+	return ((monday1-monday2).days / 7)
+
+@flask_application.route('/remainingWeeks',methods=['GET'])
+def remainingWeeks():
+	current_date = datetime.strptime(datetime.now().strftime('%m/%d/%Y'),'%m/%d/%Y')
+	compare_date = current_date
+
+	conn = get_db()
+	cursor = conn.cursor()
+	cursor.callproc('sp_get_all_constants',[])
+
+	constants = cursor.fetchall()[0]
+	end_date_str = constants[4]
+	start_date_str = constants[3]
+
+	end_date = datetime.strptime(end_date_str,'%m/%d/%Y')
+	start_date = datetime.strptime(start_date_str,'%m/%d/%Y')
+
+	if start_date > current_date:
+		compare_date = start_date
+
+	remaining_weeks = getWeeksBetweenDates(end_date,compare_date)
+	total_weeks = getWeeksBetweenDates(end_date,start_date)
+	return jsonify({'remaining':remaining_weeks,'total':total_weeks})
 
 if __name__ == "__main__":
 	flask_application.debug = True

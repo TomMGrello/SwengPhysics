@@ -31,7 +31,7 @@ BEGIN
         p_notes
 	);
   commit;
-
+  SELECT LAST_INSERT_ID();
 END $$
 
 DELIMITER ;

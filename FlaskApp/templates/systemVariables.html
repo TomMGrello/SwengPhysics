@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Variables</title>
+    <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/styles/systemVariables.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+</head>
+
+<body>
+    <img src="static/images/RULogo.png">
+    <nav class="navbar navbar-default" id="mainnavbar">
+        <div class="container-fluid">
+            <div class="navbar-header"><a class="navbar-brand visible-xs-block navbar-link" href="#">Menu </a>
+                <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+            </div>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">View <span class="caret"></span></a>
+                        <ul role="menu" class="dropdown-menu">
+                            <li role="presentation"><a href="/inventory">Inventory </a></li>
+                            <li role="presentation"><a href="/labsAndDemos">Labs &amp; Demos</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Manage <span class="caret"></span></a>
+                        <ul role="menu" class="dropdown-menu">
+                            <li role="presentation"><a href="/manageUserRequests">User Requests</a></li>
+                            <li role="presentation"><a href="/manageUserPermissions">User Permissions</a></li>
+                            <li role="presentation"><a href="/manageLabRequest">Lab/Demo Requests</a></li>
+                            <li role="presentation"><a href="/systemVariables">System Settings</a></li>
+                        </ul>
+                        <li class="dropdown">
+                            <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Database <span class="caret"></span></a>
+                            <ul role="menu" class="dropdown-menu">
+                                <li role="presentation"><a href="/uploadDatabase">Import Database</a></li>
+                            </ul>
+                        </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a id="signout" href="/signout">Log out</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="col-lg-8 col-lg-offset-2 col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="text-center text-primary panel-title">System Variables</h3></div>
+            <div class="panel-body">
+                <div class="col-md-12">
+                    <div id="filtercont" class="container-fluid">
+                        <div class="row">
+                            <form class="form">
+                                <div class="form-group">
+                                    <label for="orderBy">Semester Start Date</label>
+                                    <p><small> MUST be in the format mm/dd/yyyy</small></p>
+                                    <input type="" class="form-control" id="start_date" placeholder="Start date"><br>
+                                    <button id="btn_start_date" class="btn btn-success" type="button">Update</button><br><br>
+                                    <label class="" for="orderBy">Semester End Date</label>
+                                    <p><small> MUST be in the format mm/dd/yyyy</small></p>
+                                    <input type="" class="form-control" id="end_date" placeholder="End date"><br>
+                                    <button id="btn_end_date" class="btn btn-success" type="button">Update</button>
+                                </div>
+                                <div class="form-group">
+                                    <label class="" for="orderBy">Course Title</label>
+                                    <select type="text" class="form-control" id="course_select"></select><br>
+                                    <button id="btn_remove_course" class="btn btn-danger" type="button">Remove</button>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="orderBy">Add Course </label>
+                                    <input type="text" class="form-control" id="add_course" placeholder="Course name"><br>
+                                    <button id="btn_add_course" class="btn btn-success" type="button">Add</button>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="orderBy">Number of teams</label>
+                                    <input type="text" class="form-control" id="num_teams" placeholder="8"><br>
+                                    <button id="btn_num_teams" class="btn btn-success" type="button">Update</button>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="" for="orderBy">Lab Classroom *</label>
+                                    <select id="lab_classrooms_select" class="form-control"></select><br>
+                                    <button id="btn_remove_lab_classroom" class="btn btn-danger" type="button">Remove </button>
+                                </div>
+
+                                <div>
+                                    <label>Add new lab classroom</label><br>
+                                    <label for="orderBy">Building name</label>
+                                    <input type="text" class="form-control" id="lab_building_name" placeholder="Science">
+                                    <label for="orderBy">Room number</label>
+                                    <input type="text" class="form-control" id="lab_room_number" placeholder="501"><br>
+                                    <button id="btn_add_lab_classroom" class="btn btn-success" type="button">Add</button>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="" for="orderBy">Inventory Store Room</label>
+                                    <select id="storage_select" class="form-control"></select><br>
+                                    <button id="btn_remove_storage" class="btn btn-danger" type="button">Remove</button>
+                                </div>
+
+                                <div>
+                                    <label>Add new inventory store room</label><br>
+                                    <label for="orderBy">Building name</label>
+                                    <input type="text" class="form-control" id="storage_building_name" placeholder="">
+                                    <label for="orderBy">Store room</label>
+                                    <input type="text" class="form-control" id="storage_room_number" placeholder=""><br>
+                                    <button id="btn_add_storage" class="btn btn-success" type="button">Add</button>
+                                </div>
+
+                                <div>
+                                    <label>Toggle auto-accept lab requests</label><br>
+                                    <button id="btn_auto_accept" class="btn btn-success" type="button">Currently: </button>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="static/js/jQuery.js"></script>
+    <script src="static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="static/js/systemVariables/getConstants.js"></script>
+    <script src="static/js/systemVariables/addLocation.js"></script>
+    <script src="static/js/systemVariables/addCourse.js"></script>
+    <script src="static/js/systemVariables/removeLocation.js"></script>
+    <script src="static/js/systemVariables/removeCourse.js"></script>
+    <script src="static/js/systemVariables/getAllCourses.js"></script>
+    <script src="static/js/systemVariables/getRooms.js"></script>
+    <script src="static/js/systemVariables/updateAutoAccept.js"></script>
+    <script src="static/js/systemVariables/updateEndDate.js"></script>
+    <script src="static/js/systemVariables/updateNumTeams.js"></script>
+    <script src="static/js/systemVariables/updateStartDate.js"></script>
+    <script src="static/js/systemVariables/onPageLoad.js"></script>
+
+
+</body>
+
+</html>
