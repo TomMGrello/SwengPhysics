@@ -685,12 +685,37 @@ def getFilteredLabsDemos():
 
 	return jsonify(result=result)
 
+@flask_application.route("/updateConstants",methods=['GET'])
+def updateConstants():
+	conn = get_db()
+	cursor = conn.cursor()
+	result = ERROR
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	permission = user_permissions[CAN_MODIFY_RECORD_INDEX]
+
+	if int(permission) == 1:
+		auto_accept = request.args.get('auto_accept')
+		print(auto_accept)
+		required_num_fields = request.args.get('required_num_fields')
+		print(required_num_fields)
+		start_date = request.args.get('start_date')
+		print(start_date)
+		end_date = request.args.get('end_date')
+		print(end_date)
+		cursor.callproc('sp_update_constants', [auto_accept,required_num_fields,start_date,end_date])
+		result = SUCCESS
+	cursor.close()
+	return jsonify(result=result)
+
 @flask_application.route("/addItemToLab",methods=['GET'])
 def addItemToLab():
 	conn = get_db()
 	cursor = conn.cursor()
 
-	quantity = request.args.get('quantity');
+	quantity = request.args.get('quantity')
 	serial_num = request.args.get('serial_num')
 	lab_id = request.args.get('lab_id')
 
