@@ -11,7 +11,7 @@ from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 import time
 from datetime import datetime, timedelta
-#import spreadsheet
+import spreadsheet
 
 ###########################################################################################
 ##################################### ERROR CONSTANTS #####################################
@@ -46,12 +46,10 @@ CAN_RESTORE_DATABASE_INDEX = CAN_BACKUP_DATABASE_INDEX + 1
 
 flask_application = Flask(__name__)
 mysql = MySQL()
-flask_application.config['UPLOAD_FOLDER'] = 'C:\Users\Tom\git\sweng\SwengPhysics\FlaskApp\static\lab_pdfs'
+flask_application.config['UPLOAD_FOLDER'] = '/var/www/html/physics/lab/static/lab_pdfs'
 ALLOWED_EXTENSIONS = set(['pdf'])
 flask_application.config['MYSQL_DATABASE_USER'] = 'physics_user'
-
-flask_application.config['MYSQL_DATABASE_PASSWORD'] = '4GmfPWBC3BA5g7d'   # todo, change back to rowanphysicssweng for push, change to personal password for dev work
-
+flask_application.config['MYSQL_DATABASE_PASSWORD'] = '4GmfPWBC3BA5g7d'
 flask_application.config['MYSQL_DATABASE_DB'] = 'physics'
 flask_application.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(flask_application)
@@ -104,12 +102,6 @@ def requestLab():
 @flask_application.route("/systemVariables",methods=['GET'])
 def systemVariables():
 	return render_template("systemVariables.html")
-
-@flask_application.route("/manageConcepts",methods=['GET'])
-def manageConcepts():
-	if session.has_key('banner_id') == False:
-		return redirect(url_for('main'))
-	return render_template("manageConcepts.html");
 
 @flask_application.route("/uploadDatabase",methods=['GET'])
 def uploadDatabase():
@@ -1269,20 +1261,20 @@ def addCourse():
 
 @flask_application.route('/removeCourse')
 def removeCourse():
-	conn = get_db()
-	cursor = conn.cursor()
-	result = INCORRECT_PERMISSIONS
-	banner_id = session['banner_id']
-	cursor.callproc('sp_get_permissions',[banner_id])
-	user_permissions = cursor.fetchall()[0]
-	permission = user_permissions[CAN_REMOVE_RECORD_INDEX]
+    conn = get_db()
+    cursor = conn.cursor()
+    result = INCORRECT_PERMISSIONS
+    banner_id = session['banner_id']
+    cursor.callproc('sp_get_permissions',[banner_id])
+    user_permissions = cursor.fetchall()[0]
+    permission = user_permissions[CAN_REMOVE_RECORD_INDEX]
 
-	if permission == 1:
-		course_id = request.args.get('course_id')
-		cursor.callproc('sp_delete_course',[course_id])
-		result = cursor.fetchall()
-	cursor.close()
-	return jsonify(result = result)
+    if permission == 1:
+	course_id = request.args.get('course_id')
+	cursor.callproc('sp_delete_course',[course_id])
+	result = cursor.fetchall()
+    cursor.close()
+    return jsonify(result = result)
 
 @flask_application.route('/getAllConstants')
 def getAllConstants():
@@ -1331,8 +1323,3 @@ def remainingWeeks():
 	remaining_weeks = getWeeksBetweenDates(end_date,compare_date)
 	total_weeks = getWeeksBetweenDates(end_date,start_date)
 	return jsonify({'remaining':remaining_weeks,'total':total_weeks})
-
-if __name__ == "__main__":
-	flask_application.debug = True
-	flask_application.secret_key = 'rowanphysicssweng'
-	flask_application.run(host=os.getenv('LISTEN', '0.0.0.0'))
