@@ -48,9 +48,9 @@ flask_application = Flask(__name__)
 mysql = MySQL()
 flask_application.config['UPLOAD_FOLDER'] = 'C:\Users\Tom\git\sweng\SwengPhysics\FlaskApp\static\lab_pdfs'
 ALLOWED_EXTENSIONS = set(['pdf'])
-flask_application.config['MYSQL_DATABASE_USER'] = 'root'
+flask_application.config['MYSQL_DATABASE_USER'] = 'physics_user'
 
-flask_application.config['MYSQL_DATABASE_PASSWORD'] = 'rowanphysicssweng'   # todo, change back to rowanphysicssweng for push, change to personal password for dev work
+flask_application.config['MYSQL_DATABASE_PASSWORD'] = '4GmfPWBC3BA5g7d'   # todo, change back to rowanphysicssweng for push, change to personal password for dev work
 
 flask_application.config['MYSQL_DATABASE_DB'] = 'physics'
 flask_application.config['MYSQL_DATABASE_HOST'] = 'localhost'

@@ -1,6 +1,5 @@
-DROP database physics;
-
 CREATE DATABASE physics;
+source create_database_user.sql;
 
 CREATE TABLE `physics`.`constants`(
   `constant_id` INT(36) auto_increment,
@@ -120,19 +119,9 @@ INSERT INTO constants(
 
 /*Following lines are for development purposes only
 They add 4 basic users for the 4 different pre-defined roles. Can be used for testing physics.*/
-
-call sp_add_user(111111111,'student','student','student','student','student','student@rowan.edu');
-call sp_add_user(222222222,'professor','professor','professor','professor','professor','professor@rowan.edu');
-call sp_add_user(333333333,'sys_admin','sys_admin','sys_admin','sys_admin','sys_admin','sys_admin@rowan.edu');
 call sp_add_user(444444444,'lab_admin','lab_admin','lab_admin','lab_admin','lab_admin','lab_admin@rowan.edu');
-call sp_change_permissions(111111111,0,0,0,1,1,1,1,0,0);
-call sp_change_permissions(222222222,0,0,0,1,0,0,0,0,0);
-call sp_change_permissions(333333333,0,0,0,0,0,0,0,1,1);
 call sp_change_permissions(444444444,1,1,1,1,1,1,1,1,1);
-call sp_add_user_request(555555555,'Tom','M','Grello','tomgrello','student','test@test.com');
-call sp_add_user_request(666666666,'Ryan',' ','Bell','ryanbell','professor','test@test.com');
-call sp_add_user_request(777777777,'Connor', ' ', 'Snee','connorsnee','lab_admin','test@test.com');
-call sp_add_user_request(888888888,'Dharmik',' ','Pandya','dharmikpandya','sys_admin','test@test.com');
+
 
 /*Test course data for request Form*/
 call sp_add_course('Introduction to Mechanics');
