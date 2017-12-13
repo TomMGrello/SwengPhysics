@@ -105,6 +105,12 @@ def requestLab():
 def systemVariables():
 	return render_template("systemVariables.html")
 
+@flask_application.route("/manageConcepts",methods=['GET'])
+def manageConcepts():
+	if session.has_key('banner_id') == False:
+		return redirect(url_for('main'))
+	return render_template("manageConcepts.html");
+
 @flask_application.route("/uploadDatabase",methods=['GET'])
 def uploadDatabase():
 	conn = get_db()
@@ -1264,12 +1270,12 @@ def addCourse():
 @flask_application.route('/removeCourse')
 def removeCourse():
 	conn = get_db()
-    cursor = conn.cursor()
-    result = INCORRECT_PERMISSIONS
-    banner_id = session['banner_id']
-    cursor.callproc('sp_get_permissions',[banner_id])
-    user_permissions = cursor.fetchall()[0]
-    permission = user_permissions[CAN_REMOVE_RECORD_INDEX]
+	cursor = conn.cursor()
+	result = INCORRECT_PERMISSIONS
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+	user_permissions = cursor.fetchall()[0]
+	permission = user_permissions[CAN_REMOVE_RECORD_INDEX]
 
 	if permission == 1:
 		course_id = request.args.get('course_id')

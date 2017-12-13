@@ -79,10 +79,8 @@ source sp_add_location.sql;
 source sp_get_all_locations_by_type.sql;
 source sp_delete_location.sql;
 
-call sp_add_location("Science","135","inventory");
-call sp_add_location("Science","139","inventory");
 call sp_add_location("Science","136","inventory");
-call sp_add_location("Science","140","inventory");
+call sp_add_location("Science","146","inventory");
 call sp_add_location("Science","134","classroom");
 call sp_add_location("Science","138","classroom");
 call sp_add_location("Science","144","classroom");
