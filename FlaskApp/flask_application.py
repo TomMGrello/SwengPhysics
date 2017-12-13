@@ -702,14 +702,10 @@ def updateConstants():
 
 	if int(permission) == 1:
 		auto_accept = request.args.get('auto_accept')
-		print(auto_accept)
-		required_num_fields = request.args.get('required_num_fields')
-		print(required_num_fields)
-		start_date = request.args.get('start_date')
-		print(start_date)
-		end_date = request.args.get('end_date')
-		print(end_date)
-		cursor.callproc('sp_update_constants', [auto_accept,required_num_fields,start_date,end_date])
+		required_num_teams = request.args.get('required_num_teams')
+		start_date = request.args.get('semester_start_date')
+		end_date = request.args.get('semester_end_date')
+		cursor.callproc('sp_update_constants', [auto_accept,required_num_teams,start_date,end_date])
 		result = SUCCESS
 	cursor.close()
 	return jsonify(result=result)
