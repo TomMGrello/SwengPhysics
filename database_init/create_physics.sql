@@ -77,6 +77,30 @@ CREATE TABLE `physics`.`course`(
       `name` VARCHAR(80),
       PRIMARY KEY(`course_id`));
 
+-- create concepts table
+CREATE TABLE `physics`.`concept` (
+			`concept_id` INT(36) auto_increment,
+      `name` VARCHAR(45),
+      PRIMARY KEY (`concept_id`)
+      );
+
+-- create subconcept table
+CREATE TABLE `physics`.`subconcept` (
+			`subconcept_id` INT(36) auto_increment,
+      `name` VARCHAR(45),
+      `concept_id` INT (36),
+      PRIMARY KEY (`subconcept_id`),
+      FOREIGN KEY (`concept_id`) references `physics`.`concept`(`concept_id`)
+      );
+
+-- create spreadsheet table
+CREATE TABLE `physics`.`spreadsheet` (
+			`spreadsheet_id` INT(36) auto_increment,
+      `type` ENUM('import_lab','import_inventory','export_master')
+      `url` VARCHAR(512),
+      PRIMARY KEY (`speadsheet_id`)
+      );
+
 
 source sp_add_user.sql;
 source sp_change_permissions.sql;
