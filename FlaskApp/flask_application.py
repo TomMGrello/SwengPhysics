@@ -257,7 +257,6 @@ def addUserRequest():
 	role = request.args.get('role')
 	email = request.args.get('email')
 	conn = get_db()
-	cursor = conn.cursor()
 	print "RUNNING ADD USER REQUEST"
 
 	if banner_id and first_name and last_name and role:
@@ -434,12 +433,17 @@ def getAllUserRequests():
 def allUserPermissions():
 	conn = get_db()
 	cursor = conn.cursor()
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	permission = user_permissions[CAN_MODIFY_PERMISSIONS_INDEX];
 	result = NO_PERMISSIONS
 
-	cursor.callproc('sp_get_all_permissions')
-	all_permissions = cursor.fetchall()
-
-	result = jsonify(result=all_permissions)
+	if permission == 1:
+		cursor.callproc('sp_get_all_permissions')
+		all_permissions = cursor.fetchall()
+		result = jsonify(result=all_permissions)
 	print(result)
 	cursor.close()
 	return result
@@ -874,7 +878,19 @@ def acceptRequest(request_id):
 
 @flask_application.route("/acceptLabRequest",methods=['GET'])
 def acceptLabRequest():
-	return acceptRequest(request.args.get('request_id'))
+	conn = get_db()
+	cursor = conn.cursor()
+
+	result = INCORRECT_PERMISSIONS
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	permission = user_permissions[CAN_REMOVE_RECORD_INDEX]
+	if permission == 1:
+		return acceptRequest(request.args.get('request_id'))
+	else:
+		return jsonify(result=result)
 
 @flask_application.route("/rejectLabRequest",methods=['GET'])
 def rejectLabRequest():
@@ -1150,13 +1166,22 @@ def getAllInventoryRequests():
 @flask_application.route("/importInventory",methods=['GET'])
 def importInventory():
  	conn = get_db()
- 	cursor = conn.cursor()
- 	importedData = spreadsheet.importInventorySheet()
- 	numData = len(importedData)
+	cursor = conn.cursor()
+	result = INCORRECT_PERMISSIONS
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+	user_permissions = cursor.fetchall()[0]
+	permission = user_permissions[CAN_ADD_RECORD_INDEX]
 
-	for entry in range(0, numData):
-		importedEntry = importedData[entry]
-		cursor.callproc('sp_add_inventory_item',[importedEntry[0],importedEntry[1],int(importedEntry[2]),int(importedEntry[3]),importedEntry[4], float(importedEntry[5]),importedEntry[6],importedEntry[7],importedEntry[8],importedEntry[9],int(importedEntry[10])])
+	if permission == 1:
+		importedData = spreadsheet.importInventorySheet()
+	 	numData = len(importedData)
+
+		for entry in range(0, numData):
+			importedEntry = importedData[entry]
+			cursor.callproc('sp_add_inventory_item',[importedEntry[0],importedEntry[1],int(importedEntry[2]),int(importedEntry[3]),importedEntry[4], float(importedEntry[5]),importedEntry[6],importedEntry[7],importedEntry[8],importedEntry[9],int(importedEntry[10])])
+	else:
+		print("INSUFFICIENT PERMISSIONS")
 	cursor.close()
  	return redirect(url_for('mainInventoryView'))
 
@@ -1168,11 +1193,18 @@ def upload():
 def addLocation():
 	conn = get_db()
 	cursor = conn.cursor()
-	building = request.args.get('building')
-	room_num = request.args.get('room_num')
-	input_type = request.args.get('type')
-	cursor.callproc('sp_add_location',[building,room_num,input_type])
-	result = cursor.fetchall()
+	result = INCORRECT_PERMISSIONS
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+	user_permissions = cursor.fetchall()[0]
+	permission = user_permissions[CAN_ADD_RECORD_INDEX]
+
+	if permission == 1:
+		building = request.args.get('building')
+		room_num = request.args.get('room_num')
+		input_type = request.args.get('type')
+		cursor.callproc('sp_add_location',[building,room_num,input_type])
+		result = cursor.fetchall()
 	cursor.close()
 	return jsonify(result = result)
 
@@ -1180,9 +1212,16 @@ def addLocation():
 def removeLocation():
 	conn = get_db()
 	cursor = conn.cursor()
-	location_id = request.args.get('location_id')
-	cursor.callproc('sp_delete_location',[location_id])
-	result = cursor.fetchall()
+	result = INCORRECT_PERMISSIONS
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+	user_permissions = cursor.fetchall()[0]
+	permission = user_permissions[CAN_REMOVE_RECORD_INDEX]
+
+	if permission == 1:
+		location_id = request.args.get('location_id')
+		cursor.callproc('sp_delete_location',[location_id])
+		result = cursor.fetchall()
 	cursor.close()
 	return jsonify(result = result)
 
@@ -1209,19 +1248,33 @@ def getAllCourses():
 def addCourse():
 	conn = get_db()
 	cursor = conn.cursor()
-	name = request.args.get('name')
-	cursor.callproc('sp_add_course',[name])
-	result = cursor.fetchall()
+	result = INCORRECT_PERMISSIONS
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+	user_permissions = cursor.fetchall()[0]
+	permission = user_permissions[CAN_ADD_RECORD_INDEX]
+
+	if permission == 1:
+		name = request.args.get('name')
+		cursor.callproc('sp_add_course',[name])
+		result = cursor.fetchall()
 	cursor.close()
 	return jsonify(result = result)
 
 @flask_application.route('/removeCourse')
 def removeCourse():
 	conn = get_db()
-	cursor = conn.cursor()
-	course_id = request.args.get('course_id')
-	cursor.callproc('sp_delete_course',[course_id])
-	result = cursor.fetchall()
+    cursor = conn.cursor()
+    result = INCORRECT_PERMISSIONS
+    banner_id = session['banner_id']
+    cursor.callproc('sp_get_permissions',[banner_id])
+    user_permissions = cursor.fetchall()[0]
+    permission = user_permissions[CAN_REMOVE_RECORD_INDEX]
+
+	if permission == 1:
+		course_id = request.args.get('course_id')
+		cursor.callproc('sp_delete_course',[course_id])
+		result = cursor.fetchall()
 	cursor.close()
 	return jsonify(result = result)
 
