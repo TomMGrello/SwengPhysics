@@ -256,7 +256,7 @@ def addUserRequest():
 	banner_id = request.args.get('banner_id')
 	role = request.args.get('role')
 	email = request.args.get('email')
-	conn = get_db()
+	cursor = conn.cursor()
 	print "RUNNING ADD USER REQUEST"
 
 	if banner_id and first_name and last_name and role:
