@@ -105,7 +105,7 @@ CREATE TABLE `physics`.`spreadsheet` (
 	`spreadsheet_id` INT(36) auto_increment,
       	`type` ENUM('import_lab','import_inventory','export_master'),
       	`url` VARCHAR(512),
-      	PRIMARY KEY (`speadsheet_id`)
+      	PRIMARY KEY (`spreadsheet_id`)
       	);
 
 

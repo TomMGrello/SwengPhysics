@@ -1,7 +1,7 @@
 USE physics;
 -- add spreadsheet stored procedure
 DELIMITER $$
-CREATE PROCEDURE `sp_add_speadsheet`(
+CREATE PROCEDURE `sp_add_spreadsheet`(
   IN p_type ENUM('import_lab','import_inventory','export_master'),
   IN p_url VARCHAR(512)
 )
