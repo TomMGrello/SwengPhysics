@@ -23,27 +23,28 @@
                   <li class="dropdown">
                       <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">View <span class="caret"></span></a>
                       <ul role="menu" class="dropdown-menu">
-                          <li role="presentation"><a href="/inventory">Inventory </a></li>
-                          <li role="presentation"><a href="/labsAndDemos">Labs &amp; Demos</a></li>
+                          <li role="presentation"><a href="inventory">Inventory </a></li>
+                          <li role="presentation"><a href="labsAndDemos">Labs &amp; Demos</a></li>
                       </ul>
                   </li>
                   <li class="dropdown">
                       <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Manage <span class="caret"></span></a>
                       <ul role="menu" class="dropdown-menu">
-                          <li role="presentation"><a href="/manageUserRequests">User Requests</a></li>
-                          <li role="presentation"><a href="/manageUserPermissions">User Permissions</a></li>
-                          <li role="presentation"><a href="/manageLabRequest">Lab/Demo Requests</a></li>
-                          <li role="presentation"><a href="/systemVariables">System Settings</a></li>
+                          <li role="presentation"><a href="manageUserRequests">User Requests</a></li>
+                          <li role="presentation"><a href="manageUserPermissions">User Permissions</a></li>
+                          <li role="presentation"><a href="manageLabRequest">Lab/Demo Requests</a></li>
+                          <li role="presentation"><a href="manageConcepts">Manage Concepts</a></li>
+                          <li role="presentation"><a href="systemVariables">System Settings</a></li>
                       </ul>
                       <li class="dropdown">
                           <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Database <span class="caret"></span></a>
                           <ul role="menu" class="dropdown-menu">
-                              <li role="presentation"><a href="/uploadDatabase">Import Database</a></li>
+                              <li role="presentation"><a href="uploadDatabase">Import Database</a></li>
                           </ul>
                       </li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
-                  <li><a id="signout" href="/signout">Log out</a></li>
+                  <li><a id="signout" href="signout">Log out</a></li>
               </ul>
           </div>
       </div>
@@ -66,7 +67,7 @@
 		<div class="input-group input-file" name="Fichier1">
         </div>
         <div id = "uploadbuttons"class="form-group">
-		<a target="_blank" href="https://docs.google.com/a/students.rowan.edu/spreadsheets/d/1I4d5vY20A4lX3UGbamvTNCTdueZVRSBzf2gGb5XVV5A/edit?usp=sharing" class="btn btn-primary ">Open Google Sheets</a>
+		<a id="btn_inventory" target="_blank" href="" class="btn btn-primary ">Open Google Sheets</a>
 		<a href="/importInventory" class="btn btn-danger pull-right">Import</a>
 	</div>
 	</div>
@@ -88,7 +89,7 @@
 		<div class="input-group input-file" name="Fichier1">
         </div>
         <div id = "uploadbuttons"class="form-group">
-		<button type="submit" class="btn btn-primary ">Open Google Sheets</button>
+    <a id="btn_labs" target="_blank" href="" class="btn btn-primary ">Open Google Sheets</a>
 		<button type="reset" class="btn btn-danger pull-right">Import</button>
 	</div>
 	</div>
@@ -107,7 +108,8 @@
     </div>
     <script src="static/js/jQuery.js"></script>
     <script src="static/bootstrap/js/bootstrap.min.js"></script>
-    <script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
+    <script src="static/js/batchImport/getSpreadsheetURL.js"></script>
+    <script src="static/js/batchImport/onPageLoad.js"></script>
     <script src="static/js/signout.js"></script>
 </body>
 

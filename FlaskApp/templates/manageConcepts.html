@@ -11,39 +11,40 @@
    <body>
       <img src="static/images/RULogo.png">
       <nav class="navbar navbar-default" id="mainnavbar">
-         <div class="container-fluid">
-            <div class="navbar-header"><a class="navbar-brand visible-xs-block navbar-link" href="#">Menu </a>
-               <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
-            </div>
-            <div class="collapse navbar-collapse" id="navcol-1">
-               <ul class="nav navbar-nav">
-                  <li class="dropdown">
-                     <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">View <span class="caret"></span></a>
-                     <ul role="menu" class="dropdown-menu">
-                        <li role="presentation"><a href="/inventory">Inventory </a></li>
-                        <li role="presentation"><a href="/labsAndDemos">Labs &amp; Demos</a></li>
-                     </ul>
-                  </li>
-                  <li class="dropdown">
-                     <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Manage <span class="caret"></span></a>
-                     <ul role="menu" class="dropdown-menu">
-                        <li role="presentation"><a href="/manageUserRequests">User Requests</a></li>
-                        <li role="presentation"><a href="/manageUserPermissions">User Permissions</a></li>
-                        <li role="presentation"><a href="/manageLabRequest">Lab/Demo Requests</a></li>
-                        <li role="presentation"><a href="/systemVariables">System Settings</a></li>
-                     </ul>
-                  <li class="dropdown">
-                     <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Database <span class="caret"></span></a>
-                     <ul role="menu" class="dropdown-menu">
-                        <li role="presentation"><a href="/uploadDatabase">Import Database</a></li>
-                     </ul>
-                  </li>
-               </ul>
-               <ul class="nav navbar-nav navbar-right">
-                  <li><a id="signout" href="/signout">Log out</a></li>
-               </ul>
-            </div>
-         </div>
+          <div class="container-fluid">
+              <div class="navbar-header"><a class="navbar-brand visible-xs-block navbar-link" href="#">Menu </a>
+                  <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+              </div>
+              <div class="collapse navbar-collapse" id="navcol-1">
+                  <ul class="nav navbar-nav">
+                      <li class="dropdown">
+                          <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">View <span class="caret"></span></a>
+                          <ul role="menu" class="dropdown-menu">
+                              <li role="presentation"><a href="inventory">Inventory </a></li>
+                              <li role="presentation"><a href="labsAndDemos">Labs &amp; Demos</a></li>
+                          </ul>
+                      </li>
+                      <li class="dropdown">
+                          <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Manage <span class="caret"></span></a>
+                          <ul role="menu" class="dropdown-menu">
+                              <li role="presentation"><a href="manageUserRequests">User Requests</a></li>
+                              <li role="presentation"><a href="manageUserPermissions">User Permissions</a></li>
+                              <li role="presentation"><a href="manageLabRequest">Lab/Demo Requests</a></li>
+                              <li role="presentation"><a href="manageConcepts">Manage Concepts</a></li>
+                              <li role="presentation"><a href="systemVariables">System Settings</a></li>
+                          </ul>
+                          <li class="dropdown">
+                              <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Database <span class="caret"></span></a>
+                              <ul role="menu" class="dropdown-menu">
+                                  <li role="presentation"><a href="uploadDatabase">Import Database</a></li>
+                              </ul>
+                          </li>
+                  </ul>
+                  <ul class="nav navbar-nav navbar-right">
+                      <li><a id="signout" href="signout">Log out</a></li>
+                  </ul>
+              </div>
+          </div>
       </nav>
       <div class="col-lg-5 col-lg-offset-1 col-md-10 col-md-offset-1 col-sm-4">
          <div class="panel panel-default">
