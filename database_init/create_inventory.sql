@@ -92,25 +92,3 @@ call sp_add_location("Science","128","classroom");
 
 
 /*call sp_create_sample_inventory(25); THIS IS ONLY USED FOR FRONT END TESTING. HASHED SERIAL NUMBERS WILL NOT BE ACCURATE AND WILL CAUSE BACK END FUNCTIONS TO FAIL*/
-
-
-call sp_add_lab("LAB", "LAB1", "TOPIC1", "CONCEPT1", "SUBCONCEPT1",NULL);
-call sp_add_lab("LAB", "LAB2", "TOPIC2", "CONCEPT1", "SUBCONCEPT2",NULL);
-call sp_add_lab("DEMO", "DEMO1", "TOPIC2", "CONCEPT2", "SUBCONCEPT1",NULL);
-call sp_add_lab("DEMO", "DEMO2", "TOPIC1", "CONCEPT2", "SUBCONCEPT2",NULL);
-call sp_add_lab("LAB", "LAB1", "TOPIC1", "CONCEPT1", "SUBCONCEPT1",NULL);
-call sp_add_lab("LAB", "LAB2", "TOPIC2", "CONCEPT1", "SUBCONCEPT2",NULL);
-call sp_add_lab("DEMO", "DEMO1", "TOPIC2", "CONCEPT2", "SUBCONCEPT1",NULL);
-call sp_add_lab("DEMO", "DEMO2", "TOPIC1", "CONCEPT2", "SUBCONCEPT2",NULL);
-call sp_add_lab("LAB", "LAB1", "TOPIC1", "CONCEPT1", "SUBCONCEPT1",NULL);
-call sp_add_lab("LAB", "LAB2", "TOPIC2", "CONCEPT1", "SUBCONCEPT2",NULL);
-call sp_add_lab("DEMO", "DEMO1", "TOPIC2", "CONCEPT2", "SUBCONCEPT1",NULL);
-call sp_add_lab("DEMO", "DEMO2", "TOPIC1", "CONCEPT2", "SUBCONCEPT2",NULL);
-call sp_add_lab("LAB", "LAB1", "TOPIC1", "CONCEPT1", "SUBCONCEPT1",NULL);
-call sp_add_lab("LAB", "LAB2", "TOPIC2", "CONCEPT1", "SUBCONCEPT2",NULL);
-call sp_add_lab("DEMO", "DEMO1", "TOPIC2", "CONCEPT2", "SUBCONCEPT1",NULL);
-call sp_add_lab("DEMO", "DEMO2", "TOPIC1", "CONCEPT2", "SUBCONCEPT2",NULL);
-call sp_add_lab("LAB", "LAB1", "TOPIC1", "CONCEPT1", "SUBCONCEPT1",NULL);
-call sp_add_lab("LAB", "LAB2", "TOPIC2", "CONCEPT1", "SUBCONCEPT2",NULL);
-call sp_add_lab("DEMO", "DEMO1", "TOPIC2", "CONCEPT2", "SUBCONCEPT1",NULL);
-call sp_add_lab("DEMO", "DEMO2", "TOPIC1", "CONCEPT2", "SUBCONCEPT2",NULL);

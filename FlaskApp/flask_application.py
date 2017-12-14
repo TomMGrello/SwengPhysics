@@ -1360,6 +1360,34 @@ def remainingWeeks():
 	cursor.close()
 	return jsonify({'remaining':remaining_weeks,'total':total_weeks})
 
+@flask_application.route('/addTopic')
+def addTopic():
+	conn = get_db()
+	cursor = conn.cursor()
+	topic_name = request.args.get('name')
+	cursor.callproc('sp_add_topic',[topic_name])
+	cursor.fetchall()
+	result = SUCCESS
+	return jsonify(result=result)
+
+@flask_application.route('/removeTopic')
+def removeTopic():
+	conn = get_db()
+	cursor = conn.cursor()
+	topic_id = request.args.get('topic_id')
+	cursor.callproc('sp_delete_topic',[topic_id])
+	cursor.fetchall()
+	result = SUCCESS
+	return jsonify(result=result)
+
+@flask_application.route('/getTopics')
+def getTopics():
+	conn = get_db()
+	cursor = conn.cursor()
+	cursor.callproc('sp_get_all_topics',[])
+	result = cursor.fetchall()
+	return jsonify(result=result)
+
 if __name__ == "__main__":
 	flask_application.debug = True
 	flask_application.secret_key = 'rowanphysicssweng'

@@ -100,6 +100,13 @@ CREATE TABLE `physics`.`subconcept` (
       	FOREIGN KEY (`concept_id`) references `physics`.`concept`(`concept_id`)
       	);
 
+-- create topic table
+CREATE TABLE `physics`.`topic` (
+	`topic_id` INT(36) auto_increment,
+      	`name` VARCHAR(45),
+      	PRIMARY KEY (`topic_id`)
+      	);
+
 -- create spreadsheet table
 CREATE TABLE `physics`.`spreadsheet` (
 	`spreadsheet_id` INT(36) auto_increment,
@@ -130,6 +137,9 @@ source sp_get_all_constants.sql;
 source sp_get_all_spreadsheets.sql;
 source sp_add_spreadsheet.sql;
 source sp_update_spreadsheet_url.sql;
+source sp_add_topic.sql;
+source sp_delete_topic.sql;
+source sp_get_all_topics.sql;
 
 INSERT INTO constants(
   auto_accept,
