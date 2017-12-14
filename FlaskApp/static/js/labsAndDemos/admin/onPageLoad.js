@@ -35,6 +35,6 @@ $(function() {
     });
 
     populateFilterDropdowns();
-
+    populateAddDropdowns();
     return false;
 });
