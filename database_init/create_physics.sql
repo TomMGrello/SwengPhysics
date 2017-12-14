@@ -127,7 +127,9 @@ source sp_delete_course.sql;
 source sp_remove_user.sql;
 source sp_update_constants.sql;
 source sp_get_all_constants.sql;
-
+source sp_get_all_spreadsheets.sql;
+source sp_add_spreadsheet.sql;
+source sp_update_spreadsheet_url.sql;
 
 INSERT INTO constants(
   auto_accept,

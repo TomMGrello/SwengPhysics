@@ -9,11 +9,7 @@ CREATE PROCEDURE `sp_update_spreadsheet_url`(
 BEGIN
 
 IF (select exists (select 1 from spreadsheet where type = p_type)) then
-	REPLACE into spreadsheet (
-      url
-    ) values (
-      p_url
-    );
+	UPDATE spreadsheet SET url = p_url WHERE type=p_type;
     ELSE
 		select 'URL not found please add one using the add stored procedure';
 	END IF;

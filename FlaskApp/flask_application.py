@@ -1303,6 +1303,33 @@ def testData():
 	cursor.close()
 	return jsonify(result=result)
 
+@flask_application.route('/updateSpreadsheetURL')
+def updateSpreadsheetURL():
+	conn = get_db()
+	cursor = conn.cursor()
+	new_url = request.args.get('new_url')
+	sheet_type = request.args.get('sheet_type')
+	cursor.callproc('sp_update_spreadsheet_url',[sheet_type,new_url])
+	result = cursor.fetchall()
+	try:
+		if result[0][0]:
+			cursor.callproc('sp_add_spreadsheet',[sheet_type,new_url])
+	except:
+		result = SUCCESS
+	result = SUCCESS
+	cursor.close()
+	return jsonify(result=result)
+
+@flask_application.route('/getSpreadsheetURL')
+def getSpreadsheetURL():
+	conn = get_db()
+	cursor = conn.cursor()
+	sheet_type = request.args.get('sheet_type')
+	cursor.callproc('sp_get_all_spreadsheets',[sheet_type])
+	result = cursor.fetchall()
+	cursor.close()
+	return jsonify(result=result)
+
 #https://stackoverflow.com/questions/14191832/how-to-calculate-difference-between-two-dates-in-weeks-in-python
 def getWeeksBetweenDates(d1,d2):
 	monday1 = (d1 - timedelta(days=d1.weekday()))
@@ -1330,6 +1357,7 @@ def remainingWeeks():
 
 	remaining_weeks = getWeeksBetweenDates(end_date,compare_date)
 	total_weeks = getWeeksBetweenDates(end_date,start_date)
+	cursor.close()
 	return jsonify({'remaining':remaining_weeks,'total':total_weeks})
 
 if __name__ == "__main__":
