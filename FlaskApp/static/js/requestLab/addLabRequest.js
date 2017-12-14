@@ -36,7 +36,7 @@ var addLabRequest = function() {
     classroom:classroom,
     lab_name:lab_name
   }, function(data){
-    location.href = "/labsAndDemos";
+    location.href = $SCRIPT_ROOT + "/labsAndDemos";
     return false;
   })
 

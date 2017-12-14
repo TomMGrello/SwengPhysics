@@ -1,6 +1,6 @@
 var populateLabFields = function() {
     var lab_id = window.sessionStorage.getItem('lab_id');
-    $.getJSON('/getLab', {
+    $.getJSON($SCRIPT_ROOT + '/getLab', {
         lab_id: lab_id
     }, function(data) {
         console.log(data.result);
