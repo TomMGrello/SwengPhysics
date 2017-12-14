@@ -48,5 +48,6 @@ $(function() {
         modifyInventoryItem(document.getElementById('modify_name').value, document.getElementById('modify_serial').value, document.getElementById('modify_invoice_id').value, document.getElementById('modify_price').value, selected_location, document.getElementById('modify_shelf').value, document.getElementById('modify_quantity').value);
     });
     populateInventoryLocations();
+    populateLocations();
     return false;
 });

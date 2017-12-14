@@ -24,27 +24,28 @@
                     <li class="dropdown">
                         <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">View <span class="caret"></span></a>
                         <ul role="menu" class="dropdown-menu">
-                            <li role="presentation"><a href="/inventory">Inventory </a></li>
-                            <li role="presentation"><a href="/labsAndDemos">Labs &amp; Demos</a></li>
+                            <li role="presentation"><a href="inventory">Inventory </a></li>
+                            <li role="presentation"><a href="labsAndDemos">Labs &amp; Demos</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
                         <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Manage <span class="caret"></span></a>
                         <ul role="menu" class="dropdown-menu">
-                            <li role="presentation"><a href="/manageUserRequests">User Requests</a></li>
-                            <li role="presentation"><a href="/manageUserPermissions">User Permissions</a></li>
-                            <li role="presentation"><a href="/manageLabRequest">Lab/Demo Requests</a></li>
-                            <li role="presentation"><a href="/systemVariables">System Settings</a></li>
+                            <li role="presentation"><a href="manageUserRequests">User Requests</a></li>
+                            <li role="presentation"><a href="manageUserPermissions">User Permissions</a></li>
+                            <li role="presentation"><a href="manageLabRequest">Lab/Demo Requests</a></li>
+                            <li role="presentation"><a href="manageConcepts">Manage Concepts</a></li>
+                            <li role="presentation"><a href="systemVariables">System Settings</a></li>
                         </ul>
                         <li class="dropdown">
                             <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Database <span class="caret"></span></a>
                             <ul role="menu" class="dropdown-menu">
-                                <li role="presentation"><a href="/uploadDatabase">Import Database</a></li>
+                                <li role="presentation"><a href="uploadDatabase">Import Database</a></li>
                             </ul>
                         </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a id="signout" href="/signout">Log out</a></li>
+                    <li><a id="signout" href="signout">Log out</a></li>
                 </ul>
             </div>
         </div>
@@ -84,15 +85,15 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="" for="filter_topic">Topic</label>
-                                        <input id="filter_topic" type="text" class="form-control" placeholder="Topic" name="filter_topic">
+                                        <select id="filter_topic" type="text" class="form-control" name="filter_topic"></select>
                                     </div>
                                     <div class="form-group">
                                         <label class="" for="filter_concept">Concept</label>
-                                        <input id="filter_concept" type="text" class="form-control" placeholder="Concept" name="filter_concept">
+                                        <select id="filter_concept" type="text" class="form-control" name="filter_concept"></select>
                                     </div>
                                     <div class="form-group">
                                         <label class="" for="filter_subconcept">Subconcept</label>
-                                        <input id="filter_subconcept" type="text" class="form-control" placeholder="Subconcept" name="filter_subconcept">
+                                        <select id="filter_subconcept" type="text" class="form-control" name="filter_subconcept"></select>
                                     </div>
                                 </div>
                                 <button id="filter_submit" class="btn btn-default">Filter</button>
@@ -120,15 +121,15 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="pwd">Topic:</label>
-                                    <input name="topic" id="topic" type="text" class="form-control" placeholder="topic name">
+                                    <select name="topic" id="topic" type="text" class="form-control"><select>
                                 </div>
                                 <div class="form-group">
                                     <label for="text">Concept:</label>
-                                    <input name="concept" id="concept" type="text" class="form-control" placeholder="concept for lab/demo">
+                                    <select name="concept" id="concept" type="text" class="form-control" ><select>
                                 </div>
                                 <div class="form-group">
                                     <label for="text">Subconcept</label>
-                                    <input name="subconcept" id="subconcept" type="text" class="form-control" placeholder="subconcept name for lab/demo">
+                                    <select name="subconcept" id="subconcept" type="text" class="form-control"></select>
                                 </div>
                                 <div class="form-group">
                                     <label for="text">Category</label>
@@ -203,15 +204,15 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="edit_topic">Topic</label>
-                                        <input type="text" class="form-control" id="edit_topic" placeholder="rename topic" name="topic">
+                                        <select type="text" class="form-control" id="edit_topic" name="topic"></select>
                                     </div>
                                     <div class="form-group">
                                         <label for="edit_concept">Concept</label>
-                                        <input type="text" class="form-control" id="edit_concept" placeholder="rename concept" name="concept">
+                                        <select type="text" class="form-control" id="edit_concept" name="concept"></select>
                                     </div>
                                     <div class="form-group">
-                                        <label for="edit_subconcept">Subconcept</label>
-                                        <input type="text" class="form-control" id="edit_subconcept" placeholder="rename subconcept" name="subconcept">
+                                        <label for="edit_concept">Subconcept</label>
+                                        <select type="text" class="form-control" id="edit_subconcept" name="subconcept"></select>
                                     </div>
                                     <div class="form-group">
                                         <label for="text">Category:</label>
@@ -356,6 +357,8 @@
     <script src="static/js/labsAndDemos/admin/populateRequiredInfoItems.js"></script>
     <script src="static/js/labsAndDemos/admin/populateEditModal.js"></script>
     <script src="static/js/labsAndDemos/admin/populateInfoModal.js"></script>
+    <script src="static/js/labsAndDemos/populateFilterDropdowns.js"></script>
+    <script src="static/js/labsAndDemos/admin/populateAddDropdowns.js"></script>
     <script src="static/js/labsAndDemos/admin/populateInventoryDropdown.js"></script>
     <script src="static/js/labsAndDemos/admin/removeLab.js"></script>
     <script src="static/js/labsAndDemos/admin/onPageLoad.js"></script>

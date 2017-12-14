@@ -78,11 +78,11 @@ source sp_create_sample_inventory.sql;
 source sp_add_location.sql;
 source sp_get_all_locations_by_type.sql;
 source sp_delete_location.sql;
+source sp_get_all_concepts.sql;
+source sp_get_all_subconcepts.sql;
 
-call sp_add_location("Science","135","inventory");
-call sp_add_location("Science","139","inventory");
 call sp_add_location("Science","136","inventory");
-call sp_add_location("Science","140","inventory");
+call sp_add_location("Science","146","inventory");
 call sp_add_location("Science","134","classroom");
 call sp_add_location("Science","138","classroom");
 call sp_add_location("Science","144","classroom");
@@ -94,25 +94,3 @@ call sp_add_location("Science","128","classroom");
 
 
 /*call sp_create_sample_inventory(25); THIS IS ONLY USED FOR FRONT END TESTING. HASHED SERIAL NUMBERS WILL NOT BE ACCURATE AND WILL CAUSE BACK END FUNCTIONS TO FAIL*/
-
-
-call sp_add_lab("LAB", "LAB1", "TOPIC1", "CONCEPT1", "SUBCONCEPT1",NULL);
-call sp_add_lab("LAB", "LAB2", "TOPIC2", "CONCEPT1", "SUBCONCEPT2",NULL);
-call sp_add_lab("DEMO", "DEMO1", "TOPIC2", "CONCEPT2", "SUBCONCEPT1",NULL);
-call sp_add_lab("DEMO", "DEMO2", "TOPIC1", "CONCEPT2", "SUBCONCEPT2",NULL);
-call sp_add_lab("LAB", "LAB1", "TOPIC1", "CONCEPT1", "SUBCONCEPT1",NULL);
-call sp_add_lab("LAB", "LAB2", "TOPIC2", "CONCEPT1", "SUBCONCEPT2",NULL);
-call sp_add_lab("DEMO", "DEMO1", "TOPIC2", "CONCEPT2", "SUBCONCEPT1",NULL);
-call sp_add_lab("DEMO", "DEMO2", "TOPIC1", "CONCEPT2", "SUBCONCEPT2",NULL);
-call sp_add_lab("LAB", "LAB1", "TOPIC1", "CONCEPT1", "SUBCONCEPT1",NULL);
-call sp_add_lab("LAB", "LAB2", "TOPIC2", "CONCEPT1", "SUBCONCEPT2",NULL);
-call sp_add_lab("DEMO", "DEMO1", "TOPIC2", "CONCEPT2", "SUBCONCEPT1",NULL);
-call sp_add_lab("DEMO", "DEMO2", "TOPIC1", "CONCEPT2", "SUBCONCEPT2",NULL);
-call sp_add_lab("LAB", "LAB1", "TOPIC1", "CONCEPT1", "SUBCONCEPT1",NULL);
-call sp_add_lab("LAB", "LAB2", "TOPIC2", "CONCEPT1", "SUBCONCEPT2",NULL);
-call sp_add_lab("DEMO", "DEMO1", "TOPIC2", "CONCEPT2", "SUBCONCEPT1",NULL);
-call sp_add_lab("DEMO", "DEMO2", "TOPIC1", "CONCEPT2", "SUBCONCEPT2",NULL);
-call sp_add_lab("LAB", "LAB1", "TOPIC1", "CONCEPT1", "SUBCONCEPT1",NULL);
-call sp_add_lab("LAB", "LAB2", "TOPIC2", "CONCEPT1", "SUBCONCEPT2",NULL);
-call sp_add_lab("DEMO", "DEMO1", "TOPIC2", "CONCEPT2", "SUBCONCEPT1",NULL);
-call sp_add_lab("DEMO", "DEMO2", "TOPIC1", "CONCEPT2", "SUBCONCEPT2",NULL);

@@ -24,27 +24,28 @@
                   <li class="dropdown">
                       <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">View <span class="caret"></span></a>
                       <ul role="menu" class="dropdown-menu">
-                          <li role="presentation"><a href="/inventory">Inventory </a></li>
-                          <li role="presentation"><a href="/labsAndDemos">Labs &amp; Demos</a></li>
+                          <li role="presentation"><a href="inventory">Inventory </a></li>
+                          <li role="presentation"><a href="labsAndDemos">Labs &amp; Demos</a></li>
                       </ul>
                   </li>
                   <li class="dropdown">
                       <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Manage <span class="caret"></span></a>
                       <ul role="menu" class="dropdown-menu">
-                          <li role="presentation"><a href="/manageUserRequests">User Requests</a></li>
-                          <li role="presentation"><a href="/manageUserPermissions">User Permissions</a></li>
-                          <li role="presentation"><a href="/manageLabRequest">Lab/Demo Requests</a></li>
-                          <li role="presentation"><a href="/systemVariables">System Settings</a></li>
+                          <li role="presentation"><a href="manageUserRequests">User Requests</a></li>
+                          <li role="presentation"><a href="manageUserPermissions">User Permissions</a></li>
+                          <li role="presentation"><a href="manageLabRequest">Lab/Demo Requests</a></li>
+                          <li role="presentation"><a href="manageConcepts">Manage Concepts</a></li>
+                          <li role="presentation"><a href="systemVariables">System Settings</a></li>
                       </ul>
                       <li class="dropdown">
                           <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Database <span class="caret"></span></a>
                           <ul role="menu" class="dropdown-menu">
-                              <li role="presentation"><a href="/uploadDatabase">Import Database</a></li>
+                              <li role="presentation"><a href="uploadDatabase">Import Database</a></li>
                           </ul>
                       </li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
-                  <li><a id="signout" href="/signout">Log out</a></li>
+                  <li><a id="signout" href="signout">Log out</a></li>
               </ul>
           </div>
       </div>
@@ -78,11 +79,9 @@
                         <div class="row">
                             <form class="form">
                                 <div class="form-group">
-                                    <label class="" for="building_input">Building</label>
-                                    <input type="text" class="form-control" id="building_input" placeholder="Building...">
                                     <div class="form-group">
-                                        <label class="" for="room_num_input">Room Number</label>
-                                        <input type="text" class="form-control" id="room_num_input" placeholder="Room number...">
+                                        <label class="" for="room_num_input">Location</label>
+                                        <select type="text" class="form-control" id="location_select" ></Select>
                                     </div>
                                     <div class="form-group">
                                         <label class="" for="shelf_input">Shelf</label>
@@ -296,6 +295,7 @@
     <script src="static/js/inventory/normal/populateAssociatedInfoLabs.js"></script>
     <script src="static/js/inventory/normal/populateInfoModal.js"></script>
     <script src="static/js/inventory/admin/populateEditModal.js"></script>
+    <script src="static/js/inventory/populateLocations.js"></script>
     <script src="static/js/inventory/admin/getFilteredInventoryAdmin.js"></script>
     <script src="static/js/inventory/admin/populateInventoryLocations.js"></script>
     <script src="static/js/inventory/admin/onPageLoad.js"></script>

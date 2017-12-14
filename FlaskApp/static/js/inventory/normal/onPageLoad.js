@@ -32,5 +32,6 @@ $(function() {
       e.preventDefault();
       getFilteredInventory("vendor");
   });
+  populateLocations();
     return false;
 });
