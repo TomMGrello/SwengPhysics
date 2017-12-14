@@ -140,6 +140,11 @@ source sp_update_spreadsheet_url.sql;
 source sp_add_topic.sql;
 source sp_delete_topic.sql;
 source sp_get_all_topics.sql;
+source sp_remove_subconcepts_by_concept.sql;
+source sp_add_concept.sql;
+source sp_delete_concept.sql;
+source sp_delete_subconcept.sql;
+source sp_add_subconcept.sql;
 
 INSERT INTO constants(
   auto_accept,
