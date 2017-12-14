@@ -1,5 +1,5 @@
 var populateInventoryDropdown = function() {
-    $.getJSON('/getFilteredInventory', {},
+    $.getJSON($SCRIPT_ROOT + '/getFilteredInventory', {},
         function(data) {
             var data_array = data.result;
             var select_serial = document.getElementById('addAllItems');

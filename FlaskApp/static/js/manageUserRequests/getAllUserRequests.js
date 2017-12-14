@@ -20,7 +20,7 @@ var acceptRequest = function(button) {
 };
 
 $(function() {
-    $.getJSON('/getAllUserRequests', {},
+    $.getJSON($SCRIPT_ROOT + '/getAllUserRequests', {},
         function(data) {
             var data_array = data.result;
             if (data_array === "INCORRECT_PERMISSIONS") {

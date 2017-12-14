@@ -1,5 +1,5 @@
 var getAllCourses = function() {
-    $.getJSON('/getAllCourses', {}, function(data) {
+    $.getJSON($SCRIPT_ROOT + '/getAllCourses', {}, function(data) {
       var course_select = document.getElementById('course_select');
       var data_result = data.result;
       for(var i = 0; i < data_result.length; i++){

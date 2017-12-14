@@ -1,5 +1,5 @@
 var getUserPermissions = function() {
-    $.getJSON('/getAllUsers', function(data){
+    $.getJSON($SCRIPT_ROOT + '/getAllUsers', function(data){
         var data_array = data.result;
         var table = document.getElementById('tablebody');
         for (var curr_item = 0; curr_item < data_array.length; curr_item++) {

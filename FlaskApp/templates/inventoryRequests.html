@@ -9,7 +9,10 @@
       <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
       <link rel="stylesheet" href="static/styles/labsDemosRequestsStyle.css">
       <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
-   </head>
+      <script type=text/javascript>
+        $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+      </script> 
+  </head>
    <body>
       <img src="static/images/RULogo.png">
       <nav class="navbar navbar-default" id="mainnavbar">
@@ -22,22 +25,22 @@
                       <li class="dropdown">
                           <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">View <span class="caret"></span></a>
                           <ul role="menu" class="dropdown-menu">
-                              <li role="presentation"><a href="/inventory">Inventory </a></li>
-                              <li role="presentation"><a href="/labsAndDemos">Labs &amp; Demos</a></li>
+                              <li role="presentation"><a href="inventory">Inventory </a></li>
+                              <li role="presentation"><a href="labsAndDemos">Labs &amp; Demos</a></li>
                           </ul>
                       </li>
                       <li class="dropdown">
                           <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Manage <span class="caret"></span></a>
                           <ul role="menu" class="dropdown-menu">
-                              <li role="presentation"><a href="/manageUserRequests">User Requests</a></li>
-                              <li role="presentation"><a href="/manageUserPermissions">User Permissions</a></li>
-                              <li role="presentation"><a href="/manageLabRequest">Lab/Demo Requests</a></li>
-                              <li role="presentation"><a href="/systemVariables">System Settings</a></li>
+                              <li role="presentation"><a href="manageUserRequests">User Requests</a></li>
+                              <li role="presentation"><a href="manageUserPermissions">User Permissions</a></li>
+                              <li role="presentation"><a href="manageLabRequest">Lab/Demo Requests</a></li>
+                              <li role="presentation"><a href="systemVariables">System Settings</a></li>
                           </ul>
                           <li class="dropdown">
                               <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Database <span class="caret"></span></a>
                               <ul role="menu" class="dropdown-menu">
-                                  <li role="presentation"><a href="/uploadDatabase">Import Database</a></li>
+                                  <li role="presentation"><a href="uploadDatabase">Import Database</a></li>
                               </ul>
                           </li>
                   </ul>

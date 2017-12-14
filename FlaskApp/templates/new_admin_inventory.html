@@ -10,6 +10,22 @@
     <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="static/styles/updatedAdminPage.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+    <script src="static/js/jQuery.js"></script>
+    <script src="static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="static/js/inventory/admin/removeInventoryItem.js"></script>
+    <script src="static/js/inventory/admin/modifyInventoryItem.js"></script>
+    <script src="static/js/inventory/admin/addInventoryItem.js"></script>
+    <script src="static/js/inventory/admin/setSerialNumToRemove.js"></script>
+    <script src="static/js/inventory/normal/populateAssociatedInfoLabs.js"></script>
+    <script src="static/js/inventory/normal/populateInfoModal.js"></script>
+    <script src="static/js/inventory/admin/populateEditModal.js"></script>
+    <script src="static/js/inventory/admin/getFilteredInventoryAdmin.js"></script>
+    <script src="static/js/inventory/admin/populateInventoryLocations.js"></script>
+    <script src="static/js/inventory/admin/onPageLoad.js"></script>
+    <script src="static/js/signout.js"></script>
+    <script type=text/javascript>
+        $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+      </script>
 </head>
 
 <body>
@@ -24,27 +40,27 @@
                   <li class="dropdown">
                       <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">View <span class="caret"></span></a>
                       <ul role="menu" class="dropdown-menu">
-                          <li role="presentation"><a href="/inventory">Inventory </a></li>
-                          <li role="presentation"><a href="/labsAndDemos">Labs &amp; Demos</a></li>
+                          <li role="presentation"><a href="inventory">Inventory </a></li>
+                          <li role="presentation"><a href="labsAndDemos">Labs &amp; Demos</a></li>
                       </ul>
                   </li>
                   <li class="dropdown">
                       <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Manage <span class="caret"></span></a>
                       <ul role="menu" class="dropdown-menu">
-                          <li role="presentation"><a href="/manageUserRequests">User Requests</a></li>
-                          <li role="presentation"><a href="/manageUserPermissions">User Permissions</a></li>
-                          <li role="presentation"><a href="/manageLabRequest">Lab/Demo Requests</a></li>
-                          <li role="presentation"><a href="/systemVariables">System Settings</a></li>
+                          <li role="presentation"><a href="manageUserRequests">User Requests</a></li>
+                          <li role="presentation"><a href="manageUserPermissions">User Permissions</a></li>
+                          <li role="presentation"><a href="manageLabRequest">Lab/Demo Requests</a></li>
+                          <li role="presentation"><a href="systemVariables">System Settings</a></li>
                       </ul>
                       <li class="dropdown">
                           <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Database <span class="caret"></span></a>
                           <ul role="menu" class="dropdown-menu">
-                              <li role="presentation"><a href="/uploadDatabase">Import Database</a></li>
+                              <li role="presentation"><a href="uploadDatabase">Import Database</a></li>
                           </ul>
                       </li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
-                  <li><a id="signout" href="/signout">Log out</a></li>
+                  <li><a id="signout" href="signout">Log out</a></li>
               </ul>
           </div>
       </div>
@@ -287,19 +303,6 @@
             </div>
         </div>
     </div>
-    <script src="static/js/jQuery.js"></script>
-    <script src="static/bootstrap/js/bootstrap.min.js"></script>
-    <script src="static/js/inventory/admin/removeInventoryItem.js"></script>
-    <script src="static/js/inventory/admin/modifyInventoryItem.js"></script>
-    <script src="static/js/inventory/admin/addInventoryItem.js"></script>
-    <script src="static/js/inventory/admin/setSerialNumToRemove.js"></script>
-    <script src="static/js/inventory/normal/populateAssociatedInfoLabs.js"></script>
-    <script src="static/js/inventory/normal/populateInfoModal.js"></script>
-    <script src="static/js/inventory/admin/populateEditModal.js"></script>
-    <script src="static/js/inventory/admin/getFilteredInventoryAdmin.js"></script>
-    <script src="static/js/inventory/admin/populateInventoryLocations.js"></script>
-    <script src="static/js/inventory/admin/onPageLoad.js"></script>
-    <script src="static/js/signout.js"></script>
 </body>
 
 </html>

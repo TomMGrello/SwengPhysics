@@ -1,5 +1,5 @@
 function addUserRequest(first_name, middle_name, last_name, banner_id, username, role, email) {
-    $.getJSON('/addUserRequest', {
+    $.getJSON($SCRIPT_ROOT + '/addUserRequest', {
             banner_id: banner_id,
             first_name: first_name,
             middle_name: middle_name,

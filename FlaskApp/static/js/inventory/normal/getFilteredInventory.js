@@ -4,7 +4,7 @@ var getFilteredInventory = function(order_by) {
     var filter_building = document.getElementById('building_input').value.toLowerCase();
     var filter_room_num = document.getElementById('room_num_input').value.toLowerCase();
     var filter_shelf = document.getElementById('shelf_input').value.toLowerCase();
-    $.getJSON('/getFilteredInventory', {
+    $.getJSON($SCRIPT_ROOT + '/getFilteredInventory', {
             name: filter_name,
             vendor_name: filter_vendor,
             building: filter_building,

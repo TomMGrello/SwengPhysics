@@ -12,6 +12,9 @@
       <script src="static/js/requestAccess/signup.js"></script>
       <link rel="icon" href="static/images/favicon.ico" type="image/x-icon"/>
       <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon"/>
+      <script type=text/javascript>
+        $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+      </script>
    </head>
    <body>
       <div class="signUpBox">

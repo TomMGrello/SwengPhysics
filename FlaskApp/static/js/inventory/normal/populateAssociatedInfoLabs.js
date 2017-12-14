@@ -1,7 +1,7 @@
 var populateAssociatedInfoLabs = function() {
     var serial_num = window.sessionStorage.getItem('serial_num');
 
-    $.getJSON('/getAssociatedLabs', {
+    $.getJSON($SCRIPT_ROOT + '/getAssociatedLabs', {
         serial_num: serial_num
     }, function(data) {
         var info_associated_labs = document.getElementById('info_associated_labs');

@@ -1,5 +1,5 @@
 var getAllRequests = function() {
-  $.getJSON("/getAllLabRequests",{},function(data){
+  $.getJSON($SCRIPT_ROOT + "/getAllLabRequests",{},function(data){
     var data_result = data.result;
     var requests_table = document.getElementById('requests_table');
     requests_table.innerHTML = "";

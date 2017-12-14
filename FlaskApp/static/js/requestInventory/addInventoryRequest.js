@@ -6,7 +6,7 @@ var addInventoryRequest = function() {
   var notes = document.getElementById('notes').value;
   var room = document.getElementById('room').value;
   var item_name = document.getElementById('item_name').value;
-  $.getJSON("/addInventoryRequest",{
+  $.getJSON($SCRIPT_ROOT + "/addInventoryRequest",{
     serial_num:serial_num,
     dates:dates,
     time:time_needed,

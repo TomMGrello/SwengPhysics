@@ -26,7 +26,7 @@ var addLabRequest = function() {
     return false;
   }
 
-  $.getJSON("/addLabRequest",{
+  $.getJSON($SCRIPT_ROOT + "/addLabRequest",{
     lab_id:lab_id,
     dates:dates_string,
     time:time_needed,

@@ -3,7 +3,7 @@ var populateInfoModal = function(button) {
     var serial_num = tr.id;
     window.sessionStorage.setItem('serial_num', serial_num);
     populateAssociatedInfoLabs();
-    $.getJSON('/getItem', {
+    $.getJSON($SCRIPT_ROOT + '/getItem', {
         serial_num: serial_num
     }, function(data) {
         console.log(data.result);

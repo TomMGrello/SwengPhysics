@@ -6,7 +6,7 @@ var getFilteredLabsDemos = function(order_by) {
     var filter_topic = document.getElementById('filter_topic').value.toLowerCase();
     var filter_concept = document.getElementById('filter_concept').value.toLowerCase();
     var filter_subconcept = document.getElementById('filter_subconcept').value.toLowerCase();
-    $.getJSON('/getFilteredLabsDemos', {
+    $.getJSON($SCRIPT_ROOT + '/getFilteredLabsDemos', {
             input_type: filter_type,
             name: filter_name,
             topic: filter_topic,

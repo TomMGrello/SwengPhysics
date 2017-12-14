@@ -1,5 +1,5 @@
 var getAllConstants = function() {
-    $.getJSON('/getAllConstants', {}, function(data) {
+    $.getJSON($SCRIPT_ROOT + '/getAllConstants', {}, function(data) {
 
       var auto_accept = data.result[0][1];
       var num_teams = data.result[0][2];

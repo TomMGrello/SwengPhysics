@@ -1,114 +1,148 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Concepts</title>
-    <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="static/styles/manageConcepts.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
-</head>
-
-<body><img src="static/images/RULogo.png">
-  <nav class="navbar navbar-default" id="mainnavbar">
-      <div class="container-fluid">
-          <div class="navbar-header"><a class="navbar-brand visible-xs-block navbar-link" href="#">Menu </a>
-              <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
-          </div>
-          <div class="collapse navbar-collapse" id="navcol-1">
-              <ul class="nav navbar-nav">
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Manage Concepts</title>
+      <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+      <link rel="stylesheet" href="static/styles/manageConcepts.css">
+      <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+      <script type=text/javascript>
+      	$SCRIPT_ROOT = "/physics/lab";
+      </script>
+   </head>
+   <body>
+      <img src="static/images/RULogo.png">
+      <nav class="navbar navbar-default" id="mainnavbar">
+         <div class="container-fluid">
+            <div class="navbar-header"><a class="navbar-brand visible-xs-block navbar-link" href="#">Menu </a>
+               <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+            </div>
+            <div class="collapse navbar-collapse" id="navcol-1">
+               <ul class="nav navbar-nav">
                   <li class="dropdown">
-                      <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">View <span class="caret"></span></a>
-                      <ul role="menu" class="dropdown-menu">
-                          <li role="presentation"><a href="/inventory">Inventory </a></li>
-                          <li role="presentation"><a href="/labsAndDemos">Labs &amp; Demos</a></li>
-                      </ul>
+                     <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">View <span class="caret"></span></a>
+                     <ul role="menu" class="dropdown-menu">
+                        <li role="presentation"><a href="inventory">Inventory </a></li>
+                        <li role="presentation"><a href="labsAndDemos">Labs &amp; Demos</a></li>
+                     </ul>
                   </li>
                   <li class="dropdown">
-                      <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Manage <span class="caret"></span></a>
-                      <ul role="menu" class="dropdown-menu">
-                          <li role="presentation"><a href="/manageUserRequests">User Requests</a></li>
-                          <li role="presentation"><a href="/manageUserPermissions">User Permissions</a></li>
-                          <li role="presentation"><a href="/manageLabRequest">Lab/Demo Requests</a></li>
-                          <li role="presentation"><a href="/systemVariables">System Settings</a></li>
-                      </ul>
-                      <li class="dropdown">
-                          <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Database <span class="caret"></span></a>
-                          <ul role="menu" class="dropdown-menu">
-                              <li role="presentation"><a href="/uploadDatabase">Import Database</a></li>
-                          </ul>
-                      </li>
-              </ul>
-              <ul class="nav navbar-nav navbar-right">
-                  <li><a id="signout" href="/signout">Log out</a></li>
-              </ul>
-          </div>
+                     <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Manage <span class="caret"></span></a>
+                     <ul role="menu" class="dropdown-menu">
+                        <li role="presentation"><a href="manageUserRequests">User Requests</a></li>
+                        <li role="presentation"><a href="manageUserPermissions">User Permissions</a></li>
+                        <li role="presentation"><a href="manageLabRequest">Lab/Demo Requests</a></li>
+                        <li role="presentation"><a href="systemVariables">System Settings</a></li>
+                     </ul>
+                  <li class="dropdown">
+                     <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Database <span class="caret"></span></a>
+                     <ul role="menu" class="dropdown-menu">
+                        <li role="presentation"><a href="uploadDatabase">Import Database</a></li>
+                     </ul>
+                  </li>
+               </ul>
+               <ul class="nav navbar-nav navbar-right">
+                  <li><a id="signout" href="signout">Log out</a></li>
+               </ul>
+            </div>
+         </div>
+      </nav>
+      <div class="col-lg-5 col-lg-offset-1 col-md-10 col-md-offset-1 col-sm-4">
+         <div class="panel panel-default">
+            <div class="panel-heading">
+               <h3 class="text-center text-primary panel-title"><strong>Manage Concept</strong></h3>
+            </div>
+            <div class="panel-body">
+               <form class="form">
+                  <label class="" for="orderBy">Choose the Concept * </label>
+                  <div class="input-group">
+                     <select class="form-control">
+                        <option> </option>
+                        <option>Intro to Mech</option>
+                     </select>
+                     <span class="input-group-btn">
+                     <button class="btn btn-danger" type="button">Remove</button>
+                     </span>
+                  </div>
+                  <hr>
+                  <label class="" for="orderBy">Add Concept </label>
+                  <div class="input-group">
+                     <input type="text" class="form-control" placeholder="add concept here">
+                     <span class="input-group-btn">
+                     <button class="btn btn-success" type="button">Add</button>
+                     </span>
+                  </div>
+                  <hr>
+               </form>
+            </div>
+         </div>
       </div>
-  </nav>
-    <div class="col-lg-5 col-lg-offset-1 col-md-10 col-md-offset-1 col-sm-4">
-        <div class="panel panel-default">
+      <div class="col-lg-5 col-lg-offset-0 col-md-10 col-md-offset-1 col-sm-4">
+         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="text-center text-primary panel-title"><strong>Manage Concept</strong></h3></div>
-            <div class="panel-body">
-                <form class="form">
-    <label class="" for="orderBy">Choose the Concept * </label>
-    <div class="input-group">
-            <select class="form-control">
-                <option> </option>
-                <option>Intro to Mech</option>
-            </select>
-        <span class="input-group-btn">
-            <button class="btn btn-danger" type="button">Remove</button>
-        </span>
-    </div>
-    <hr>
-
-    <label class="" for="orderBy">Add Concept </label>
-    <div class="input-group">
-        <input type="text" class="form-control" placeholder = "add concept here">
-        <span class="input-group-btn">
-            <button class="btn btn-success" type="button">Add</button>
-        </span>
-    </div>
-    <hr>
-    <button class="btn btn-primary" type="button">Move to Subconcept</button>
-</form>
+               <h3 class="text-center text-primary panel-title"><strong>Manage Subconcept</strong></h3>
             </div>
-        </div>
-    </div>
-    <div class="col-lg-5 col-lg-offset-0 col-md-10 col-md-offset-1 col-sm-4">
-        <div class="panel panel-default">
+            <div class="panel-body">
+               <form class="form">
+                  <label class="" for="orderBy">Choose the Subconcept * </label>
+                  <div class="input-group">
+                     <select class="form-control">
+                        <option> </option>
+                        <option>Intro to Mech</option>
+                     </select>
+                     <span class="input-group-btn">
+                     <button class="btn btn-danger" type="button">Remove</button>
+                     </span>
+                  </div>
+                  <hr>
+                  <label class="" for="orderBy">Add Subconcept </label>
+                  <div class="input-group">
+                     <input type="text" class="form-control" placeholder="add subconept here">
+                     <span class="input-group-btn">
+                     <button class="btn btn-success" type="button">Add</button>
+                     </span>
+                  </div>
+                  <hr>
+                  <button class="btn btn-primary" type="button">Move to Concept</button>
+               </form>
+            </div>
+         </div>
+      </div>
+      <div class="col-lg-5 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-4">
+         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="text-center text-primary panel-title"><strong>Manage Subconcept</strong></h3></div>
-            <div class="panel-body">
-                <form class="form">
-    <label class="" for="orderBy">Choose the Subconcept * </label>
-    <div class="input-group">
-            <select class="form-control">
-                <option> </option>
-                <option>Intro to Mech</option>
-            </select>
-        <span class="input-group-btn">
-            <button class="btn btn-danger" type="button">Remove</button>
-        </span>
-    </div>
-    <hr>
-    <label class="" for="orderBy">Add Subconcept </label>
-    <div class="input-group">
-        <input type="text" class="form-control" placeholder = "add subconept here">
-        <span class="input-group-btn">
-            <button class="btn btn-success" type="button">Add</button>
-        </span>
-    </div>
-    <hr>
-    <button class="btn btn-primary" type="button">Move to Concept</button>
-</form>
+               <h3 class="text-center text-primary panel-title"><strong>Manage Topics</strong></h3>
             </div>
-        </div>
-    </div>
-    <script src="static/js/jQuery.js"></script>
-    <script src="static/bootstrap/js/bootstrap.min.js"></script>
-</body>
+            <div class="panel-body">
+               <form class="form">
+                  <label class="" for="orderBy">Topic</label>
+                  <div class="input-group">
+                     <select class="form-control" id="topic_select">
+                     </select>
+                     <span class="input-group-btn">
+                     <button class="btn btn-danger" type="button" id="topic_remove">Remove</button>
+                     </span>
+                  </div>
+                  <hr>
+                  <label class="" for="orderBy">Add Topic</label>
+                  <div class="input-group">
+                     <input id="topic" type="text" class="form-control" placeholder="Topic title">
+                     <span class="input-group-btn">
+                     <button id="topic_add" class="btn btn-success" type="button">Add</button>
+                     </span>
+                  </div>
+                  <hr>
+               </form>
+            </div>
+         </div>
+      </div>
+      <script src="static/js/jQuery.js"></script>
+      <script src="static/bootstrap/js/bootstrap.min.js"></script>
+      <script src="static/js/manageConcepts/addTopic.js"></script>
+      <script src="static/js/manageConcepts/removeTopic.js"></script>
+      <script src="static/js/manageConcepts/getTopics.js"></script>
+      <script src="static/js/manageConcepts/onPageLoad.js"></script>
 
+   </body>
 </html>

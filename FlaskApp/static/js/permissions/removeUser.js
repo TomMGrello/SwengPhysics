@@ -1,5 +1,5 @@
 function removeUser(banner_id) {
-    $.getJSON('/removeUser', {
+    $.getJSON($SCRIPT_ROOT + '/removeUser', {
             banner_id: banner_id
         },
         function(data) {

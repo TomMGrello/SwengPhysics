@@ -1,5 +1,5 @@
 $(function() {
-    $.getJSON('/allUserPermissions', {},
+    $.getJSON($SCRIPT_ROOT + '/allUserPermissions', {},
         function(data) {
             console.log(data.result);
             var dataArray = data.result;

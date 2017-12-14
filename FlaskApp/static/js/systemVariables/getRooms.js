@@ -1,5 +1,5 @@
 var getRooms = function() {
-    $.getJSON('/getLocations', {type:"classroom"}, function(data) {
+    $.getJSON($SCRIPT_ROOT + '/getLocations', {type:"classroom"}, function(data) {
       var classroom_select = document.getElementById('lab_classrooms_select');
       var data_result = data.result;
       for(var i = 0; i < data_result.length; i++){
@@ -14,7 +14,7 @@ var getRooms = function() {
       }
     });
 
-      $.getJSON('/getLocations', {type:"inventory"}, function(data) {
+      $.getJSON($SCRIPT_ROOT + '/getLocations', {type:"inventory"}, function(data) {
         var storage_select = document.getElementById('storage_select');
         var data_result = data.result;
         for(var i = 0; i < data_result.length; i++){

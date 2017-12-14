@@ -1,5 +1,5 @@
 var getAllInventoryRequests = function() {
-  $.getJSON("/getAllInventoryRequests",{},function(data){
+  $.getJSON($SCRIPT_ROOT + "/getAllInventoryRequests",{},function(data){
     var data_result = data.result;
     var requests_table = document.getElementById('requests_table');
     requests_table.innerHTML = "";
