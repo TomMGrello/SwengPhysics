@@ -24,5 +24,8 @@ $(function() {
       e.preventDefault();
       getFilteredLabsDemos("subconcept");
   });
+
+  populateFilterDropdowns();
+
     return false;
 });

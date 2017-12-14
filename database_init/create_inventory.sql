@@ -78,6 +78,8 @@ source sp_create_sample_inventory.sql;
 source sp_add_location.sql;
 source sp_get_all_locations_by_type.sql;
 source sp_delete_location.sql;
+source sp_get_all_concepts.sql;
+source sp_get_all_subconcepts.sql;
 
 call sp_add_location("Science","136","inventory");
 call sp_add_location("Science","146","inventory");

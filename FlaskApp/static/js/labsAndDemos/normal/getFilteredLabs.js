@@ -1,11 +1,26 @@
 var getFilteredLabsDemos = function(order_by) {
-    var select_type = document.getElementById('filter_type');
-    var filter_type = select_type.options[select_type.selectedIndex].value.toLowerCase();
-    console.log("TYPE: " + filter_type);
-    var filter_name = document.getElementById('filter_name').value.toLowerCase();
-    var filter_topic = document.getElementById('filter_topic').value.toLowerCase();
-    var filter_concept = document.getElementById('filter_concept').value.toLowerCase();
-    var filter_subconcept = document.getElementById('filter_subconcept').value.toLowerCase();
+  var select_type = document.getElementById('filter_type');
+  var select_topic = document.getElementById('filter_topic');
+  var select_concept = document.getElementById('filter_concept');
+  var select_subconcept = document.getElementById('filter_subconcept');
+
+  var filter_type;
+  if(select_type.options[select_type.selectedIndex])
+    filter_type = select_type.options[select_type.selectedIndex].value.toLowerCase();
+
+  var filter_name = document.getElementById('filter_name').value.toLowerCase();
+
+  var filter_topic;
+  if(select_topic.options[select_topic.selectedIndex])
+    filter_topic = select_topic.options[select_topic.selectedIndex].text.toLowerCase();
+
+  var filter_concept;
+  if(select_concept.options[select_concept.selectedIndex])
+    filter_concept = select_concept.options[select_concept.selectedIndex].text.toLowerCase();
+
+  var filter_subconcept;
+  if(select_subconcept.options[select_subconcept.selectedIndex])
+    filter_subconcept = select_subconcept.options[select_subconcept.selectedIndex].text.toLowerCase();
     $.getJSON('/getFilteredLabsDemos', {
             input_type: filter_type,
             name: filter_name,

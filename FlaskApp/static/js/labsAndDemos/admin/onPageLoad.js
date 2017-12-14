@@ -33,5 +33,8 @@ $(function() {
     document.getElementById('remove_ok').addEventListener('click', function() {
         removeLab();
     });
+
+    populateFilterDropdowns();
+
     return false;
 });

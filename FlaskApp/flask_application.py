@@ -262,8 +262,7 @@ def addUserRequest():
 	banner_id = request.args.get('banner_id')
 	role = request.args.get('role')
 	email = request.args.get('email')
-	conn = get_db()
-	print "RUNNING ADD USER REQUEST"
+	cursor = conn.cursor()
 
 	if banner_id and first_name and last_name and role:
 		result = SUCCESS
@@ -626,12 +625,9 @@ def getFilteredInventory():
 	vendor_name = request.args.get('vendor_name')
 	if vendor_name == "":
 		vendor_name = None
-	building = request.args.get('building')
-	if building == "":
-		building = None
-	room_num = request.args.get('room_num')
-	if room_num == "":
-		room_num = None
+	location_id = request.args.get('location_id')
+	if location_id == "":
+		location_id = None
 	shelf = request.args.get('shelf')
 	if shelf == "":
 		shelf = None
@@ -649,7 +645,7 @@ def getFilteredInventory():
 	else:
 		session['prev_sort_field'] = order_by
 	session['asc_or_desc'] = asc_or_desc
-	cursor.callproc('sp_get_filtered_inventory_items',[name,None,vendor_name,building,room_num,shelf,order_by,asc_or_desc])
+	cursor.callproc('sp_get_filtered_inventory_items',[name,None,vendor_name,location_id,shelf,order_by,asc_or_desc])
 
 	result = cursor.fetchall()
 	cursor.close()
@@ -1368,6 +1364,7 @@ def addTopic():
 	cursor.callproc('sp_add_topic',[topic_name])
 	cursor.fetchall()
 	result = SUCCESS
+	cursor.close()
 	return jsonify(result=result)
 
 @flask_application.route('/removeTopic')
@@ -1378,6 +1375,16 @@ def removeTopic():
 	cursor.callproc('sp_delete_topic',[topic_id])
 	cursor.fetchall()
 	result = SUCCESS
+	cursor.close()
+	return jsonify(result=result)
+
+@flask_application.route('/getConcepts')
+def getConcepts():
+	conn = get_db()
+	cursor = conn.cursor()
+	cursor.callproc('sp_get_all_concepts',[])
+	result = cursor.fetchall()
+	cursor.close()
 	return jsonify(result=result)
 
 @flask_application.route('/getTopics')
@@ -1386,6 +1393,16 @@ def getTopics():
 	cursor = conn.cursor()
 	cursor.callproc('sp_get_all_topics',[])
 	result = cursor.fetchall()
+	cursor.close()
+	return jsonify(result=result)
+
+@flask_application.route('/getSubconcepts')
+def getSubconcepts():
+	conn = get_db()
+	cursor = conn.cursor()
+	cursor.callproc('sp_get_all_subconcepts',[])
+	result = cursor.fetchall()
+	cursor.close()
 	return jsonify(result=result)
 
 if __name__ == "__main__":

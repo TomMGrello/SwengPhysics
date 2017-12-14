@@ -51,28 +51,26 @@
                   <!--FILTER CODE starts here-->
                   <h2 style = "text-align: center;"> Filter </h2>
                   <hr>
-                  <div id = "filtercont" class="container">
-                     <div class="row">
-                        <form class="form">
-                           <div class="form-group">
-                              <label class="" for="building_input">Building</label>
-                              <input type="text" class="form-control" id="building_input" placeholder="Building...">
+                  <div id="filtercont" class="container">
+                      <div class="row">
+                          <form class="form">
                               <div class="form-group">
-                                 <label class="" for="room_num_input">Room Number</label>
-                                 <input type="text" class="form-control" id="room_num_input" placeholder="Room number...">
+                                  <div class="form-group">
+                                      <label class="" for="room_num_input">Location</label>
+                                      <select type="text" class="form-control" id="location_select" ></Select>
+                                  </div>
+                                  <div class="form-group">
+                                      <label class="" for="shelf_input">Shelf</label>
+                                      <input type="text" class="form-control" id="shelf_input" placeholder="Shelf...">
+                                  </div>
+                                  <div class="form-group">
+                                      <label class="" for="vendor_input">Vendor</label>
+                                      <input type="text" class="form-control" id="vendor_input" placeholder="Vendor...">
+                                  </div>
                               </div>
-                              <div class="form-group">
-                                 <label class="" for="shelf_input">Shelf</label>
-                                 <input type="text" class="form-control" id="shelf_input" placeholder="Shelf...">
-                              </div>
-                              <div class="form-group">
-                                 <label class="" for="vendor_input">Vendor</label>
-                                 <input type="text" class="form-control" id="vendor_input" placeholder="Vendor...">
-                              </div>
-                           </div>
-                           <button id="btn_filter" type="submit" class="btn btn-default" style =" margin-bottom : 10%;" >Filter</button>
-                        </form>
-                     </div>
+                              <button id="btn_filter" type="submit" class="btn btn-default" style="margin-bottom: 15%;">Filter</button>
+                          </form>
+                      </div>
                   </div>
                   <!--FILTER CODE ends here-->
                </div>
@@ -169,6 +167,7 @@
       <script src="static/js/inventory/normal/getFilteredInventory.js"></script>
       <script src="static/js/inventory/normal/populateAssociatedInfoLabs.js"></script>
       <script src="static/js/inventory/normal/populateInfoModal.js"></script>
+      <script src="static/js/inventory/populateLocations.js"></script>
       <script src="static/js/inventory/normal/onPageLoad.js"></script>
       <script src="static/js/signout.js"></script>
    </body>
