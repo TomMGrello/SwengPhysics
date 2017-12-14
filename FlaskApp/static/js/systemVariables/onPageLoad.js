@@ -2,6 +2,7 @@ $(function() {
     getAllConstants();
     getRooms();
     getAllCourses();
+    getSpreadsheetURL();
     document.getElementById('btn_auto_accept').onclick = function(){
       updateAutoAccept();
     };
@@ -49,4 +50,16 @@ $(function() {
       var room_num = document.getElementById('storage_room_number').value;
       addLocation("inventory",building,room_num);
     };
+
+    document.getElementById('btn_import_spreadsheet').onclick = function(){
+      var new_url = document.getElementById('import_spreadsheet').value;
+      updateSpreadsheetURL(new_url,'import_inventory');
+    };
+
+    document.getElementById('btn_export_spreadsheet').onclick = function(){
+      var new_url = document.getElementById('export_spreadsheet').value;
+      updateSpreadsheetURL(new_url,'export_master');
+    };
+
+
 });

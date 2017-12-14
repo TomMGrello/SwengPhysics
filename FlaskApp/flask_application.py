@@ -1264,12 +1264,12 @@ def addCourse():
 @flask_application.route('/removeCourse')
 def removeCourse():
 	conn = get_db()
-    cursor = conn.cursor()
-    result = INCORRECT_PERMISSIONS
-    banner_id = session['banner_id']
-    cursor.callproc('sp_get_permissions',[banner_id])
-    user_permissions = cursor.fetchall()[0]
-    permission = user_permissions[CAN_REMOVE_RECORD_INDEX]
+	cursor = conn.cursor()
+	result = INCORRECT_PERMISSIONS
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+	user_permissions = cursor.fetchall()[0]
+	permission = user_permissions[CAN_REMOVE_RECORD_INDEX]
 
 	if permission == 1:
 		course_id = request.args.get('course_id')
@@ -1304,9 +1304,12 @@ def updateSpreadsheetURL():
 	new_url = request.args.get('new_url')
 	sheet_type = request.args.get('sheet_type')
 	cursor.callproc('sp_update_spreadsheet_url',[sheet_type,new_url])
-	result = cursor.fetchall()[0][0]
-	if result == 'URL not found please add one using the add stored procedure':
-		cursor.callproc('sp_add_spreadsheet',[sheet_type,new_url])
+	result = cursor.fetchall()
+	try:
+		if result[0][0]:
+			cursor.callproc('sp_add_spreadsheet',[sheet_type,new_url])
+	except:
+		result = SUCCESS
 	result = SUCCESS
 	cursor.close()
 	return jsonify(result=result)
