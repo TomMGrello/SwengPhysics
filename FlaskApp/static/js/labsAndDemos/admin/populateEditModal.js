@@ -33,18 +33,22 @@ var populateEditModal = function(button) {
         populateEditConcepts();
         populateEditTopics();
         populateEditSubconcepts();
+        $(document).on('change',"#edit_concept", function() {
+          populateEditSubconcepts();
+        });
     });
 }
 
 function populateEditConcepts(selected){
   $.getJSON('/getConcepts', {},function(data) {
-          var edit_concept = document.getElementById('concept');
+          var edit_concept = document.getElementById('edit_concept');
           edit_concept.innerHTML = "";
           var data_array = data.result;
           for(var i = 0; i < data_array.length; i++){
             var concept = data_array[i][1];
+            var concept_id = data_array[i][0];
             var option = document.createElement('option');
-            option.value = concept;
+            option.value = concept_id;
             option.text = concept;
             edit_concept.appendChild(option);
             if(concept === selected)
@@ -55,8 +59,12 @@ function populateEditConcepts(selected){
 }
 
 function populateEditSubconcepts(selected){
-  $.getJSON('/getSubconcepts', {},function(data) {
-          var edit_subconcept = document.getElementById('subconcept');
+  var filter_concept = document.getElementById('edit_concept');
+  var concept_id;
+  if(filter_concept.options[filter_concept.selectedIndex])
+    concept_id = filter_concept.options[filter_concept.selectedIndex].value;
+  $.getJSON('/getSubconcepts', {concept_id:concept_id},function(data) {
+          var edit_subconcept = document.getElementById('edit_subconcept');
           edit_subconcept.innerHTML = "";
           var data_array = data.result;
           for(var i = 0; i < data_array.length; i++){
@@ -73,7 +81,7 @@ function populateEditSubconcepts(selected){
 
 function populateEditTopics(selected){
   $.getJSON('/getTopics', {},function(data) {
-          var edit_topic = document.getElementById('topic');
+          var edit_topic = document.getElementById('edit_topic');
           edit_topic.innerHTML = "";
           var data_array = data.result;
           for(var i = 0; i < data_array.length; i++){

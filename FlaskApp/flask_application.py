@@ -1018,6 +1018,8 @@ def uploadFile():
 			concept = request.form['concept']
 			subconcept = request.form['subconcept']
 			lab_id = request.form['lab_id']
+			if lab_id == '':
+				lab_id = None
 
 			#The result will be the newly added lab_id
 			addResult = addLab(input_type,name,topic,concept,subconcept,lab_id)
