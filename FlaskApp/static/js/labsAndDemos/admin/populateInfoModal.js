@@ -3,7 +3,7 @@ var populateInfoModal = function(button) {
     var lab_id = tr.id;
     window.sessionStorage.setItem('lab_id', lab_id);
     populateRequiredInfoItems();
-    $.getJSON('/getLab', {
+    $.getJSON($SCRIPT_ROOT + '/getLab', {
         lab_id: lab_id
     }, function(data) {
         console.log(data.result);

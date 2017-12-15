@@ -1,5 +1,5 @@
 CREATE DATABASE physics;
-source create_database_user.sql;
+--source create_database_user.sql;
 
 CREATE TABLE `physics`.`constants`(
   `constant_id` INT(36) auto_increment,
@@ -164,7 +164,8 @@ call sp_add_user(444444444,'lab_admin','lab_admin','lab_admin','lab_admin','lab_
 call sp_change_permissions(444444444,1,1,1,1,1,1,1,1,1);
 
 
-/*Test course data for request Form*/
+/* Course data for request Form */
+/* These are actual values taken directly from the existing form */
 call sp_add_course('Introduction to Mechanics');
 call sp_add_course('Introduction to Electricity and Magnetism');
 call sp_add_course('Thermal/Fluids/Waves/Optics');
@@ -178,6 +179,30 @@ call sp_add_course('Introduction to Astronomy');
 call sp_add_course('Optics and Light');
 call sp_add_course('LAB CANCELLATION (Include Note)');
 
+/* Concept and Topic data. These are actual values from their existing spreadsheets */
+call sp_add_topic('Thermodynamics');
+call sp_add_topic('Electricity and Magnetism');
+call sp_add_topic('Waves');
+call sp_add_topic('Optics');
 
+call sp_add_concept('Kinematics');
+call sp_add_concept('Dynamics');
+call sp_add_concept('Measurment');
+call sp_add_concept('Standard');
+call sp_add_concept('Energy');
+call sp_add_concept('Momentum');
+call sp_add_concept('Rotation');
+call sp_add_concept('Fluids');
+call sp_add_concept('Expansion');
+call sp_add_concept('Gas Laws');
+call sp_add_concept('Statics');
+call sp_add_concept('Capacitance');
+call sp_add_concept('Current');
+call sp_add_concept('Magnetism');
+call sp_add_concept('Induction');
+call sp_add_concept('AC Circuits');
+call sp_add_concept('Standing Waves');
+call sp_add_concept('Reflection/Refraction');
+call sp_add_concept('Diffraction/Interference/Polarization');
 
 source create_inventory.sql;

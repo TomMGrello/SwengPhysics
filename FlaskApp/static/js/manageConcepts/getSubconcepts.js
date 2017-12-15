@@ -1,7 +1,7 @@
 var getSubconcepts = function() {
   var remove_subconcept_select = document.getElementById('remove_subconcept_select');
 
-    $.getJSON('/getSubconcepts', {concept_id:null}, function(data) {
+    $.getJSON($SCRIPT_ROOT + '/getSubconcepts', {concept_id:null}, function(data) {
       var subconcepts = data.result;
       for(var i = 0; i < subconcepts.length; i++){
         var curr_subconcept = subconcepts[i];

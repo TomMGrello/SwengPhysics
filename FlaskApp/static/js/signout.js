@@ -1,6 +1,6 @@
 $(function() {
     $('#signout').click(function() {
-        $.getJSON('/signout', {},
+        $.getJSON($SCRIPT_ROOT + '/signout', {},
             function(data) {
                 window.location = "/";
             });

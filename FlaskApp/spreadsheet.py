@@ -2,7 +2,7 @@ import gspread, threading, time
 from oauth2client.service_account import ServiceAccountCredentials
 
 scope = ['https://spreadsheets.google.com/feeds']
-creds = ServiceAccountCredentials.from_json_keyfile_name('/var/www/FlaskApp/client_secret.json', scope)
+creds = ServiceAccountCredentials.from_json_keyfile_name('/var/www/html/physics/lab/client_secret.json', scope)
 client = gspread.authorize(creds)
 importSheet = client.open("Physics Inventory Import Sheet").sheet1
 

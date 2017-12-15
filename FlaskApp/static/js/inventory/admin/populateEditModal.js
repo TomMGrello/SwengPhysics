@@ -2,7 +2,7 @@ var populateEditModal = function(button) {
     var tr = button.closest('tr');
     var serial_num = tr.id;
     window.sessionStorage.setItem('serial_num', serial_num);
-    $.getJSON('/getItem', {
+    $.getJSON($SCRIPT_ROOT + '/getItem', {
         serial_num: serial_num
     }, function(data) {
         var modify_name = document.getElementById('modify_name');

@@ -11,7 +11,7 @@ $(function() {
         var type = "LAB";
         if (demo.checked)
             type = "DEMO";
-        $.getJSON('/addLab', {
+        $.getJSON($SCRIPT_ROOT + '/addLab', {
             type: type,
             name: name,
             topic: topic,

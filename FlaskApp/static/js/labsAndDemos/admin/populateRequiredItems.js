@@ -1,7 +1,7 @@
 var populateRequiredItems = function(button) {
     var lab_id = window.sessionStorage.getItem('lab_id');
 
-    $.getJSON('/getLabItems', {
+    $.getJSON($SCRIPT_ROOT + '/getLabItems', {
         lab_id: lab_id
     }, function(data) {
         console.log(data.result);

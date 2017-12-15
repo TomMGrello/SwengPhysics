@@ -1,6 +1,6 @@
 var populateInventoryFields = function() {
     var serial_num = window.sessionStorage.getItem('serial_num');
-    $.getJSON('/getItem', {
+    $.getJSON($SCRIPT_ROOT + '/getItem', {
         serial_num: serial_num
     }, function(data) {
         console.log(data.result);

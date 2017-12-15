@@ -18,7 +18,7 @@ $(function() {
             email: email
         };
         console.log(myjson);
-        $.getJSON('/addUserRequest', {
+        $.getJSON($SCRIPT_ROOT + '/addUserRequest', {
                 first_name: first_name,
                 middle_name: middle_name,
                 last_name: last_name,

@@ -1,5 +1,5 @@
 function modifyInventoryItem(name, serial_num, invoice_id, price, location_id, shelf, quantity) {
-    $.getJSON('/modifyInventoryItem', {
+    $.getJSON($SCRIPT_ROOT + '/modifyInventoryItem', {
             name: name,
             serial_num: serial_num,
             invoice_id: invoice_id,

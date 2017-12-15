@@ -9,6 +9,9 @@
       <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
       <link rel="stylesheet" href="static/styles/viewLabsDemosNonAdmin.css">
       <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+      <script type=text/javascript>
+        $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+      </script>
    </head>
    <body>
       <img src="static/images/RULogo.png">
@@ -22,8 +25,8 @@
                   <li class="dropdown">
                      <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">View <span class="caret"></span></a>
                      <ul role="menu" class="dropdown-menu">
-                        <li role="presentation"><a href="/inventory">Inventory </a></li>
-                        <li role="presentation"><a href="/labsAndDemos">Labs &amp; Demos</a></li>
+                        <li role="presentation"><a href="inventory">Inventory </a></li>
+                        <li role="presentation"><a href="labsAndDemos">Labs &amp; Demos</a></li>
                      </ul>
                   </li>
                </ul>
@@ -200,7 +203,7 @@
                         </select>
                      </div>
                      <div class="form-group">
-                        <button id="btn_request_lab" onclick='location.href="/requestLab"' class="btn btn-success navbar-btn " type="button" >Request</button>
+                        <button id="btn_request_lab" onclick='location.href=$SCRIPT_ROOT + "/requestLab"' class="btn btn-success navbar-btn " type="button" >Request</button>
                      </div>
                   </form>
                </div>

@@ -1,46 +1,26 @@
-##Install Procedure for our Flask App  DO NOT COPY PASTE, THIS IS OVERVIEW##
+##Install Procedure for our Flask App  DO NOT COPY PASTE, THIS IS OVERVIEW##
 ##Jared Hamlin 11/16/2017##
 
 python -V
-yum install mod_wsgi-python27.x86_64  
+yum install mod_wsgi-python27.x86_64  
 pip install Flask
-cd /etc/httpd/conf.d
-nano wsgi.conf
-cd /var/www/
-ls
-wget https://github.com/TomMGrello/SwengPhysics/archive/master.zip
-unzip master.zip 
-ls
-rm master.zip
-ls
-cd SwengPhysics-master/
-ls
-cd ..
-ls
-mv SwengPhysics-master/ FlaskApp
-ls
-cd FlaskApp
-ls
+pip install flask-mysql
+pip install pyopenssl
+pip install gspread
+
+
+
+Download zip from Github and unzip
+
+Install backup script
+
 mv backup_script.sh /root/
-cat crontab.txt 
+cat crontab.txt 
 crontab -e
-chmod +x /root/backup_script.sh 
+--Insert cron entry --
+chmod +x /root/backup_script.sh 
 ls
 rm crontab.txt
 ls
-yum install mysql-server
-chkconfig mysqld on
-service mysqld start
-/usr/libexec/mysql55/mysql_secure_installation
-ls
-cd database_init/
-mysql -u root -p < create-permissions.sql
-cd /etc/httpd/conf.d
-ls
-nano flaskAppSSL.conf
-yum install mod_ssl
-chown -R apache:apache FlaskApp
-pip install flask-mysql
-service httpd restart
-  
 
+service httpd restart

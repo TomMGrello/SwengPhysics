@@ -1,6 +1,6 @@
 var populateLabFields = function() {
     var lab_id = window.sessionStorage.getItem('lab_id');
-    $.getJSON('/getLab', {
+    $.getJSON($SCRIPT_ROOT + '/getLab', {
         lab_id: lab_id
     }, function(data) {
         console.log(data.result);
@@ -18,7 +18,7 @@ var populateLabFields = function() {
 }
 
 var getLabClassrooms = function(){
-  $.getJSON('/getLocations', {
+  $.getJSON($SCRIPT_ROOT + '/getLocations', {
       type: "classroom"
   }, function(data) {
       console.log(data.result);
@@ -39,7 +39,7 @@ var getLabClassrooms = function(){
 }
 
   var getCourses = function() {
-    $.getJSON('/getAllCourses', {}, function(data) {
+    $.getJSON($SCRIPT_ROOT + '/getAllCourses', {}, function(data) {
         console.log(data.result);
         var course_select = document.getElementById('course');
         var data_array = data.result;
@@ -55,7 +55,7 @@ var getLabClassrooms = function(){
   }
 
   var getNumTeams = function(){
-    $.getJSON('/getAllConstants', {}, function(data) {
+    $.getJSON($SCRIPT_ROOT + '/getAllConstants', {}, function(data) {
         console.log("CONSTANTS: ")
         console.log(data.result);
         var num_teams_field = document.getElementById('numTeams');
@@ -66,7 +66,7 @@ var getLabClassrooms = function(){
   }
 
   var getWeeks = function() {
-    $.getJSON('/remainingWeeks', {}, function(data) {
+    $.getJSON($SCRIPT_ROOT + '/remainingWeeks', {}, function(data) {
         var week_select = document.getElementById('week');
         var remaining = data.remaining;
         var total = data.total;

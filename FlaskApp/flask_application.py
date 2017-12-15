@@ -49,9 +49,7 @@ mysql = MySQL()
 flask_application.config['UPLOAD_FOLDER'] = 'C:\Users\Tom\git\sweng\SwengPhysics\FlaskApp\static\lab_pdfs'
 ALLOWED_EXTENSIONS = set(['pdf'])
 flask_application.config['MYSQL_DATABASE_USER'] = 'physics_user'
-
-flask_application.config['MYSQL_DATABASE_PASSWORD'] = '4GmfPWBC3BA5g7d'   # todo, change back to rowanphysicssweng for push, change to personal password for dev work
-
+flask_application.config['MYSQL_DATABASE_PASSWORD'] = '4GmfPWBC3BA5g7d'
 flask_application.config['MYSQL_DATABASE_DB'] = 'physics'
 flask_application.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(flask_application)
@@ -95,7 +93,7 @@ def manageLabRequest():
 	user_permissions = cursor.fetchall()[0]
 	can_remove_record = user_permissions[CAN_REMOVE_RECORD_INDEX];
 
-	if int(can_modify_record) == 1:
+	if int(can_remove_record) == 1:
 		return render_template("labsDemosRequests.html");
 
 @flask_application.route("/requestLab",methods=['GET'])
@@ -1316,20 +1314,20 @@ def addCourse():
 
 @flask_application.route('/removeCourse')
 def removeCourse():
-	conn = get_db()
-	cursor = conn.cursor()
-	result = INCORRECT_PERMISSIONS
-	banner_id = session['banner_id']
-	cursor.callproc('sp_get_permissions',[banner_id])
-	user_permissions = cursor.fetchall()[0]
-	permission = user_permissions[CAN_REMOVE_RECORD_INDEX]
+    conn = get_db()
+    cursor = conn.cursor()
+    result = INCORRECT_PERMISSIONS
+    banner_id = session['banner_id']
+    cursor.callproc('sp_get_permissions',[banner_id])
+    user_permissions = cursor.fetchall()[0]
+    permission = user_permissions[CAN_REMOVE_RECORD_INDEX]
 
-	if permission == 1:
-		course_id = request.args.get('course_id')
-		cursor.callproc('sp_delete_course',[course_id])
-		result = cursor.fetchall()
-	cursor.close()
-	return jsonify(result = result)
+    if permission == 1:
+	course_id = request.args.get('course_id')
+	cursor.callproc('sp_delete_course',[course_id])
+	result = cursor.fetchall()
+    cursor.close()
+    return jsonify(result = result)
 
 @flask_application.route('/getAllConstants')
 def getAllConstants():
@@ -1342,6 +1340,7 @@ def getAllConstants():
 
 @flask_application.route('/populateTestData')
 def testData():
+	cursor = get_db().cursor()
 	banner_id = session['banner_id']
 	cursor.callproc('sp_get_permissions',[banner_id])
 

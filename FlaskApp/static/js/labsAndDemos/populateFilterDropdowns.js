@@ -8,7 +8,7 @@ function populateFilterDropdowns() {
 }
 
 function populateConcepts(){
-  $.getJSON('/getConcepts', {},function(data) {
+  $.getJSON($SCRIPT_ROOT + '/getConcepts', {},function(data) {
           var filter_concept = document.getElementById('filter_concept');
           filter_concept.innerHTML = "";
           var data_array = data.result;
@@ -28,7 +28,7 @@ function populateSubconcepts(){
   var concept_id;
   if(filter_concept.options[filter_concept.selectedIndex])
     concept_id = filter_concept.options[filter_concept.selectedIndex].value;
-  $.getJSON('/getSubconcepts', {concept_id:concept_id},function(data) {
+  $.getJSON($SCRIPT_ROOT + '/getSubconcepts', {concept_id:concept_id},function(data) {
           var filter_subconcept = document.getElementById('filter_subconcept');
           filter_subconcept.innerHTML = "";
           var data_array = data.result;
@@ -43,7 +43,7 @@ function populateSubconcepts(){
 }
 
 function populateTopics(){
-  $.getJSON('/getTopics', {},function(data) {
+  $.getJSON($SCRIPT_ROOT + '/getTopics', {},function(data) {
           var filter_topic = document.getElementById('filter_topic');
           filter_topic.innerHTML = "";
           var data_array = data.result;

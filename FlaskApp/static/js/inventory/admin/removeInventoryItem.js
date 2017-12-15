@@ -1,5 +1,5 @@
 function removeInventoryItem(serial_num) {
-    $.getJSON('/removeInventoryItem', {
+    $.getJSON($SCRIPT_ROOT + '/removeInventoryItem', {
             serial_num: serial_num
         },
         function(data) {

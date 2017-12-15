@@ -9,7 +9,7 @@ var editLabDemo = function() {
     var type = "LAB";
     if (demo.checked)
         type = "DEMO";
-    $.getJSON('/editLab', {
+    $.getJSON($SCRIPT_ROOT + '/editLab', {
         lab_id: lab_id,
         type: type,
         name: name,
