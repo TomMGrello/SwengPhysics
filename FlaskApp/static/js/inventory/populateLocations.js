@@ -6,6 +6,7 @@ function populateLocations() {
             var select_location = document.getElementById('location_select');
             select_location.innerHTML = "";
             var data_array = data.result;
+	    var index = 0;
             for(var i = 0; i < data_array.length; i++){
               var location = data_array[i];
               var location_id = location[0];
@@ -15,8 +16,10 @@ function populateLocations() {
               option.value = location_id;
               option.text = building + " " + room_num;
               select_location.appendChild(option);
+	      index = i;
             }
             select_location.appendChild(document.createElement('option'));
+	    select_location.selectedIndex = index + 1;
 
         });
 }

@@ -89,7 +89,7 @@ def importLabSheet():
 		cleanedData = []
 		cleanedData.append("Lab")
 		url = str(importLabSheet.cell(i,5).value)
-		print "URL: " + url
+		#print "URL: " + url
 		for x in range(0,4):
 			cleanedData.append(importData[x])  
 		cleanedData.append(url)
@@ -107,10 +107,35 @@ def importLabSheet():
 
 def importDemoSheet():
         global importSheet
-        importDemoSheet = importSheet.get_worksheet(2)
-        importDemoSheet.update_cell(1,2,"Demo Name")
-        importDemoSheet.update_cell(1,2,"Demo ID")
-        demoList = []
+        importDemoSheet = importSheet.get_worksheet(3)
+        importDemoSheet.update_cell(1,1,"Demo Name")
+       	importDemoSheet.update_cell(1,2,"Topic")
+        importDemoSheet.update_cell(1,3,"Concept")
+        importDemoSheet.update_cell(1,4,"Subconcept")
+        labList = []
+        cleanedData = []
+        numRows = 200
+        print("Num Rows: " + str(numRows))
+        for i in range(2, numRows):
+                importData = importDemoSheet.row_values(i)
+                cleanedData = []
+                cleanedData.append("Demo")
+                #url = str(importDemoSheet.cell(i,5).value)
+                #print "URL: " + url
+                for x in range(0,4):
+                        cleanedData.append(importData[x])
+                #cleanedData.append(url)
+                #cleanedData = [x for x in importData if x]
+                #cleanedData.append("")
+                #cleanedData.reverse()
+                #cleanedData.append("Lab")
+                #cleanedData.reverse()
+                #print(cleanedData)
+                labList.append(cleanedData)
+                #print(labList)
+
+        return labList
+        #print(str(labList))
 
 def importInventoryToLabSheet():
 	global importSheet
@@ -130,8 +155,9 @@ def convertXtoSerial():
 		sheet4.append_row(list)
 
 def getPDFs(address, id):
-	pdf = urllib.URLopener()
-	pdf.retrieve(address, "/var/www/html/physics/lab/static/lab_pdfs/" + str(id) + ".pdf")	
+	if address is not None: 
+		pdf = urllib.URLopener()
+		pdf.retrieve(address, "/var/www/html/physics/lab/static/lab_pdfs/" + str(id) + ".pdf")	
 
 #importLabSheet()
 #convertXtoSerial()

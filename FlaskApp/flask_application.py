@@ -112,7 +112,7 @@ def checkLogin(username):
 	cursor = get_db().cursor()
 	cursor.callproc('sp_get_banner_id',[username])
 	result = cursor.fetchall()
-	print "RESULT: " + str(result[0][0])
+	#print "RESULT: " + str(result[0][0])
 	if result[0][0] == 'Username not found':
 		session['username_to_add'] = username
 		return redirect(url_for('RequestAccess'))
@@ -1309,12 +1309,35 @@ def importLabs():
                         importedEntry = importedData[entry]
 			cursor.callproc('sp_add_lab', [importedEntry[0],importedEntry[1],importedEntry[2],importedEntry[3],importedEntry[4],None])
 			lab_id = cursor.fetchall()[0][0]
-			print "IMPORT ENTRY 5: " + importedEntry[5]
 			spreadsheet.getPDFs(importedEntry[5],lab_id)
         else:
                 print("INSUFFICIENT PERMISSIONS")
         cursor.close()
-        return redirect(url_for('mainInventoryView'))
+        return redirect(url_for('labsAndDemos'))
+
+@flask_application.route("/importDemos",methods=['GET'])
+def importDemos():
+        conn = get_db()
+        cursor = conn.cursor()
+        result = INCORRECT_PERMISSIONS
+        banner_id = session['banner_id']
+        cursor.callproc('sp_get_permissions',[banner_id])
+        user_permissions = cursor.fetchall()[0]
+        permission = user_permissions[CAN_ADD_RECORD_INDEX]
+
+        if permission == 1:
+                importedData = spreadsheet.importDemoSheet()
+                numData = len(importedData)
+
+                for entry in range(0, numData):
+                        importedEntry = importedData[entry]
+                        cursor.callproc('sp_add_lab', [importedEntry[0],importedEntry[1],importedEntry[2],importedEntry[3],importedEntry[4],None])
+                        lab_id = cursor.fetchall()[0][0]
+                        #spreadsheet.getPDFs(importedEntry[5],lab_id)
+        else:
+                print("INSUFFICIENT PERMISSIONS")
+        cursor.close()
+        return redirect(url_for('labsAndDemos'))
 
 @flask_application.route('/addLocation')
 def addLocation():

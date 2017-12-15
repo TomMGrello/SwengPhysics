@@ -33,9 +33,6 @@ var populateEditModal = function(button) {
         populateEditConcepts();
         populateEditTopics();
         populateEditSubconcepts();
-        $(document).on('change',"#edit_concept", function() {
-          populateEditSubconcepts();
-        });
     });
 }
 
@@ -48,7 +45,7 @@ function populateEditConcepts(selected){
             var concept = data_array[i][1];
             var concept_id = data_array[i][0];
             var option = document.createElement('option');
-            option.value = concept_id;
+            option.value = concept;
             option.text = concept;
             edit_concept.appendChild(option);
             if(concept === selected)

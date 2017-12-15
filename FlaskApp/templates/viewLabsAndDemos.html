@@ -26,7 +26,6 @@
       <script src="static/js/labsAndDemos/admin/populateInventoryDropdown.js"></script>
       <script src="static/js/labsAndDemos/admin/removeLab.js"></script>
       <script src="static/js/labsAndDemos/admin/onPageLoad.js"></script>
-      <script src="static/js/signout.js"></script>
     <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="static/styles/viewLabsDemos.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
@@ -218,7 +217,7 @@
                             </div>
                             <div class="modal-body">
                                 <form action="uploadFile" method="POST" enctype="multipart/form-data">
-                                    <input id="edit_id" name="lab_id" hidden>
+                                    <input id="edit_id" name="lab_id" value="-1" hidden>
                                     <div class="form-group">
                                         <label for="edit_name">Name:</label>
                                         <input type="text" class="form-control" id="edit_name" placeholder="Name" name="name">
