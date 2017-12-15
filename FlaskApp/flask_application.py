@@ -118,6 +118,9 @@ def checkLogin(username):
 		return redirect(url_for('RequestAccess'))
 	else:
 		session['banner_id'] = result
+		cursor.callproc('sp_get_email',[result])
+		email = cursor.fetchall()[0][0]
+		session['email'] = email
 		return redirect(url_for('mainInventoryView'))
 	
 @flask_application.route("/manageLabRequest",methods=['GET'])
@@ -929,10 +932,15 @@ def acceptRequest(request_id):
 		classroom = request_data[15] + " " + request_data[16]
 		banner_id = request_data[5]
 		num_teams = request_data[6]
+		notes = request_data[7]
 		lab_name = request_data[10]
 		cursor.callproc('sp_delete_lab_request',[request_id])
 		cursor.fetchall()
 		result = SUCCESS
+		
+		cursor.callproc('sp_get_user',[banner_id])
+		user_obj = cursor.fetchall()[0]
+		username = user_obj[2] + " " + user_obj[4]
 
 		cursor.callproc('sp_get_email',[int(banner_id)])
 
@@ -953,6 +961,8 @@ def acceptRequest(request_id):
 		sendEmail(toaddr,body,subject)
 
 		result = SUCCESS
+	
+		spreadsheet.exportInventory([dates,"Test",time_needed,classroom,num_teams,username,notes,toaddr])
 
 	cursor.close()
 	return jsonify(result=result)
@@ -1297,9 +1307,10 @@ def importLabs():
 
                 for entry in range(0, numData):
                         importedEntry = importedData[entry]
-			cursor.callproc('sp_add_lab', [importedData[0],importedData[1],importedData[2],importedData[3],importedData[4],None])
+			cursor.callproc('sp_add_lab', [importedEntry[0],importedEntry[1],importedEntry[2],importedEntry[3],importedEntry[4],None])
 			lab_id = cursor.fetchall()[0][0]
-			spreadsheet.getPDFs(importedData[5],lab_id)
+			print "IMPORT ENTRY 5: " + importedEntry[5]
+			spreadsheet.getPDFs(importedEntry[5],lab_id)
         else:
                 print("INSUFFICIENT PERMISSIONS")
         cursor.close()

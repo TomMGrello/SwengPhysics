@@ -1,5 +1,8 @@
 import gspread, threading, time
 from oauth2client.service_account import ServiceAccountCredentials
+import os
+import socket
+os.environ['http_proxy']=''
 import urllib
 
 scope = ['https://spreadsheets.google.com/feeds']
@@ -15,7 +18,7 @@ def gspreadUpdater():
 	creds = ServiceAccountCredentials.from_json_keyfile_name('/var/www/html/physics/lab/client_secret.json', scope)
 	client = gspread.authorize(creds)
 	importSheet = client.open_by_url("https://docs.google.com/spreadsheets/d/1I4d5vY20A4lX3UGbamvTNCTdueZVRSBzf2gGb5XVV5A")
-	exportSheet = client.open_by_url("https://docs.google.com/spreadsheets/d/1YCmQ32EYT87llrCKS3VM28gjJeiC8xkYHV_DmiKD2X8")
+	exportSheet = client.open_by_url("https://docs.google.com/spreadsheets/d/1QEMbfTEIuOuY1J-LW-EqhfuY5T4a3m9KG0WhRZDkDs0")
 	time.sleep(3590)
 
 gsUpdateThread = threading.Thread(target=gspreadUpdater)
@@ -31,8 +34,8 @@ def exportInventory(*args):
 		numRequests=1
 	else:
 		master_sheet.resize(numRequests+10,len(*args)+2)
-	header_list = master_sheet.range('A1:J1')
-	headerRow = ["Day/Week Code", "Course", "Week", "Day of Week", "Time Requested", "Lab Classroom", "Number of Teams", "Instructor", "Notes", "Email Address"]
+	header_list = master_sheet.range('A1:H1')
+	headerRow = ["Day/Week Code", "Course", "Time Requested", "Lab Classroom", "Number of Teams", "Instructor", "Notes", "Email Address"]
 	if headerRow != header_list:
 		for i, val in enumerate(headerRow):
                 	header_list[i].value = val
@@ -45,15 +48,15 @@ def exportInventory(*args):
 def importInventorySheet():
 	global importSheet
 	importWksht = importSheet.get_worksheet(0)
-	header_list = importSheet.range('A1:I1')
+	header_list = importWksht.range('A1:I1')
 	headerRow = ["Item Name", "Serial Number", "Invoice ID", "Purchase Date", "Purchase Price", "Vendor Name", "Location ID(136 is 1, 146 is 2)", "Shelf", "Quantity"]
 	for i, val in enumerate(headerRow):
 		header_list[i].value = val
-	importSheet.update_cells(header_list)
+	importWksht.update_cells(header_list)
 
 	#Gets entered data from sheet and stores
-	bodyRange = importSheet.range('A2:I300')
-	importData = importSheet.get_all_values()
+	bodyRange = importWksht.range('A2:I300')
+	importData = importWksht.get_all_values()
 	del importData[0]
 	#get serial number and insert hashed serial num for each entry
 
@@ -68,7 +71,7 @@ def importInventorySheet():
         #        cell.value=""
         #importSheet.update_cells(bodyRange)
 
-	#return importData
+	return importData
 
 def importLabSheet():
 	global importSheet
@@ -86,7 +89,8 @@ def importLabSheet():
 		cleanedData = []
 		cleanedData.append("Lab")
 		url = str(importLabSheet.cell(i,5).value)
-		for x in range(0,3):
+		print "URL: " + url
+		for x in range(0,4):
 			cleanedData.append(importData[x])  
 		cleanedData.append(url)
 		#cleanedData = [x for x in importData if x]
@@ -127,7 +131,7 @@ def convertXtoSerial():
 
 def getPDFs(address, id):
 	pdf = urllib.URLopener()
-	pdf.retrieve(address, "static/lab_pdfs/" + str(id) + ".pdf")	
+	pdf.retrieve(address, "/var/www/html/physics/lab/static/lab_pdfs/" + str(id) + ".pdf")	
 
 #importLabSheet()
 #convertXtoSerial()
