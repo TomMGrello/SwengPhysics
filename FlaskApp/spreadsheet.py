@@ -1,45 +1,58 @@
 import gspread, threading, time
 from oauth2client.service_account import ServiceAccountCredentials
+import urllib
 
 scope = ['https://spreadsheets.google.com/feeds']
-creds = ServiceAccountCredentials.from_json_keyfile_name('/var/www/html/physics/lab/client_secret.json', scope)
+creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
 client = gspread.authorize(creds)
-importSheet = client.open("Physics Inventory Import Sheet").sheet1
-
+importSheet = client.open("Physics Inventory Import Sheet")
+exportSheet = client.open("Physics Inventory Testing")
 
 def gspreadUpdater():
 	global scope,client,importSheet
 	# use creds to create a client to interact with the Google Drive API
 	scope = ['https://spreadsheets.google.com/feeds']
-	creds = ServiceAccountCredentials.from_json_keyfile_name('/var/www/html/physics/lab/client_secret.json', scope)
+	creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
 	client = gspread.authorize(creds)
-	importSheet = client.open("Physics Inventory Import Sheet").sheet1
+	importSheet = client.open_by_url("https://docs.google.com/spreadsheets/d/1I4d5vY20A4lX3UGbamvTNCTdueZVRSBzf2gGb5XVV5A")
+	exportSheet = client.open_by_url("https://docs.google.com/spreadsheets/d/1YCmQ32EYT87llrCKS3VM28gjJeiC8xkYHV_DmiKD2X8")
 	time.sleep(3590)
 
 gsUpdateThread = threading.Thread(target=gspreadUpdater)
 gsUpdateThread.daemon = True
 gsUpdateThread.start()
 
-def exportInventory():
-	sheet = client.open("Physics Inventory Testing")
-	wksheet136 = sheet.worksheet("136")
-	wksheet146 = sheet.worksheet("146")
-	demowksheet = sheet.worksheet("DEMO")
-	cell_list = wksheet136.range('A1:J3')
-	for cell in cell_list:
-		cell.value = "YO!"
-	wksheet136.update_cells(cell_list)
+def exportInventory(*args):
+	global exportSheet
+	master_sheet = exportSheet.sheet1
+	numRequests = len(master_sheet.get_all_values())
+	if master_sheet.get_all_values() == []:
+		master_sheet.resize(10, len(*args)+2)
+		numRequests=1
+	else:
+		master_sheet.resize(numRequests+10,len(*args)+2)
+	header_list = master_sheet.range('A1:J1')
+	headerRow = ["Day/Week Code", "Course", "Week", "Day of Week", "Time Requested", "Lab Classroom", "Number of Teams", "Instructor", "Notes", "Email Address"]
+	if headerRow != header_list:
+		for i, val in enumerate(headerRow):
+                	header_list[i].value = val
+        	master_sheet.update_cells(header_list)
+	
+
+	master_sheet.insert_row(*args,index=numRequests+1)	
+	
 
 def importInventorySheet():
 	global importSheet
-	header_list = importSheet.range('A1:J1')
-	headerRow = ["Item Name", "Serial Number", "Invoice ID", "Purchase Date", "Purchase Price", "Vendor Name", "Building Name", "Room Number", "Shelf", "Quantity"]
+	importWksht = importSheet.get_worksheet(0)
+	header_list = importSheet.range('A1:I1')
+	headerRow = ["Item Name", "Serial Number", "Invoice ID", "Purchase Date", "Purchase Price", "Vendor Name", "Location ID(136 is 1, 146 is 2)", "Shelf", "Quantity"]
 	for i, val in enumerate(headerRow):
 		header_list[i].value = val
 	importSheet.update_cells(header_list)
 
 	#Gets entered data from sheet and stores
-	bodyRange = importSheet.range('A2:J200')
+	bodyRange = importSheet.range('A2:I300')
 	importData = importSheet.get_all_values()
 	del importData[0]
 	#get serial number and insert hashed serial num for each entry
@@ -51,8 +64,64 @@ def importInventorySheet():
 		importData[entry].insert(2,hashed_serial)
 
 	#Clears the body range after importing for next time
-        for cell in bodyRange:
-                cell.value=""
-        importSheet.update_cells(bodyRange)
+        #for cell in ibodyRange:
+        #        cell.value=""
+        #importSheet.update_cells(bodyRange)
 
-	return importData
+	#return importData
+
+def importLabSheet():
+	global importSheet
+        importLabSheet = importSheet.get_worksheet(1)
+	importLabSheet.update_cell(1,1,"Lab Name")
+	importLabSheet.update_cell(2,1,"Lab ID")
+	importLabSheet.update_cell(3,1,"Item1 Serial#")
+	importLabSheet.update_cell(4,1,"Item2 Serial#")
+	labList = []
+	numCols = importLabSheet.col_count+1
+	print("Num Cols: " + str(numCols))
+	for i in range(2, numCols):
+		importData = importLabSheet.col_values(i)
+		cleanedData = [x for x in importData if x]
+		cleanedData.reverse()
+                cleanedData.append("Lab")
+                cleanedData.reverse()
+		print(cleanedData)
+		labList.append(cleanedData)
+		print(labList)
+	
+	#return cleanedData
+
+def importDemoSheet():
+        global importSheet
+        importDemoSheet = importSheet.get_worksheet(2)
+        importDemoSheet.update_cell(1,2,"Demo Name")
+        importDemoSheet.update_cell(1,2,"Demo ID")
+        demoList = []
+
+def importInventoryToLabSheet():
+	global importSheet
+	itlsheet = importSheet.get_worksheet(1)
+
+def convertXtoSerial():
+	global importSheet
+	sheet4 = importSheet.get_worksheet(3)
+	for i in range(2,155):
+		list = sheet4.row_values(i)
+		serial = list[0]
+		print(str(serial))
+		for n,i in enumerate(list):
+   			if i=="x" or i=="X":
+	      			list[n]=serial
+		print(str(list))
+		sheet4.append_row(list)
+
+def getPDFs(address, id):
+	pdf = urllib.URLopener()
+	pdf.retrieve(address, "static/lab_pdfs/" + str(id) + ".pdf")	
+
+#importLabSheet()
+#convertXtoSerial()
+getPDFs("http://users.rowan.edu/~klassen/dpa/current/IntroLabs/IdealGasLaw.pdf", 1000)
+#request = ["15.2","Intro to Mechanics", "12/14/2017", "8AM", "Science 138", "8", "Dr. Klassen", None, None,"klassen@rowan.edu"]
+#exportInventory(request)
