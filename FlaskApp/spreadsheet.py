@@ -3,7 +3,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 import urllib
 
 scope = ['https://spreadsheets.google.com/feeds']
-creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
+creds = ServiceAccountCredentials.from_json_keyfile_name('/var/www/html/physics/lab/client_secret.json', scope)
 client = gspread.authorize(creds)
 importSheet = client.open("Physics Inventory Import Sheet")
 exportSheet = client.open("Physics Inventory Testing")
@@ -12,7 +12,7 @@ def gspreadUpdater():
 	global scope,client,importSheet
 	# use creds to create a client to interact with the Google Drive API
 	scope = ['https://spreadsheets.google.com/feeds']
-	creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
+	creds = ServiceAccountCredentials.from_json_keyfile_name('/var/www/html/physics/lab/client_secret.json', scope)
 	client = gspread.authorize(creds)
 	importSheet = client.open_by_url("https://docs.google.com/spreadsheets/d/1I4d5vY20A4lX3UGbamvTNCTdueZVRSBzf2gGb5XVV5A")
 	exportSheet = client.open_by_url("https://docs.google.com/spreadsheets/d/1YCmQ32EYT87llrCKS3VM28gjJeiC8xkYHV_DmiKD2X8")
@@ -74,23 +74,32 @@ def importLabSheet():
 	global importSheet
         importLabSheet = importSheet.get_worksheet(1)
 	importLabSheet.update_cell(1,1,"Lab Name")
-	importLabSheet.update_cell(2,1,"Lab ID")
-	importLabSheet.update_cell(3,1,"Item1 Serial#")
-	importLabSheet.update_cell(4,1,"Item2 Serial#")
+	importLabSheet.update_cell(1,2,"Topic")
+	importLabSheet.update_cell(1,3,"Concept")
+	importLabSheet.update_cell(1,4,"Subconcept")
 	labList = []
-	numCols = importLabSheet.col_count+1
-	print("Num Cols: " + str(numCols))
-	for i in range(2, numCols):
-		importData = importLabSheet.col_values(i)
-		cleanedData = [x for x in importData if x]
-		cleanedData.reverse()
-                cleanedData.append("Lab")
-                cleanedData.reverse()
-		print(cleanedData)
+	cleanedData = []
+	numRows = 47
+	print("Num Rows: " + str(numRows))
+	for i in range(2, numRows):
+		importData = importLabSheet.row_values(i)
+		cleanedData = []
+		cleanedData.append("Lab")
+		url = str(importLabSheet.cell(i,5).value)
+		for x in range(0,3):
+			cleanedData.append(importData[x])  
+		cleanedData.append(url)
+		#cleanedData = [x for x in importData if x]
+		#cleanedData.append("")
+		#cleanedData.reverse()
+                #cleanedData.append("Lab")
+                #cleanedData.reverse()
+		#print(cleanedData)
 		labList.append(cleanedData)
-		print(labList)
+		#print(labList)
 	
-	#return cleanedData
+	return labList
+	#print(str(labList))	
 
 def importDemoSheet():
         global importSheet
@@ -122,6 +131,6 @@ def getPDFs(address, id):
 
 #importLabSheet()
 #convertXtoSerial()
-getPDFs("http://users.rowan.edu/~klassen/dpa/current/IntroLabs/IdealGasLaw.pdf", 1000)
+#getPDFs("http://users.rowan.edu/~klassen/dpa/current/IntroLabs/IdealGasLaw.pdf", 1000)
 #request = ["15.2","Intro to Mechanics", "12/14/2017", "8AM", "Science 138", "8", "Dr. Klassen", None, None,"klassen@rowan.edu"]
 #exportInventory(request)

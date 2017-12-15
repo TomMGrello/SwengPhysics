@@ -1274,11 +1274,36 @@ def importInventory():
 
 		for entry in range(0, numData):
 			importedEntry = importedData[entry]
-			cursor.callproc('sp_add_inventory_item',[importedEntry[0],importedEntry[1],int(importedEntry[2]),int(importedEntry[3]),importedEntry[4], float(importedEntry[5]),importedEntry[6],importedEntry[7],importedEntry[8],importedEntry[9],int(importedEntry[10])])
+			
+			cursor.callproc('sp_add_inventory_item',[importedEntry[0],importedEntry[1],int(importedEntry[2]),int(importedEntry[3]),importedEntry[4], float(importedEntry[5]),importedEntry[6],importedEntry[7],importedEntry[8],int(importedEntry[9])])
 	else:
 		print("INSUFFICIENT PERMISSIONS")
 	cursor.close()
  	return redirect(url_for('mainInventoryView'))
+
+@flask_application.route("/importLabs",methods=['GET'])
+def importLabs():
+        conn = get_db()
+        cursor = conn.cursor()
+        result = INCORRECT_PERMISSIONS
+        banner_id = session['banner_id']
+        cursor.callproc('sp_get_permissions',[banner_id])
+        user_permissions = cursor.fetchall()[0]
+        permission = user_permissions[CAN_ADD_RECORD_INDEX]
+
+        if permission == 1:
+                importedData = spreadsheet.importLabSheet()
+                numData = len(importedData)
+
+                for entry in range(0, numData):
+                        importedEntry = importedData[entry]
+			cursor.callproc('sp_add_lab', [importedData[0],importedData[1],importedData[2],importedData[3],importedData[4],None])
+			lab_id = cursor.fetchall()[0][0]
+			spreadsheet.getPDFs(importedData[5],lab_id)
+        else:
+                print("INSUFFICIENT PERMISSIONS")
+        cursor.close()
+        return redirect(url_for('mainInventoryView'))
 
 @flask_application.route('/addLocation')
 def addLocation():
