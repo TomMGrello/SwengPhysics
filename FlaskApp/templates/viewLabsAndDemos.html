@@ -7,12 +7,30 @@
   <meta name="google" content="notranslate">
   <meta http-equiv="Content-Language" content="en">
     <title>Labs and Demos</title>
-    <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="static/styles/viewLabsDemos.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
     <script type=text/javascript>
         $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
       </script>
+      <script src="static/js/jQuery.js"></script>
+      <script src="static/bootstrap/js/bootstrap.min.js"></script>
+      <script src="static/js/labsAndDemos/admin/getFilteredLabsAdmin.js"></script>
+      <script src="static/js/labsAndDemos/admin/addLab.js"></script>
+      <script src="static/js/labsAndDemos/admin/addItemToLab.js"></script>
+      <script src="static/js/labsAndDemos/admin/editLabDemo.js"></script>
+      <script src="static/js/labsAndDemos/openPDFTab.js"></script>
+      <script src="static/js/labsAndDemos/admin/populateRequiredItems.js"></script>
+      <script src="static/js/labsAndDemos/admin/populateRequiredInfoItems.js"></script>
+      <script src="static/js/labsAndDemos/admin/populateEditModal.js"></script>
+      <script src="static/js/labsAndDemos/admin/populateInfoModal.js"></script>
+      <script src="static/js/labsAndDemos/populateFilterDropdowns.js"></script>
+      <script src="static/js/labsAndDemos/admin/populateAddDropdowns.js"></script>
+      <script src="static/js/labsAndDemos/admin/populateInventoryDropdown.js"></script>
+      <script src="static/js/labsAndDemos/admin/removeLab.js"></script>
+      <script src="static/js/labsAndDemos/admin/onPageLoad.js"></script>
+      <script src="static/js/signout.js"></script>
+    <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/styles/viewLabsDemos.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+    
 </head>
 
 <body>
@@ -137,7 +155,7 @@
                                 <div class="form-group">
                                     <label for="text">Category</label>
                                     <label class="radio-inline">
-                                        <input value="LAB" name="type" id="type" type="radio">Lab
+                                        <input value="LAB" name="type" id="type" type="radio" checked>Lab
                                     </label>
                                     <label class="radio-inline">
                                         <input value="DEMO" name="type" id="type" type="radio">Demo
@@ -349,23 +367,7 @@
             </div>
         </div>
     </div>
-    <script src="static/js/jQuery.js"></script>
-    <script src="static/bootstrap/js/bootstrap.min.js"></script>
-    <script src="static/js/labsAndDemos/admin/getFilteredLabsAdmin.js"></script>
-    <script src="static/js/labsAndDemos/admin/addLab.js"></script>
-    <script src="static/js/labsAndDemos/admin/addItemToLab.js"></script>
-    <script src="static/js/labsAndDemos/admin/editLabDemo.js"></script>
-    <script src="static/js/labsAndDemos/openPDFTab.js"></script>
-    <script src="static/js/labsAndDemos/admin/populateRequiredItems.js"></script>
-    <script src="static/js/labsAndDemos/admin/populateRequiredInfoItems.js"></script>
-    <script src="static/js/labsAndDemos/admin/populateEditModal.js"></script>
-    <script src="static/js/labsAndDemos/admin/populateInfoModal.js"></script>
-    <script src="static/js/labsAndDemos/populateFilterDropdowns.js"></script>
-    <script src="static/js/labsAndDemos/admin/populateAddDropdowns.js"></script>
-    <script src="static/js/labsAndDemos/admin/populateInventoryDropdown.js"></script>
-    <script src="static/js/labsAndDemos/admin/removeLab.js"></script>
-    <script src="static/js/labsAndDemos/admin/onPageLoad.js"></script>
-    <script src="static/js/signout.js"></script>
+
 </body>
 
 </html>

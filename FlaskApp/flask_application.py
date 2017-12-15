@@ -46,7 +46,7 @@ CAN_RESTORE_DATABASE_INDEX = CAN_BACKUP_DATABASE_INDEX + 1
 
 flask_application = Flask(__name__)
 mysql = MySQL()
-flask_application.config['UPLOAD_FOLDER'] = 'C:\Users\Tom\git\sweng\SwengPhysics\FlaskApp\static\lab_pdfs'
+flask_application.config['UPLOAD_FOLDER'] = 'G:\Documents\GitHub\Sweng\SwengPhysics\FlaskApp\static\lab_pdfs'
 ALLOWED_EXTENSIONS = set(['pdf'])
 flask_application.config['MYSQL_DATABASE_USER'] = 'physics_user'
 flask_application.config['MYSQL_DATABASE_PASSWORD'] = '4GmfPWBC3BA5g7d'
@@ -1015,6 +1015,8 @@ def uploadFile():
 			topic = request.form['topic']
 			concept = request.form['concept']
 			subconcept = request.form['subconcept']
+			if subconcept == "" or subconcept == None or subconcept == "-1":
+				subconcept = None
 			lab_id = request.form['lab_id']
 			if lab_id == '':
 				lab_id = None

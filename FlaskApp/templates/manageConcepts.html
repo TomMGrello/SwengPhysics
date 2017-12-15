@@ -4,12 +4,26 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Manage Concepts</title>
-      <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
-      <link rel="stylesheet" href="static/styles/manageConcepts.css">
-      <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
       <script type=text/javascript>
         $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
       </script>
+      <script src="static/js/jQuery.js"></script>
+      <script src="static/bootstrap/js/bootstrap.min.js"></script>
+      <script src="static/js/manageConcepts/addTopic.js"></script>
+      <script src="static/js/manageConcepts/removeTopic.js"></script>
+      <script src="static/js/manageConcepts/getTopics.js"></script>
+      <script src="static/js/manageConcepts/getConcepts.js"></script>
+      <script src="static/js/manageConcepts/getSubconcepts.js"></script>
+      <script src="static/js/manageConcepts/addConcept.js"></script>
+      <script src="static/js/manageConcepts/addSubconcept.js"></script>
+      <script src="static/js/manageConcepts/moveSubconcept.js"></script>
+      <script src="static/js/manageConcepts/removeSubconcept.js"></script>
+      <script src="static/js/manageConcepts/removeConcept.js"></script>
+      <script src="static/js/manageConcepts/onPageLoad.js"></script>
+      <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+      <link rel="stylesheet" href="static/styles/manageConcepts.css">
+      <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+
    </head>
    <body>
       <img src="static/images/RULogo.png">
@@ -136,19 +150,7 @@
             </div>
          </div>
       </div>
-      <script src="static/js/jQuery.js"></script>
-      <script src="static/bootstrap/js/bootstrap.min.js"></script>
-      <script src="static/js/manageConcepts/addTopic.js"></script>
-      <script src="static/js/manageConcepts/removeTopic.js"></script>
-      <script src="static/js/manageConcepts/getTopics.js"></script>
-      <script src="static/js/manageConcepts/getConcepts.js"></script>
-      <script src="static/js/manageConcepts/getSubconcepts.js"></script>
-      <script src="static/js/manageConcepts/addConcept.js"></script>
-      <script src="static/js/manageConcepts/addSubconcept.js"></script>
-      <script src="static/js/manageConcepts/moveSubconcept.js"></script>
-      <script src="static/js/manageConcepts/removeSubconcept.js"></script>
-      <script src="static/js/manageConcepts/removeConcept.js"></script>
-      <script src="static/js/manageConcepts/onPageLoad.js"></script>
+
 
    </body>
 </html>

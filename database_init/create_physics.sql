@@ -1,5 +1,5 @@
 CREATE DATABASE physics;
---source create_database_user.sql;
+/*source create_database_user.sql;*/
 
 CREATE TABLE `physics`.`constants`(
   `constant_id` INT(36) auto_increment,

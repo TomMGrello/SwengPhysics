@@ -6,12 +6,21 @@
      <meta name="google" content="notranslate">
      <meta http-equiv="Content-Language" content="en">
       <title>User Permissions</title>
-      <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
-      <link rel="stylesheet" href="static/styles/adminPermissionsPage.css">
-      <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
       <script type=text/javascript>
         $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
       </script>
+      <script src="static/js/jQuery.js"></script>
+      <script src="static/bootstrap/js/bootstrap.min.js"></script>
+      <script src="static/js/permissions/onPageLoad.js"></script>
+      <script src="static/js/permissions/getUserPermissions.js"></script>
+      <script src="static/js/permissions/populateUserPermissions.js"></script>
+      <script src="static/js/permissions/removeUser.js"></script>
+      <script src="static/js/permissions/setBannerIdToRemove.js"></script>
+      <script src="static/js/permissions/changePermissions.js"></script>
+      <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+      <link rel="stylesheet" href="static/styles/adminPermissionsPage.css">
+      <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+
    </head>
    <body>
       <img src="static/images/RULogo.png">
@@ -242,13 +251,6 @@
             </div>
          </div>
       </div>
-      <script src="static/js/jQuery.js"></script>
-      <script src="static/bootstrap/js/bootstrap.min.js"></script>
-      <script src="static/js/permissions/onPageLoad.js"></script>
-      <script src="static/js/permissions/getUserPermissions.js"></script>
-      <script src="static/js/permissions/populateUserPermissions.js"></script>
-      <script src="static/js/permissions/removeUser.js"></script>
-      <script src="static/js/permissions/setBannerIdToRemove.js"></script>
-      <script src="static/js/permissions/changePermissions.js"></script>
+
    </body>
 </html>
