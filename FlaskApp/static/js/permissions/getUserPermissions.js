@@ -5,9 +5,7 @@ var getUserPermissions = function() {
         for (var curr_item = 0; curr_item < data_array.length; curr_item++) {
             var user = data_array[curr_item];
             var banner_id = user[1];
-            var first = user[2];
-            var middle = user[3];
-            var last = user[4];
+            var name = user[2];
             var uname = user[5];
 
             var newRow = document.createElement("tr");
@@ -15,15 +13,9 @@ var getUserPermissions = function() {
             var rowIndex = document.createElement("td");
             rowIndex.id = "index";
             rowIndex.innerHTML = (curr_item + 1);
-            var firstNameTd = document.createElement("td");
-            firstNameTd.id = "first_name";
-            firstNameTd.innerHTML = first;
-            var middleNameTd = document.createElement("td");
-            middleNameTd.id = "middle_name";
-            middleNameTd.innerHTML = middle;
-            var lastNameTd = document.createElement("td");
-            lastNameTd.id = "last_name";
-            lastNameTd.innerHTML = last;
+            var nameTd = document.createElement("td");
+            nameTd.id = "name";
+            nameTd.innerHTML = name;
             var bannerIdTd = document.createElement("td");
             bannerIdTd.id = "banner_id";
             bannerIdTd.innerHTML = banner_id;
@@ -32,9 +24,7 @@ var getUserPermissions = function() {
             unameTd.innerHTML = uname;
 
             newRow.appendChild(rowIndex);
-            newRow.appendChild(firstNameTd);
-            newRow.appendChild(middleNameTd);
-            newRow.appendChild(lastNameTd);
+            newRow.appendChild(nameTd);
             newRow.appendChild(bannerIdTd);
             newRow.appendChild(unameTd);
 
