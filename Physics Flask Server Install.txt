@@ -20,6 +20,7 @@ pip install Flask
 pip install flask-mysql
 pip install pyopenssl
 pip install gspread
+pip install --upgrade oauth2client
 
 
 
