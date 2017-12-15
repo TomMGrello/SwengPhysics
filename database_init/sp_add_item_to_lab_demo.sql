@@ -1,4 +1,4 @@
-USE physics_lab;
+USE physicslab;
 DELIMITER $$
 CREATE PROCEDURE `sp_add_item_to_lab_demo`(
   IN p_lab_id int(36),

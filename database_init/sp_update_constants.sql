@@ -1,4 +1,4 @@
-USE physics_lab;
+USE physicslab;
 DELIMITER $$
 
 CREATE PROCEDURE `sp_update_constants`(

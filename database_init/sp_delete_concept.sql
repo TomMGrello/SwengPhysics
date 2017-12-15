@@ -1,4 +1,4 @@
-USE physics_lab;
+USE physicslab;
 -- delete concept stored procedure
 DELIMITER $$
 CREATE PROCEDURE `sp_delete_concept`(

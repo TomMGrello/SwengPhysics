@@ -1,4 +1,4 @@
-USE physics_lab;
+USE physicslab;
 -- add subconcept stored procedure
 DELIMITER $$
 CREATE PROCEDURE `sp_add_topic`(

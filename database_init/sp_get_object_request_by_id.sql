@@ -1,4 +1,4 @@
-USE physics_lab_lab;
+USE physicslab_lab;
 -- get all lab requests stored procedure
 DELIMITER $$
 CREATE PROCEDURE `sp_get_object_request_by_id`(

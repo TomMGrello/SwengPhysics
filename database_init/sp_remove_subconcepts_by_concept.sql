@@ -1,4 +1,4 @@
-USE physics_lab;
+USE physicslab;
 -- delete subconcept stored procedure
 DELIMITER $$
 CREATE PROCEDURE `sp_remove_subconcepts_by_concept`(

@@ -1,4 +1,4 @@
-USE physics_lab;
+USE physicslab;
 DELIMITER $$
 
 -- stored procedure to remove an inventory item
