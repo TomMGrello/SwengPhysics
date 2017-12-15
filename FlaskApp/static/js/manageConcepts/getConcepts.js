@@ -1,7 +1,7 @@
 var getConcepts = function() {
   var remove_concept_select = document.getElementById('remove_concept_select');
   var add_subconcept_select = document.getElementById('add_subconcept_select');
-    $.getJSON('/getConcepts', {}, function(data) {
+    $.getJSON($SCRIPT_ROOT + '/getConcepts', {}, function(data) {
       var concepts = data.result;
       for(var i = 0; i < concepts.length; i++){
         var curr_concept = concepts[i];

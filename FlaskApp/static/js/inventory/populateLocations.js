@@ -1,5 +1,5 @@
 function populateLocations() {
-    $.getJSON('/getLocations', {
+    $.getJSON($SCRIPT_ROOT + '/getLocations', {
             type:"inventory"
         },
         function(data) {

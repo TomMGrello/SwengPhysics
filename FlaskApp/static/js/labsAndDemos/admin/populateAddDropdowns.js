@@ -8,7 +8,7 @@ function populateAddDropdowns() {
 }
 
 function populateaddConcepts(){
-  $.getJSON('/getConcepts', {},function(data) {
+  $.getJSON($SCRIPT_ROOT + '/getConcepts', {},function(data) {
           var add_concept = document.getElementById('concept');
           add_concept.innerHTML = "";
           var data_array = data.result;
@@ -30,7 +30,7 @@ function populateaddSubconcepts(){
   if(add_concept.options[add_concept.selectedIndex])
     concept_id = add_concept.options[add_concept.selectedIndex].value;
   add_subconcept.innerHTML = "";
-  $.getJSON('/getSubconcepts', {concept_id:concept_id},function(data) {
+  $.getJSON($SCRIPT_ROOT + '/getSubconcepts', {concept_id:concept_id},function(data) {
           var data_array = data.result;
           for(var i = 0; i < data_array.length; i++){
             var subconcept = data_array[i][1];
@@ -43,7 +43,7 @@ function populateaddSubconcepts(){
 }
 
 function populateaddTopics(){
-  $.getJSON('/getTopics', {},function(data) {
+  $.getJSON($SCRIPT_ROOT + '/getTopics', {},function(data) {
           var add_topic = document.getElementById('topic');
           add_topic.innerHTML = "";
           var data_array = data.result;

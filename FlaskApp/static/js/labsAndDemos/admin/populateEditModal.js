@@ -40,7 +40,7 @@ var populateEditModal = function(button) {
 }
 
 function populateEditConcepts(selected){
-  $.getJSON('/getConcepts', {},function(data) {
+  $.getJSON($SCRIPT_ROOT + '/getConcepts', {},function(data) {
           var edit_concept = document.getElementById('edit_concept');
           edit_concept.innerHTML = "";
           var data_array = data.result;
@@ -63,7 +63,7 @@ function populateEditSubconcepts(selected){
   var concept_id;
   if(filter_concept.options[filter_concept.selectedIndex])
     concept_id = filter_concept.options[filter_concept.selectedIndex].value;
-  $.getJSON('/getSubconcepts', {concept_id:concept_id},function(data) {
+  $.getJSON($SCRIPT_ROOT + '/getSubconcepts', {concept_id:concept_id},function(data) {
           var edit_subconcept = document.getElementById('edit_subconcept');
           edit_subconcept.innerHTML = "";
           var data_array = data.result;
@@ -80,7 +80,7 @@ function populateEditSubconcepts(selected){
 }
 
 function populateEditTopics(selected){
-  $.getJSON('/getTopics', {},function(data) {
+  $.getJSON($SCRIPT_ROOT + '/getTopics', {},function(data) {
           var edit_topic = document.getElementById('edit_topic');
           edit_topic.innerHTML = "";
           var data_array = data.result;

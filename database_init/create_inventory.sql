@@ -91,6 +91,3 @@ call sp_add_location("Science","149","classroom");
 call sp_add_location("Science","150","classroom");
 call sp_add_location("Science","151","classroom");
 call sp_add_location("Science","128","classroom");
-
-
-/*call sp_create_sample_inventory(25); THIS IS ONLY USED FOR FRONT END TESTING. HASHED SERIAL NUMBERS WILL NOT BE ACCURATE AND WILL CAUSE BACK END FUNCTIONS TO FAIL*/

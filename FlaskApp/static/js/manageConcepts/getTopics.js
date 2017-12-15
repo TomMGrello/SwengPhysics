@@ -1,6 +1,6 @@
 var getTopics = function() {
   var topic_select = document.getElementById('topic_select');
-    $.getJSON('/getTopics', {}, function(data) {
+    $.getJSON($SCRIPT_ROOT + '/getTopics', {}, function(data) {
       var topics = data.result;
       for(var i = 0; i < topics.length; i++){
         var curr_topic = topics[i];

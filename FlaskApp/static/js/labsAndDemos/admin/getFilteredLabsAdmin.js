@@ -22,7 +22,7 @@ var getFilteredLabsAdmin = function(order_by) {
     if(select_subconcept.options[select_subconcept.selectedIndex])
       filter_subconcept = select_subconcept.options[select_subconcept.selectedIndex].text.toLowerCase();
 
-    $.getJSON('/getFilteredLabsDemos', {
+    $.getJSON($SCRIPT_ROOT + '/getFilteredLabsDemos', {
             input_type: filter_type,
             name: filter_name,
             topic: filter_topic,

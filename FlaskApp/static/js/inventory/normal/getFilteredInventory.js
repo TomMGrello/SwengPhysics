@@ -6,7 +6,7 @@ var getFilteredInventory = function(order_by) {
   if(select_location.options[select_location.selectedIndex])
     location_id = select_location.options[select_location.selectedIndex].value;
   var filter_shelf = document.getElementById('shelf_input').value.toLowerCase();
-    $.getJSON('/getFilteredInventory', {
+    $.getJSON($SCRIPT_ROOT + '/getFilteredInventory', {
             name: filter_name,
             vendor_name: filter_vendor,
             location_id:location_id,
