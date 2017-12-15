@@ -1,7 +1,7 @@
-CREATE DATABASE physics;
+CREATE DATABASE physics_lab;
 /*source create_database_user.sql;*/
 
-CREATE TABLE `physics`.`constants`(
+CREATE TABLE `physics_lab`.`constants`(
   `constant_id` INT(36) auto_increment,
   `auto_accept` BOOLEAN,
   `required_num_teams` INT(10),
@@ -9,7 +9,7 @@ CREATE TABLE `physics`.`constants`(
   `semester_end_date` VARCHAR(45),
   PRIMARY KEY(`constant_id`));
 
-CREATE TABLE `physics`.`user`(
+CREATE TABLE `physics_lab`.`user`(
      `user_id` int(36) auto_increment,
      `banner_id` int(9) NULL,
      `first_name` VARCHAR(45) NULL,
@@ -21,7 +21,7 @@ CREATE TABLE `physics`.`user`(
      PRIMARY KEY(`user_id`),
      UNIQUE KEY(`banner_id`));
 
-CREATE TABLE `physics`.`user_permissions`(
+CREATE TABLE `physics_lab`.`user_permissions`(
     `permission_id` int(36) auto_increment,
     `banner_id` int(9) NULL,
     `can_add_user` BOOLEAN,
@@ -36,7 +36,7 @@ CREATE TABLE `physics`.`user_permissions`(
     PRIMARY KEY(`permission_id`),
     UNIQUE KEY(`banner_id`));
 
-  CREATE TABLE `physics`.`banner_ids` (
+  CREATE TABLE `physics_lab`.`banner_ids` (
     `banner_index` int(36) auto_increment,
     `username` VARCHAR(45) NULL,
     `banner_id` int(9) NULL,
@@ -44,7 +44,7 @@ CREATE TABLE `physics`.`user_permissions`(
     UNIQUE KEY(`username`));
 
  -- create user requests table
-  CREATE TABLE `physics`.`user_requests`(
+  CREATE TABLE `physics_lab`.`user_requests`(
      `user_request_id` int(36) auto_increment,
      `banner_id` int(9),
      `first_name` varchar(45) NULL,
@@ -56,7 +56,7 @@ CREATE TABLE `physics`.`user_permissions`(
      PRIMARY KEY(`user_request_id`));
 
  -- create lab requests table
- CREATE TABLE `physics`.`lab_requests`(
+ CREATE TABLE `physics_lab`.`lab_requests`(
      `lab_request_id` INT(36) auto_increment,
      `lab_id` INT(36),
      `dates` VARCHAR(60),
@@ -68,7 +68,7 @@ CREATE TABLE `physics`.`user_permissions`(
      PRIMARY KEY(`lab_request_id`));
 
 -- create object requests table
-CREATE TABLE `physics`.`object_requests`(
+CREATE TABLE `physics_lab`.`object_requests`(
 	`object_request_id` INT (36) auto_increment,
         `hashed_serial_num` INT (60),
         `dates` VARCHAR (60),
@@ -79,36 +79,36 @@ CREATE TABLE `physics`.`object_requests`(
         `notes` VARCHAR (250) NULL,
         PRIMARY KEY(`object_request_id`));
 
-CREATE TABLE `physics`.`course`(
+CREATE TABLE `physics_lab`.`course`(
       `course_id` INT(36) auto_increment,
       `name` VARCHAR(80),
       PRIMARY KEY(`course_id`));
 
 -- create concepts table
-CREATE TABLE `physics`.`concept` (
+CREATE TABLE `physics_lab`.`concept` (
 	`concept_id` INT(36) auto_increment,
       	`name` VARCHAR(45),
       	PRIMARY KEY (`concept_id`)
       	);
 
 -- create subconcept table
-CREATE TABLE `physics`.`subconcept` (
+CREATE TABLE `physics_lab`.`subconcept` (
 	`subconcept_id` INT(36) auto_increment,
       	`name` VARCHAR(45),
       	`concept_id` INT (36),
       	PRIMARY KEY (`subconcept_id`),
-      	FOREIGN KEY (`concept_id`) references `physics`.`concept`(`concept_id`)
+      	FOREIGN KEY (`concept_id`) references `physics_lab`.`concept`(`concept_id`)
       	);
 
 -- create topic table
-CREATE TABLE `physics`.`topic` (
+CREATE TABLE `physics_lab`.`topic` (
 	`topic_id` INT(36) auto_increment,
       	`name` VARCHAR(45),
       	PRIMARY KEY (`topic_id`)
       	);
 
 -- create spreadsheet table
-CREATE TABLE `physics`.`spreadsheet` (
+CREATE TABLE `physics_lab`.`spreadsheet` (
 	`spreadsheet_id` INT(36) auto_increment,
       	`type` ENUM('import_lab','import_inventory','export_master'),
       	`url` VARCHAR(512),
@@ -159,7 +159,7 @@ INSERT INTO constants(
 );
 
 /*Following lines are for development purposes only
-They add 4 basic users for the 4 different pre-defined roles. Can be used for testing physics.*/
+They add 4 basic users for the 4 different pre-defined roles. Can be used for testing physics_lab.*/
 call sp_add_user(444444444,'lab_admin','lab_admin','lab_admin','lab_admin','lab_admin','lab_admin@rowan.edu');
 call sp_change_permissions(444444444,1,1,1,1,1,1,1,1,1);
 
