@@ -95,7 +95,7 @@ def manageLabRequest():
 	user_permissions = cursor.fetchall()[0]
 	can_remove_record = user_permissions[CAN_REMOVE_RECORD_INDEX];
 
-	if int(can_modify_record) == 1:
+	if int(can_remove_record) == 1:
 		return render_template("labsDemosRequests.html");
 
 @flask_application.route("/requestLab",methods=['GET'])
@@ -1338,6 +1338,7 @@ def getAllConstants():
 
 @flask_application.route('/populateTestData')
 def testData():
+	cursor = get_db().cursor()
 	banner_id = session['banner_id']
 	cursor.callproc('sp_get_permissions',[banner_id])
 
