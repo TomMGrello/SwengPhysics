@@ -95,7 +95,7 @@ def manageLabRequest():
 	user_permissions = cursor.fetchall()[0]
 	can_remove_record = user_permissions[CAN_REMOVE_RECORD_INDEX];
 
-	if int(can_modify_record) == 1:
+	if int(can_remove_record) == 1:
 		return render_template("labsDemosRequests.html");
 
 @flask_application.route("/requestLab",methods=['GET'])
