@@ -1,439 +1,635 @@
-#!/usr/bin/python
-
-#  Debug
-## import os
-## print "Content-type: text/html\n"
-## import sys
-## sys.stderr = sys.stdout
-
-#  Copyright 2011 Jon Rifkin
-# 
-#  Licensed under the Apache License, Version 2.0 (the "License");
-#  you may not use this file except in compliance with the License.
-#  You may obtain a copy of the License at
-# 
-#      http://www.apache.org/licenses/LICENSE-2.0
-# 
-#  Unless required by applicable law or agreed to in writing, software
-#  distributed under the License is distributed on an "AS IS" BASIS,
-#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#  See the License for the specific language governing permissions and
-#  limitations under the License.
-
-
-
-
-#-----------------------------------------------------------------------
-#  Usage
-#-----------------------------------------------------------------------
-#
-#  Purpose
-#      Authenticate users against a CAS server from your python cgi scripts.
-#
-#  Using in your script
-#
-#      import pycas
-#      status, id, cookie = pycas.login(CAS_SERVER,THIS_SCRIPT)
-#
-#  Required Parameters
-#
-#      - CAS_SERVER : the url of your CAS server 
-#                     (for example, https://login.yoursite.edu).
-#      - THIS_SCRIPT: the url of the calling python cgi script.
-#
-#  Returned Values
-#
-#      - status:  return code, 0 for success.
-#      - id    :  the user name returned by cas.
-#      - cookie:  when non-blank, send this cookie to the client's 
-#                 browser so it can authenticate for the rest of the
-#                 session.
-#
-#  Optional Parmaters:
-#      - lifetime:  lifetime of the cookie in seconds, enforced by pycas. 
-#                   Default is 0, meaning unlimited lifetime.
-#      - path:      Authentication cookie applies for all urls under 'path'. 
-#                   Defaults to "/" (all urls).
-#      - protocol:  CAS protocol version.  Default is 2.  Can be set to 1.
-#      - secure:    Default is 1, which authenticates for https connections only.
-#      - opt:       set to 'renew' or 'gateway' for these CAS options.
-#
-#        Examples:
-#          status, id, cookie = pycas.login(CAS_SERVER,THIS_SCRIPT,protocol=1,secure=0)
-#          status, id, cookie = pycas.login(CAS_SERVER,THIS_SCRIPT,path="/cgi-bin/accts")
-#
-#   Status Codes are listed below.
-#
-
-#-----------------------------------------------------------------------
-#  Constants
-#-----------------------------------------------------------------------
-#
-#  Secret used to produce hash.   This can be any string.  Hackers
-#  who know this string can forge this script's authentication cookie.
-SECRET = "7e16162998eb7efafb1498f75190a937"
-
-#  Name field for pycas cookie
-PYCAS_NAME = "pycas"
-
-#  CAS Staus Codes:  returned to calling program by login() function.
-CAS_OK               = 0  #  CAS authentication successful.
-CAS_COOKIE_EXPIRED   = 1  #  PYCAS cookie exceeded its lifetime.
-CAS_COOKIE_INVALID   = 2  #  PYCAS cookie is invalid (probably corrupted).
-CAS_TICKET_INVALID   = 3  #  CAS server ticket invalid.
-CAS_GATEWAY          = 4  #  CAS server returned without ticket while in gateway mode.
-
-
-#  Status codes returned internally by function get_cookie_status().
-COOKIE_AUTH    = 0        #  PYCAS cookie is valid.
-COOKIE_NONE    = 1        #  No PYCAS cookie found.
-COOKIE_GATEWAY = 2        #  PYCAS gateway cookie found.
-COOKIE_INVALID = 3        #  Invalid PYCAS cookie found.
-
-#  Status codes returned internally by function get_ticket_status().
-TICKET_OK      = 0        #  Valid CAS server ticket found.
-TICKET_NONE    = 1        #  No CAS server ticket found.
-TICKET_INVALID = 2        #  Invalid CAS server ticket found.
-
-CAS_MSG = (
-"CAS authentication successful.",
-"PYCAS cookie exceeded its lifetime.",
-"PYCAS cookie is invalid (probably corrupted).",
-"CAS server ticket invalid.",
-"CAS server returned without ticket while in gateway mode.",
-)
-
-###Optional log file for debugging
-###LOG_FILE="/tmp/cas.log"
-
-
-#-----------------------------------------------------------------------
-#  Imports
-#-----------------------------------------------------------------------
-import os
-import cgi
-import md5
-import time
-import urllib
-import urlparse
-
-
-#-----------------------------------------------------------------------
-#  Functions
-#-----------------------------------------------------------------------
-
-#  For debugging.
-def writelog(msg):
-	f = open(LOG_FILE,"a")
-	timestr = time.strftime("%Y-%m-%d %H:%M:%S ");
-	f.write(timestr + msg + "\n");
-	f.close()
-
-#  Used for parsing xml.  Search str for first occurance of
-#  <tag>.....</tag> and return text (striped of leading and
-#  trailing whitespace) between tags.  Return "" if tag not
-#  found.
-def parse_tag(str,tag):
-   tag1_pos1 = str.find("<" + tag)
-   #  No tag found, return empty string.
-   if tag1_pos1==-1: return ""
-   tag1_pos2 = str.find(">",tag1_pos1)
-   if tag1_pos2==-1: return ""
-   tag2_pos1 = str.find("</" + tag,tag1_pos2)
-   if tag2_pos1==-1: return ""
-   return str[tag1_pos2+1:tag2_pos1].strip()
-
-
-#  Split string in exactly two pieces, return '' for missing pieces.
-def split2(str,sep):
-	parts = str.split(sep,1) + ["",""]
-	return parts[0], parts[1]
-
-#  Use hash and secret to encrypt string.
-def makehash(str,secret=SECRET):
-	m = md5.new()
-	m.update(str)
-	m.update(SECRET)
-	return m.hexdigest()[0:8]
-	
-	
-#  Form cookie
-def make_pycas_cookie(val, domain, path, secure, expires=None):
-	cookie = "Set-Cookie: %s=%s;domain=%s;path=%s" % (PYCAS_NAME, val, domain, path)
-	if secure:
-		cookie += ";secure"
-	if expires:
-		cookie += ";expires=" + expires
-	return cookie
-
-#  Send redirect to client.  This function does not return, i.e. it teminates this script.
-def do_redirect(cas_host, service_url, opt, secure):
-	cas_url  = cas_host + "/cas/login?service=" + service_url
-	if opt in ("renew","gateway"):
-		cas_url += "&%s=true" % opt
-	#  Print redirect page to browser
-	print "Refresh: 0; url=%s" % cas_url
-	print "Content-type: text/html"
-	if opt=="gateway":
-		domain,path = urlparse.urlparse(service_url)[1:3]
-		print make_pycas_cookie("gateway", domain, path, secure)
-	print """
-If your browser does not redirect you, then please follow <a href="%s">this link</a>.
-""" % (cas_url)
-	raise SystemExit
-	
-
-
-
-#  Retrieve id from pycas cookie and test data for validity 
-# (to prevent mailicious users from falsely authenticating).
-#  Return status and id (id will be empty string if unknown).
-def decode_cookie(cookie_vals,lifetime=None):
-
-	#  Test for now cookies
-	if cookie_vals==None:
-		return COOKIE_NONE, ""
-
-	#  Test each cookie value
-	cookie_attrs = []
-	for cookie_val in cookie_vals:
-		#  Remove trailing ;
-		if cookie_val and cookie_val[-1]==";":
-			cookie_val = cookie_val[0:-1]
-
-		#  Test for pycas gateway cookie
-		if cookie_val=="gateway":
-			cookie_attrs.append(COOKIE_GATEWAY)
-
-		#  Test for valid pycas authentication cookie.
-		else:
-			# Separate cookie parts
-			oldhash     = cookie_val[0:8]
-			timestr, id = split2(cookie_val[8:],":")
-			#  Verify hash
-			newhash=makehash(timestr + ":" + id)
-			if oldhash==makehash(timestr + ":" + id):
-				#  Check lifetime
-				if lifetime:
-					if str(int(time.time()+int(lifetime)))<timestr:
-						#  OK:  Cookie still valid.
-						cookie_attrs.append(COOKIE_AUTH)
-					else:
-						# ERROR:  Cookie exceeded lifetime
-						cookie_attrs.append(COOKIE_EXPIRED)
-				else:
-					#  OK:  Cookie valid (it has no lifetime)
-					cookie_attrs.append(COOKIE_AUTH)
-					
-			else:
-				#  ERROR:  Cookie value are not consistent
-				cookie_attrs.append(COOKIE_INVALID)
-
-	#  Return status according to attribute values
-
-	#  Valid authentication cookie takes precedence
-	if COOKIE_AUTH in cookie_attrs:
-		return COOKIE_AUTH, id
-	#  Gateway cookie takes next precedence
-	if COOKIE_GATEWAY in cookie_attrs:
-		return COOKIE_GATEWAY, ""
-	#  If we've gotten here, there should be only one attribute left.
-	return cookie_attrs[0], ""
-
-
-#  Validate ticket using cas 1.0 protocol
-def validate_cas_1(cas_host, service_url, ticket):
-	#  Second Call to CAS server: Ticket found, verify it.
-	cas_validate = cas_host + "/cas/validate?ticket=" + ticket + "&service=" + service_url
-	f_validate   = urllib.urlopen(cas_validate)
-	#  Get first line - should be yes or no
-	response = f_validate.readline()
-	#  Ticket does not validate, return error
-	if response=="no\n":
-		f_validate.close()
-		return TICKET_INVALID, ""
-	#  Ticket validates
-	else:
-		#  Get id
-		id = f_validate.readline()
-		f_validate.close()
-		id = id.strip()
-		return TICKET_OK, id
-
-
-
-#  Validate ticket using cas 2.0 protocol
-#    The 2.0 protocol allows the use of the mutually exclusive "renew" and "gateway" options.
-def validate_cas_2(cas_host, service_url, ticket, opt):
-	#  Second Call to CAS server: Ticket found, verify it.
-	cas_validate = cas_host + "/cas/serviceValidate?ticket=" + ticket + "&service=" + service_url
-	if opt:
-		cas_validate += "&%s=true" % opt
-	f_validate   = urllib.urlopen(cas_validate)
-	#  Get first line - should be yes or no
-	response = f_validate.read()
-	id = parse_tag(response,"cas:user")
-	#  Ticket does not validate, return error
-	if id=="":
-		return TICKET_INVALID, ""
-	#  Ticket validates
-	else:
-		return TICKET_OK, id
-
-
-#  Read cookies from env variable HTTP_COOKIE.
-def get_cookies():
-	#  Read all cookie pairs
-	try:
-		cookie_pairs = os.getenv("HTTP_COOKIE").split()
-	except AttributeError:
-		cookie_pairs = []
-	cookies = {}
-	for cookie_pair in cookie_pairs:
-		key,val = split2(cookie_pair.strip(),"=")
-		if cookies.has_key(key):
-			cookies[key].append(val)
-		else:
-			cookies[key] = [val,]
-	return cookies
-
-
-#  Check pycas cookie
-def get_cookie_status():
-	cookies = get_cookies()
-	return decode_cookie(cookies.get(PYCAS_NAME))
-
-
-def get_ticket_status(cas_host,service_url,protocol,opt):
-	if cgi.FieldStorage().has_key("ticket"):
-		ticket = cgi.FieldStorage()["ticket"].value
-		if protocol==1:
-			ticket_status, id = validate_cas_1(cas_host, service_url, ticket, opt)
-		else:
-			ticket_status, id = validate_cas_2(cas_host, service_url, ticket, opt)
-		#  Make cookie and return id
-		if ticket_status==TICKET_OK:
-			return TICKET_OK, id
-		#  Return error status
-		else:
-			return ticket_status, ""
-	else:
-		return TICKET_NONE, ""
-
-
-#-----------------------------------------------------------------------
-#  Exported functions
-#-----------------------------------------------------------------------
-
-#  Login to cas and return user id.
-#
-#   Returns status, id, pycas_cookie.
-#
-def login(cas_host, service_url, lifetime=None, secure=1, protocol=2, path="/", opt=""):
-
-	#  Check cookie for previous pycas state, with is either
-	#     COOKIE_AUTH    - client already authenticated by pycas.
-	#     COOKIE_GATEWAY - client returning from CAS_SERVER with gateway option set.
-	#  Other cookie status are 
-	#     COOKIE_NONE    - no cookie found.
-	#     COOKIE_INVALID - invalid cookie found.
-	cookie_status, id = get_cookie_status()
-
-	if cookie_status==COOKIE_AUTH:
-		return CAS_OK, id, ""
-
-	if cookie_status==COOKIE_INVALID:
-		return CAS_COOKIE_INVALID, "", ""
-
-	#  Check ticket ticket returned by CAS server, ticket status can be
-	#     TICKET_OK      - a valid authentication ticket from CAS server
-	#     TICKET_INVALID - an invalid authentication ticket.
-	#     TICKET_NONE    - no ticket found.
-	#  If ticket is ok, then user has authenticated, return id and 
-	#  a pycas cookie for calling program to send to web browser.
-	ticket_status, id = get_ticket_status(cas_host,service_url,protocol,opt)
-
-	if ticket_status==TICKET_OK:
-		timestr     = str(int(time.time()))
-		hash        = makehash(timestr + ":" + id)
-		cookie_val  = hash + timestr + ":" + id
-		domain      = urlparse.urlparse(service_url)[1]
-		return CAS_OK, id, make_pycas_cookie(cookie_val, domain, path, secure)
-
-	elif ticket_status==TICKET_INVALID:
-		return CAS_TICKET_INVALID, "", ""
-
-
-	#  If unathenticated and in gateway mode, return gateway status and clear
-	#  pycas cookie (which was set to gateway by do_redirect()).
-	if opt=="gateway":
-		if cookie_status==COOKIE_GATEWAY:
-			domain,path = urlparse.urlparse(service_url)[1:3]
-			#  Set cookie expiration in the past to clear the cookie.
-			past_date = time.strftime("%a, %d-%b-%Y %H:%M:%S %Z",time.localtime(time.time()-48*60*60))
-			return CAS_GATEWAY, "", make_pycas_cookie("",domain,path,secure,past_date)
-
-	#  Do redirect
-	do_redirect(cas_host, service_url, opt, secure)
-
-
-#-----------------------------------------------------------------------
-#  Test
-#-----------------------------------------------------------------------
-
-
-if __name__=="__main__":
-
-	CAS_SERVER  = "https://login.uconn.edu"
-        SERVICE_URL = "http://bluet.ucc.uconn.edu/~jon/cgi-bin/pycas.py"
-
-	status, id, cookie = login(CAS_SERVER, SERVICE_URL, secure=0, opt="gateway")
-
-
-
-	print "Content-type: text/html"
-	print cookie
-	print
-	print """
-<html>
-<head>
-<title>
-castest.py
-</title>
-<style type=text/css>
-td {background-color: #dddddd; padding: 4px}
-</style>
-</head>
-<body>
-<h2>pycas.py</h2>
-<hr>
-"""
-	#  Print browser parameters from pycas.login
-	if cgi.FieldStorage().has_key("ticket"):
-		ticket = cgi.FieldStorage()["ticket"].value
-	else:
-		ticket = ""
-
-	in_cookie = os.getenv("HTTP_COOKIE")
-
-	print """
-<p>
-<b>Parameters sent from browser</b>
-<table>
-<tr> <td>Ticket</td> <td>%s</td> </tr> 
-<tr> <td>Cookie</td> <td>%s</td> </tr> 
-</table>
-</p>""" % (ticket,in_cookie)
-
-
-	#  Print output from pycas.login
-	print """
-<p>
-<b>Parameters returned from pycas.login()</b>
-<table>
-<tr><td>status</td><td> <b>%s</b> - <i>%s</i></td></tr>
-<tr><td>id</td><td> <b>%s</b></td></tr>
-<tr><td>cookie</td><td> <b>%s</b></td></tr>
-</table>
-</p>
-</body></html>""" % (status,CAS_MSG[status],id,cookie)
+# -*- encoding: utf-8 -*-
+import abc
+import base64
+import json
+import logging
+import requests
+import six
+from Crypto.Hash import SHA256
+from Crypto.PublicKey import RSA
+from Crypto.Signature import PKCS1_v1_5
+from xml.dom.minidom import parseString
+#try:
+#    from urllib import urlencode
+#except ImportError:
+#    from urllib.parse import urlencode
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.SecurityWarning)
+
+class CASClient(object):
+    '''
+    A client for interacting with a remote CAS instance.
+
+    ::
+
+        >>> from cas_client import CASClient
+        >>> client = CASClient('https://logmein.com')
+
+    '''
+
+    def __init__(
+        self,
+        server_url,
+        service_url=None,
+        auth_prefix='/cas',
+        proxy_url=None,
+        proxy_callback=None,
+        verify_certificates=False,
+        session_storage_adapter=None,
+        headers=None,
+        ):
+        self._auth_prefix = auth_prefix
+        self._proxy_callback = proxy_callback
+        self._proxy_url = proxy_url
+        self._server_url = server_url
+        self._service_url = service_url
+        self._session_storage_adapter = session_storage_adapter
+        self._verify_certificates = bool(verify_certificates)
+        self._headers = headers
+
+    ### PUBLIC METHODS ###
+
+    def acquire_auth_token_ticket(self, headers=None):
+        '''
+        Acquire an auth token from the CAS server.
+        '''
+        logging.debug('[CAS] Acquiring Auth token ticket')
+        url = self._get_auth_token_tickets_url()
+        text = self._perform_post(url, headers=headers)
+        auth_token_ticket = json.loads(text)['ticket']
+        logging.debug('[CAS] Acquire Auth token ticket: {}'.format(
+            auth_token_ticket))
+        return auth_token_ticket
+
+    def create_session(self, ticket, payload=None, expires=None):
+        '''
+        Create a session record from a service ticket.
+        '''
+        assert isinstance(self.session_storage_adapter, CASSessionAdapter)
+        logging.debug('[CAS] Creating session for ticket {}'.format(ticket))
+        self.session_storage_adapter.create(
+            ticket,
+            payload=payload,
+            expires=expires,
+            )
+
+    def delete_session(self, ticket):
+        '''
+        Delete a session record associated with a service ticket.
+        '''
+        assert isinstance(self.session_storage_adapter, CASSessionAdapter)
+        logging.debug('[CAS] Deleting session for ticket {}'.format(ticket))
+        self.session_storage_adapter.delete(ticket)
+
+    def get_api_url(
+        self,
+        api_resource,
+        auth_token_ticket,
+        authenticator,
+        private_key,
+        service_url=None,
+        **kwargs
+        ):
+        '''
+        Build an auth-token-protected CAS API url.
+        '''
+        auth_token, auth_token_signature = self._build_auth_token_data(
+            auth_token_ticket,
+            authenticator,
+            private_key,
+            **kwargs
+            )
+        params = {
+            'at': auth_token,
+            'ats': auth_token_signature,
+            }
+        if service_url is not None:
+            params['service'] = service_url
+        url = '{}?{}'.format(
+            self._get_api_url(api_resource),
+            urlencode(params),
+            )
+        return url
+
+    def get_auth_token_login_url(
+        self,
+        auth_token_ticket,
+        authenticator,
+        private_key,
+        service_url,
+        username,
+        ):
+        '''
+        Build an auth token login URL.
+
+        See https://github.com/rbCAS/CASino/wiki/Auth-Token-Login for details.
+        '''
+        auth_token, auth_token_signature = self._build_auth_token_data(
+            auth_token_ticket,
+            authenticator,
+            private_key,
+            username=username,
+            )
+        logging.debug('[CAS] AuthToken: {}'.format(auth_token))
+        url = self._get_auth_token_login_url(
+            auth_token=auth_token,
+            auth_token_signature=auth_token_signature,
+            service_url=service_url,
+            )
+        logging.debug('[CAS] AuthToken Login URL: {}'.format(url))
+        return url
+
+    def get_destroy_other_sessions_url(self, service_url=None):
+        '''
+        Get the URL for a remote CAS `destroy-other-sessions` endpoint.
+
+        ::
+
+            >>> from cas_client import CASClient
+            >>> client = CASClient('https://logmein.com')
+            >>> service_url = 'http://myservice.net'
+            >>> client.get_destroy_other_sessions_url(service_url)
+            'https://logmein.com/cas/destroy-other-sessions?service=http://myservice.net'
+
+        '''
+        template = '{server_url}{auth_prefix}/destroy-other-sessions?service={service_url}'
+        url = template.format(
+            server_url=self.server_url,
+            auth_prefix=self.auth_prefix,
+            service_url=service_url or self.service_url,
+            )
+        logging.debug('[CAS] Login URL: {}'.format(url))
+        return url
+
+    def get_login_url(self, service_url=None):
+        '''
+        Get the URL for a remote CAS `login` endpoint.
+
+        ::
+
+            >>> from cas_client import CASClient
+            >>> client = CASClient('https://logmein.com')
+            >>> service_url = 'http://myservice.net'
+            >>> client.get_login_url(service_url)
+            'https://logmein.com/cas/login?service=http://myservice.net'
+
+        '''
+        template = '{server_url}{auth_prefix}/login?service={service_url}'
+        url = template.format(
+            server_url=self.server_url,
+            auth_prefix=self.auth_prefix,
+            service_url=service_url or self.service_url,
+            )
+        logging.debug('[CAS] Login URL: {}'.format(url))
+        return url
+
+    def get_logout_url(self, service_url=None):
+        '''
+        Get the URL for a remote CAS `logout` endpoint.
+
+        ::
+
+            >>> from cas_client import CASClient
+            >>> client = CASClient('https://logmein.com')
+            >>> service_url = 'http://myservice.net'
+            >>> client.get_logout_url(service_url)
+            'https://logmein.com/cas/logout?service=http://myservice.net'
+
+        '''
+        template = '{server_url}{auth_prefix}/logout?service={service_url}'
+        url = template.format(
+            server_url=self.server_url,
+            auth_prefix=self.auth_prefix,
+            service_url=service_url or self.service_url,
+            )
+        logging.debug('[CAS] Logout URL: {}'.format(url))
+        return url
+
+    def parse_logout_request(self, message_text):
+        '''
+        Parse the contents of a CAS `LogoutRequest` XML message.
+
+        ::
+
+            >>> from cas_client import CASClient
+            >>> client = CASClient('https://logmein.com')
+            >>> message_text = """
+            ... <samlp:LogoutRequest
+            ...     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+            ...     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+            ...     ID="935a2d0c-4026-481e-be3d-20a1b2cdd553"
+            ...     Version="2.0"
+            ...     IssueInstant="2016-04-08 00:40:55 +0000">
+            ...     <saml:NameID>@NOT_USED@</saml:NameID>
+            ...     <samlp:SessionIndex>ST-14600760351898-0B3lSFt2jOWSbgQ377B4CtbD9uq0MXR9kG23vAuH</samlp:SessionIndex>
+            ... </samlp:LogoutRequest>
+            ... """
+            >>> parsed_message = client.parse_logout_request(message_text)
+            >>> import pprint
+            >>> pprint.pprint(parsed_message)
+            {'ID': '935a2d0c-4026-481e-be3d-20a1b2cdd553',
+             'IssueInstant': '2016-04-08 00:40:55 +0000',
+             'Version': '2.0',
+             'session_index': 'ST-14600760351898-0B3lSFt2jOWSbgQ377B4CtbD9uq0MXR9kG23vAuH',
+             'xmlns:saml': 'urn:oasis:names:tc:SAML:2.0:assertion',
+             'xmlns:samlp': 'urn:oasis:names:tc:SAML:2.0:protocol'}
+
+        '''
+        result = {}
+        xml_document = parseString(message_text)
+        for node in xml_document.getElementsByTagName('saml:NameId'):
+            for child in node.childNodes:
+                if child.nodeType == child.TEXT_NODE:
+                    result['name_id'] = child.nodeValue.strip()
+        for node in xml_document.getElementsByTagName('samlp:SessionIndex'):
+            for child in node.childNodes:
+                if child.nodeType == child.TEXT_NODE:
+                    result['session_index'] = str(child.nodeValue.strip())
+        for key in xml_document.documentElement.attributes.keys():
+            result[str(key)] = str(xml_document.documentElement.getAttribute(key))
+        logging.debug('[CAS] LogoutRequest:\n{}'.format(
+            json.dumps(result, sort_keys=True, indent=4, separators=[',', ': ']),
+            ))
+        return result
+
+    def perform_api_request(
+        self,
+        api_resource,
+        auth_token_ticket,
+        authenticator,
+        private_key,
+        method='POST',
+        service_url=None,
+        headers=None,
+        **kwargs
+        ):
+        '''
+        Perform an auth-token-protected request against a CAS API endpoint.
+        '''
+        assert method in ('GET', 'POST')
+        url = self.get_api_url(
+            api_resource,
+            auth_token_ticket,
+            authenticator,
+            private_key,
+            service_url=None,
+            **kwargs
+            )
+        if method == 'GET':
+            response = self._perform_get(url, headers=headers)
+        elif method == 'POST':
+            response = self._perform_post(url, headers=headers)
+        return response
+
+    def perform_proxy(self, proxy_ticket, headers=None):
+        '''
+        Fetch a response from the remote CAS `proxy` endpoint.
+        '''
+        url = self._get_proxy_url(ticket=proxy_ticket)
+        logging.debug('[CAS] Proxy URL: {}'.format(url))
+        return self._perform_cas_call(
+            url,
+            ticket=proxy_ticket,
+            headers=headers,
+            )
+
+    def perform_proxy_validate(self, proxied_service_ticket, headers=None):
+        '''
+        Fetch a response from the remote CAS `proxyValidate` endpoint.
+        '''
+        url = self._get_proxy_validate_url(ticket=proxied_service_ticket)
+        logging.debug('[CAS] ProxyValidate URL: {}'.format(url))
+        return self._perform_cas_call(
+            url,
+            ticket=proxied_service_ticket,
+            headers=headers,
+            )
+
+    def perform_service_validate(
+        self,
+        ticket=None,
+        service_url=None,
+        headers=None,
+        ):
+        '''
+        Fetch a response from the remote CAS `serviceValidate` endpoint.
+        '''
+        url = self._get_service_validate_url(ticket, service_url=service_url)
+        logging.debug('[CAS] ServiceValidate URL: {}'.format(url))
+        return self._perform_cas_call(url, ticket=ticket, headers=headers)
+
+    def session_exists(self, ticket):
+        '''
+        Test if a session records exists for a service ticket.
+        '''
+        assert isinstance(self.session_storage_adapter, CASSessionAdapter)
+        exists = self.session_storage_adapter.exists(ticket)
+        logging.debug('[CAS] Session [{}] exists: {}'.format(ticket, exists))
+        return exists
+
+    ### PRIVATE METHODS ###
+
+    def _build_auth_token_data(
+        self,
+        auth_token_ticket,
+        authenticator,
+        private_key,
+        **kwargs
+        ):
+        auth_token = dict(
+            authenticator=authenticator,
+            ticket=auth_token_ticket,
+            **kwargs
+            )
+        auth_token = json.dumps(auth_token, sort_keys=True)
+        if six.PY3:
+            auth_token = auth_token.encode('utf-8')
+        digest = SHA256.new()
+        digest.update(auth_token)
+        auth_token = base64.b64encode(auth_token)
+        rsa_key = RSA.importKey(private_key)
+        signer = PKCS1_v1_5.new(rsa_key)
+        auth_token_signature = signer.sign(digest)
+        auth_token_signature = base64.b64encode(auth_token_signature)
+        return auth_token, auth_token_signature
+
+    def _clean_up_response_text(self, response_text):
+        lines = []
+        for line in response_text.splitlines():
+            line = line.rstrip()
+            if line:
+                lines.append(line)
+        return '\n'.join(lines)
+
+    def _get_api_url(self, api_resource):
+        template = '{server_url}{auth_prefix}/api/{api_resource}'
+        url = template.format(
+            api_resource=api_resource,
+            auth_prefix=self.auth_prefix,
+            server_url=self.server_url,
+            )
+        return url
+
+    def _get_auth_token_tickets_url(self):
+        return self._get_api_url('auth_token_tickets')
+
+    def _get_auth_token_login_url(self, auth_token, auth_token_signature, service_url):
+        template = '{server_url}{auth_prefix}/authTokenLogin?{query_string}'
+        query_string = urlencode({
+            'at': auth_token,
+            'ats': auth_token_signature,
+            'service': service_url or self.service_url,
+            })
+        url = template.format(
+            auth_prefix=self.auth_prefix,
+            query_string=query_string,
+            server_url=self.server_url,
+            )
+        return url
+
+    def _get_proxy_url(self, ticket):
+        template = '{server_url}{auth_prefix}/proxy?'
+        template += 'targetService={proxy_callback}&pgt={ticket}'
+        url = template.format(
+            auth_prefix=self.auth_prefix,
+            proxy_callback=self.proxy_callback,
+            server_url=self.server_url,
+            ticket=ticket,
+            )
+        return url
+
+    def _get_proxy_validate_url(self, ticket):
+        template = '{server_url}{auth_prefix}/proxy?'
+        template += 'ticket={ticket}&service={proxy_callback}'
+        url = template.format(
+            auth_prefix=self.auth_prefix,
+            proxy_callback=self.proxy_callback,
+            server_url=self.server_url,
+            ticket=ticket,
+            )
+        return url
+
+    def _get_service_validate_url(self, ticket, service_url=None):
+        template = '{server_url}{auth_prefix}/serviceValidate?'
+        template += 'ticket={ticket}&service={service_url}'
+        url = template.format(
+            auth_prefix=self.auth_prefix,
+            server_url=self.server_url,
+            service_url=service_url or self.service_url,
+            ticket=ticket,
+            )
+        if self.proxy_url:
+            url = '{url}&pgtUrl={proxy_url}'.format(url, self.proxy_url)
+        return url
+
+    def _perform_cas_call(self, url, ticket, headers=None):
+        if ticket is not None:
+            logging.debug('[CAS] Requesting Ticket Validation')
+            response_text = self._perform_get(url, headers=headers)
+            response_text = self._clean_up_response_text(response_text)
+            if response_text:
+                logging.debug('[CAS] Response:\n{}'.format(response_text))
+                return CASResponse(response_text)
+        logging.debug('[CAS] Response: None')
+        return None
+
+    def _perform_get(self, url, headers=None):
+        headers = headers or self.headers
+        try:
+            response = requests.get(
+                url,
+                verify=self.verify_certificates,
+                headers=headers,
+                )
+            return response.text
+        except requests.HTTPError:
+            return None
+
+    def _perform_post(self, url, headers=None):
+        headers = headers or self.headers
+        try:
+            response = requests.post(
+                url,
+                verify=self.verify_certificates,
+                headers=headers,
+                )
+            return response.text
+        except requests.HTTPError:
+            return None
+
+    ### PUBLIC PROPERTIES ###
+
+    @property
+    def auth_prefix(self):
+        '''
+        The CAS client's auth prefix. Typically "/cas".
+        '''
+        return self._auth_prefix
+
+    @property
+    def headers(self):
+        return self._headers
+
+    @property
+    def proxy_callback(self):
+        '''
+        The CAS client's proxy callback address.
+        '''
+        return self._proxy_callback
+
+    @property
+    def proxy_url(self):
+        '''
+        The CAS client's proxy URL.
+        '''
+        return self._proxy_url
+
+    @property
+    def server_url(self):
+        '''
+        The CAS client's CAS server URL (i.e. the server name of the CAS
+        service).
+        '''
+        return self._server_url
+
+    @property
+    def service_url(self):
+        '''
+        The CAS client's default service URL.
+
+        This can typically be overriden in any method call.
+        '''
+        return self._service_url
+
+    @property
+    def session_storage_adapter(self):
+        '''
+        The CAS client's session storage adapter for maintaining session state.
+        '''
+        return self._session_storage_adapter
+
+    @property
+    def verify_certificates(self):
+        '''
+        Flag for controlling whether the CAS client verifies SSL certificates
+        in its ``requests`` calls.
+        '''
+        return self._verify_certificates
+
+
+class CASResponse(object):
+    '''
+    A CAS response object.
+    '''
+
+    def __init__(self, response_text):
+        self.response_text = response_text
+        self.response_type, cas_data = self._parse_cas_xml_response(
+            response_text)
+        self.success = 'success' in self.response_type.lower()
+        self.data = cas_data.get(self.response_type)
+        if isinstance(self.data, dict):
+            self.error = None
+        else:
+            self.data = {}
+            self.error = cas_data
+        self.user = self.data.get('user')
+        self.attributes = self.data.get('attributes')
+
+    @classmethod
+    def _parse_cas_xml_response(cls, response_text):
+        cas_type = 'noResponse'
+        cas_data = {}
+        if not response_text:
+            return cas_type, cas_data
+        xml_document = parseString(response_text)
+        node_element = xml_document.documentElement
+        if node_element.nodeName != 'cas:serviceResponse':
+            raise Exception
+        for child in node_element.childNodes:
+            if child.nodeType != child.ELEMENT_NODE:
+                continue
+            cas_type = child.nodeName.replace("cas:", "")
+            cas_data = cls._parse_cas_xml_data(child)
+            break
+        return cas_type, cas_data
+
+    @classmethod
+    def _parse_cas_xml_data(cls, xml_node, namespace='cas:'):
+        result = {}
+        tag_name = xml_node.nodeName
+        if tag_name.startswith(namespace):
+            tag_name = tag_name.replace(namespace, '')
+        for child in xml_node.childNodes:
+            if child.nodeType == child.TEXT_NODE:
+                text = child.nodeValue.strip()
+                if text:
+                    result[tag_name] = text
+            elif child.nodeType == child.ELEMENT_NODE:
+                subresult = cls._parse_cas_xml_data(child)
+                result.setdefault(tag_name, {}).update(subresult)
+        return result
+
+
+class CASSessionAdapter(object):
+    '''
+    Abstract base class for session adapters.
+    '''
+
+    __metaclass__ = abc.ABCMeta
+
+    @abc.abstractmethod
+    def create(self, ticket, payload=None, expires=None):
+        '''
+        Create a session identifier associated with ``ticket``.
+        '''
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def delete(self, ticket):
+        '''
+        Destroy a session identifier associated with ``ticket``.
+        '''
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def exists(self, ticket):
+        '''
+        Test if a session identifier exists for ``ticket``.
+        '''
+        raise NotImplementedError
+
+
+class MemcachedCASSessionAdapter(CASSessionAdapter):
+    r'''A Memcached session adapter.'''
+
+    def __init__(self, client):
+        self._client = client
+
+    def create(self, ticket, payload=None, expires=None):
+        '''
+        Create a session identifier in memcache associated with ``ticket``.
+        '''
+        if not payload:
+            payload = True
+        self._client.set(str(ticket), payload, expires)
+
+    def delete(self, ticket):
+        '''
+        Destroy a session identifier in memcache associated with ``ticket``.
+        '''
+        self._client.delete(str(ticket))
+
+    def exists(self, ticket):
+        '''
+        Test if a session identifier exists for ``ticket``.
+        '''
+        return self._client.get(str(ticket)) is not None
+
+
+__all__ = [
+    'CASClient',
+    'CASResponse',
+    'CASSessionAdapter',
+    'MemcachedCASSessionAdapter',
+    ]

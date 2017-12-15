@@ -6,12 +6,20 @@
      <meta name="google" content="notranslate">
      <meta http-equiv="Content-Language" content="en">
       <title>Inventory Requests</title>
-      <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
-      <link rel="stylesheet" href="static/styles/labsDemosRequestsStyle.css">
-      <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
       <script type=text/javascript>
         $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
       </script>
+      <script src="static/js/jQuery.js"></script>
+      <script src="static/bootstrap/js/bootstrap.min.js"></script>
+      <script src="static/js/manageInventoryRequests/acceptInventoryRequest.js"></script>
+      <script src="static/js/manageInventoryRequests/rejectInventoryRequest.js"></script>
+      <script src="static/js/manageInventoryRequests/getAllInventoryRequests.js"></script>
+      <script src="static/js/manageInventoryRequests/onPageLoad.js"></script>
+
+      <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+      <link rel="stylesheet" href="static/styles/labsDemosRequestsStyle.css">
+      <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+
   </head>
    <body>
       <img src="static/images/RULogo.png">
@@ -82,12 +90,6 @@
             </div>
          </div>
       </div>
-      <script src="static/js/jQuery.js"></script>
-      <script src="static/bootstrap/js/bootstrap.min.js"></script>
-      <script src="static/js/manageInventoryRequests/acceptInventoryRequest.js"></script>
-      <script src="static/js/manageInventoryRequests/rejectInventoryRequest.js"></script>
-      <script src="static/js/manageInventoryRequests/getAllInventoryRequests.js"></script>
-      <script src="static/js/manageInventoryRequests/onPageLoad.js"></script>
 
 
    </body>

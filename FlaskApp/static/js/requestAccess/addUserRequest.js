@@ -9,6 +9,6 @@ function addUserRequest(first_name, middle_name, last_name, banner_id, username,
             email: email
         },
         function(data) {
-            window.location = "/";
+            window.location = "$SCRIPT_ROOT + /";
         });
 }

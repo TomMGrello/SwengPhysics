@@ -6,15 +6,16 @@
      <meta name="google" content="notranslate">
      <meta http-equiv="Content-Language" content="en">
       <title>Request Access</title>
+      <script type=text/javascript>
+        $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+      </script>
       <link rel="stylesheet" href="static/styles/requestaccess.css">
       <link rel="stylesheet" href="static/styles/style.css">
       <script src="static/js/jQuery.js"></script>
       <script src="static/js/requestAccess/signup.js"></script>
       <link rel="icon" href="static/images/favicon.ico" type="image/x-icon"/>
       <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon"/>
-      <script type=text/javascript>
-        $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
-      </script>
+
    </head>
    <body>
       <div class="signUpBox">
@@ -22,7 +23,7 @@
          <h2>Request Access</h2>
          <form>
             <p>Username</p>
-            <input id="inputUsername" type="text" name="" placeholder="Username">
+            <input id="inputUsername" type="text" name="" placeholder="Username" readonly>
             <p>First name</p>
             <input id="inputFirstName" type="text" name="" placeholder="First Name">
             <p>Middle name</p>

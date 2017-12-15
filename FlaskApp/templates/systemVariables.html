@@ -4,12 +4,29 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>System Variables</title>
-      <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
-      <link rel="stylesheet" href="static/styles/systemVariables.css">
-      <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
       <script type=text/javascript>
         $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
       </script>
+      <script src="static/js/jQuery.js"></script>
+      <script src="static/bootstrap/js/bootstrap.min.js"></script>
+      <script src="static/js/systemVariables/getConstants.js"></script>
+      <script src="static/js/systemVariables/addLocation.js"></script>
+      <script src="static/js/systemVariables/addCourse.js"></script>
+      <script src="static/js/systemVariables/removeLocation.js"></script>
+      <script src="static/js/systemVariables/removeCourse.js"></script>
+      <script src="static/js/systemVariables/getAllCourses.js"></script>
+      <script src="static/js/systemVariables/getRooms.js"></script>
+      <script src="static/js/systemVariables/updateAutoAccept.js"></script>
+      <script src="static/js/systemVariables/updateEndDate.js"></script>
+      <script src="static/js/systemVariables/updateNumTeams.js"></script>
+      <script src="static/js/systemVariables/updateStartDate.js"></script>
+      <script src="static/js/systemVariables/updateSpreadsheetURL.js"></script>
+      <script src="static/js/systemVariables/getSpreadsheetURL.js"></script>
+      <script src="static/js/systemVariables/onPageLoad.js"></script>
+      <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+      <link rel="stylesheet" href="static/styles/systemVariables.css">
+      <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+
    </head>
    <body>
       <img src="static/images/RULogo.png">
@@ -196,21 +213,6 @@
             </div>
          </div>
       </div>
-      <script src="static/js/jQuery.js"></script>
-      <script src="static/bootstrap/js/bootstrap.min.js"></script>
-      <script src="static/js/systemVariables/getConstants.js"></script>
-      <script src="static/js/systemVariables/addLocation.js"></script>
-      <script src="static/js/systemVariables/addCourse.js"></script>
-      <script src="static/js/systemVariables/removeLocation.js"></script>
-      <script src="static/js/systemVariables/removeCourse.js"></script>
-      <script src="static/js/systemVariables/getAllCourses.js"></script>
-      <script src="static/js/systemVariables/getRooms.js"></script>
-      <script src="static/js/systemVariables/updateAutoAccept.js"></script>
-      <script src="static/js/systemVariables/updateEndDate.js"></script>
-      <script src="static/js/systemVariables/updateNumTeams.js"></script>
-      <script src="static/js/systemVariables/updateStartDate.js"></script>
-      <script src="static/js/systemVariables/updateSpreadsheetURL.js"></script>
-      <script src="static/js/systemVariables/getSpreadsheetURL.js"></script>
-      <script src="static/js/systemVariables/onPageLoad.js"></script>
+
    </body>
 </html>

@@ -1,4 +1,11 @@
 $(function() {
+
+$.getJSON($SCRIPT_ROOT + '/getStoredUsername', {},
+            function(data) {
+		document.getElementById("inputUsername").value = data.username;
+            });
+
+
     $('#signup').click(function() {
         var first_name = document.getElementById("inputFirstName").value;
         var middle_name = document.getElementById("inputMiddleName").value;
@@ -28,7 +35,8 @@ $(function() {
                 email: email
             },
             function(data) {
-                window.location = '/';
+		alert("Your request has been added");
+                window.location = $SCRIPT_ROOT + '/signout';
             });
         return false;
     });

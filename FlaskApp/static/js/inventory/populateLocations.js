@@ -16,5 +16,7 @@ function populateLocations() {
               option.text = building + " " + room_num;
               select_location.appendChild(option);
             }
+            select_location.appendChild(document.createElement('option'));
+
         });
 }

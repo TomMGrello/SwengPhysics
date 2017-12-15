@@ -20,6 +20,8 @@ function populateConcepts(){
             option.text = concept;
             filter_concept.appendChild(option);
           }
+          filter_concept.appendChild(document.createElement('option'));
+
       });
 }
 
@@ -39,6 +41,8 @@ function populateSubconcepts(){
             option.text = subconcept;
             filter_subconcept.appendChild(option);
           }
+          filter_subconcept.appendChild(document.createElement('option'));
+
       });
 }
 
@@ -54,5 +58,7 @@ function populateTopics(){
             option.text = topic;
             filter_topic.appendChild(option);
           }
+          filter_topic.appendChild(document.createElement('option'));
+
       });
 }

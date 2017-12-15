@@ -4,11 +4,12 @@
       <meta charset="utf-8">
       <title>Login</title>
       <meta name="viewport" content="width=device-width">
+      <script type=text/javascript>
+        $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+      </script>
       <script src="static/js/jQuery.js"></script>
       <script src="static/js/index/login.js"></script>
-      <script type=text/javascript>
-      	$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
-      </script>
+
       <link rel="stylesheet" href="static/styles/style.css">
       <link rel="icon" href="static/images/favicon.ico" type="image/x-icon"/>
       <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon"/>

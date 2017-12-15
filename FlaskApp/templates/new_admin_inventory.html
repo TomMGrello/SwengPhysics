@@ -7,12 +7,27 @@
   <meta name="google" content="notranslate">
   <meta http-equiv="Content-Language" content="en">
     <title>Inventory</title>
-    <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="static/styles/updatedAdminPage.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
     <script type=text/javascript>
         $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
       </script>
+    <script src="static/js/jQuery.js"></script>
+    <script src="static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="static/js/inventory/admin/removeInventoryItem.js"></script>
+    <script src="static/js/inventory/admin/modifyInventoryItem.js"></script>
+    <script src="static/js/inventory/admin/addInventoryItem.js"></script>
+    <script src="static/js/inventory/admin/setSerialNumToRemove.js"></script>
+    <script src="static/js/inventory/normal/populateAssociatedInfoLabs.js"></script>
+    <script src="static/js/inventory/normal/populateInfoModal.js"></script>
+    <script src="static/js/inventory/admin/populateEditModal.js"></script>
+    <script src="static/js/inventory/populateLocations.js"></script>
+    <script src="static/js/inventory/admin/getFilteredInventoryAdmin.js"></script>
+    <script src="static/js/inventory/admin/populateInventoryLocations.js"></script>
+    <script src="static/js/inventory/admin/onPageLoad.js"></script>
+    <script src="static/js/signout.js"></script>
+    <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/styles/updatedAdminPage.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+
 </head>
 
 <body>
@@ -289,20 +304,7 @@
             </div>
         </div>
     </div>
-    <script src="static/js/jQuery.js"></script>
-    <script src="static/bootstrap/js/bootstrap.min.js"></script>
-    <script src="static/js/inventory/admin/removeInventoryItem.js"></script>
-    <script src="static/js/inventory/admin/modifyInventoryItem.js"></script>
-    <script src="static/js/inventory/admin/addInventoryItem.js"></script>
-    <script src="static/js/inventory/admin/setSerialNumToRemove.js"></script>
-    <script src="static/js/inventory/normal/populateAssociatedInfoLabs.js"></script>
-    <script src="static/js/inventory/normal/populateInfoModal.js"></script>
-    <script src="static/js/inventory/admin/populateEditModal.js"></script>
-    <script src="static/js/inventory/populateLocations.js"></script>
-    <script src="static/js/inventory/admin/getFilteredInventoryAdmin.js"></script>
-    <script src="static/js/inventory/admin/populateInventoryLocations.js"></script>
-    <script src="static/js/inventory/admin/onPageLoad.js"></script>
-    <script src="static/js/signout.js"></script>
+
 </body>
 
 </html>

@@ -7,12 +7,18 @@
   <meta name="google" content="notranslate">
   <meta http-equiv="Content-Language" content="en">
     <title>Batch Importing</title>
-    <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="static/styles/uploadDatabaseStyle.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
     <script type=text/javascript>
         $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
       </script>
+    <script src="static/js/jQuery.js"></script>
+    <script src="static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="static/js/batchImport/getSpreadsheetURL.js"></script>
+    <script src="static/js/batchImport/onPageLoad.js"></script>
+    <script src="static/js/signout.js"></script>
+    <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/styles/uploadDatabaseStyle.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+
 </head>
 
 <body><img src="static/images/RULogo.png">
@@ -109,11 +115,7 @@
             </div>
         </div>
     </div>
-    <script src="static/js/jQuery.js"></script>
-    <script src="static/bootstrap/js/bootstrap.min.js"></script>
-    <script src="static/js/batchImport/getSpreadsheetURL.js"></script>
-    <script src="static/js/batchImport/onPageLoad.js"></script>
-    <script src="static/js/signout.js"></script>
+
 </body>
 
 </html>

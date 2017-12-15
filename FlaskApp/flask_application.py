@@ -12,6 +12,8 @@ from email.MIMEText import MIMEText
 import time
 from datetime import datetime, timedelta
 import spreadsheet
+from pycas import *
+import xml.etree.ElementTree as ET
 
 ###########################################################################################
 ##################################### ERROR CONSTANTS #####################################
@@ -49,8 +51,8 @@ mysql = MySQL()
 flask_application.config['UPLOAD_FOLDER'] = '/var/www/html/physics/lab/static/lab_pdfs'
 ALLOWED_EXTENSIONS = set(['pdf'])
 flask_application.config['MYSQL_DATABASE_USER'] = 'physics_user'
-flask_application.config['MYSQL_DATABASE_PASSWORD'] = '4GmfPWBC3BA5g7d'
-flask_application.config['MYSQL_DATABASE_DB'] = 'physics'
+flask_application.config['MYSQL_DATABASE_PASSWORD'] = 'rowanphysics2017'
+flask_application.config['MYSQL_DATABASE_DB'] = 'physicslab'
 flask_application.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(flask_application)
 
@@ -72,6 +74,11 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
+app_login_url = 'https://rucsm.org/physics/lab'
+cas_url = 'https://login.rowan.edu/cas'
+cas_client = CASClient(cas_url, auth_prefix='')
+
+
 ###########################################################################################
 ############################   WEBPAGE ENDPOINTS   ########################################
 ###########################################################################################
@@ -79,8 +86,40 @@ def allowed_file(filename):
 @flask_application.route("/")
 @flask_application.route("/index")
 def main():
-	return render_template("index.html")
+	if session.has_key('logged-in'):
+		return redirect(url_for('signout'))
+	ticket = request.args.get('ticket')
+    	cas_response = None
+	if ticket:
+        	try:
+            		cas_response = cas_client.perform_service_validate(
+                	ticket=ticket,
+                	service_url=app_login_url,
+                	)
+        	except:
+            		# CAS server is currently broken, try again later.
+            		return redirect(url_for('/index'))
+        #if cas_response and cas_response.success:
+        if cas_response:
+            	session['logged-in'] = True
+		return checkLogin(cas_response.user)
+	if session.has_key('logged-in'):
+		del(session['logged-in'])
+    	cas_login_url = cas_client.get_login_url(service_url=app_login_url)
+    	return redirect(cas_login_url)
 
+def checkLogin(username):
+	cursor = get_db().cursor()
+	cursor.callproc('sp_get_banner_id',[username])
+	result = cursor.fetchall()
+	print "RESULT: " + str(result[0][0])
+	if result[0][0] == 'Username not found':
+		session['username_to_add'] = username
+		return redirect(url_for('RequestAccess'))
+	else:
+		session['banner_id'] = result
+		return redirect(url_for('mainInventoryView'))
+	
 @flask_application.route("/manageLabRequest",methods=['GET'])
 def manageLabRequest():
 	cursor = get_db().cursor()
@@ -261,7 +300,7 @@ def test():
 ###########################################################################################
 
 @flask_application.route("/login",methods=['GET'])
-def login():
+def login_user():
 	result = MISSING_INPUT
 	conn = get_db()
 	cursor = conn.cursor()
@@ -444,8 +483,11 @@ def permissions():
 
 @flask_application.route("/signout",methods=['GET'])
 def signout():
-	session.clear();
-	return jsonify(result="CLEARED");
+	session.clear()
+	if(session.has_key('logged-in')):
+		del(session['logged-in'])
+    	cas_logout_url = cas_client.get_logout_url(service_url=app_login_url)
+    	return redirect(cas_logout_url)
 
 @flask_application.route("/getAllUserRequests",methods=['GET'])
 def getAllUserRequests():
@@ -1015,6 +1057,8 @@ def uploadFile():
 			topic = request.form['topic']
 			concept = request.form['concept']
 			subconcept = request.form['subconcept']
+			if subconcept == "" or subconcept == None or subconcept == "-1":
+				subconcept = None
 			lab_id = request.form['lab_id']
 			if lab_id == '':
 				lab_id = None
@@ -1572,6 +1616,11 @@ def removeConcept():
 		result = SUCCESS
 	cursor.close()
 	return jsonify(result=result)
+
+@flask_application.route('/getStoredUsername')
+def getStoredUsername():
+        return jsonify(username=session['username_to_add'])
+
 
 if __name__ == "__main__":
 	flask_application.debug = True
