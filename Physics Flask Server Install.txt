@@ -1,8 +1,21 @@
 ##Install Procedure for our Flask App  DO NOT COPY PASTE, THIS IS OVERVIEW##
-##Jared Hamlin 11/16/2017##
+##Jared Hamlin 12/14/2017##
 
 python -V
-yum install mod_wsgi-python27.x86_64  
+yum install httpd24-devel 
+
+#Installs mod_wsgi from source
+wget https://github.com/GrahamDumpleton/mod_wsgi/archive/4.5.22.tar.gz
+tar xvf 4.5.22.tar.gz
+cd mod_wsgi-4.5.22/
+./configure --with-python=/usr/bin/python27
+make; make install
+
+vi /etc/httpd/conf.d/wsgi.conf
+##add this line LoadModule wsgi_module modules/mod_wsgi.so
+service httpd restart
+
+
 pip install Flask
 pip install flask-mysql
 pip install pyopenssl
