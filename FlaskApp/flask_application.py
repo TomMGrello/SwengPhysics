@@ -11,7 +11,7 @@ from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 import time
 from datetime import datetime, timedelta
-import spreadsheet
+#import spreadsheet
 
 ###########################################################################################
 ##################################### ERROR CONSTANTS #####################################
@@ -46,7 +46,7 @@ CAN_RESTORE_DATABASE_INDEX = CAN_BACKUP_DATABASE_INDEX + 1
 
 flask_application = Flask(__name__)
 mysql = MySQL()
-flask_application.config['UPLOAD_FOLDER'] = '/var/www/html/physics/lab/static/lab_pdfs'
+flask_application.config['UPLOAD_FOLDER'] = 'C:\Users\Tom\git\sweng\SwengPhysics\FlaskApp\static\lab_pdfs'
 ALLOWED_EXTENSIONS = set(['pdf'])
 flask_application.config['MYSQL_DATABASE_USER'] = 'physics_user'
 flask_application.config['MYSQL_DATABASE_PASSWORD'] = '4GmfPWBC3BA5g7d'
