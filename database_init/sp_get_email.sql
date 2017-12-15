@@ -1,4 +1,4 @@
-USE physics;
+USE physics_lab;
 DELIMITER $$
 CREATE PROCEDURE `sp_get_email` (
   IN p_banner_id int(9)

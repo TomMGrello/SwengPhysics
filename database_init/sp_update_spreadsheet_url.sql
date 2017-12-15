@@ -1,4 +1,4 @@
-USE physics;
+USE physics_lab;
 -- update spreadsheet url stored procedure
 DELIMITER $$
 CREATE PROCEDURE `sp_update_spreadsheet_url`(

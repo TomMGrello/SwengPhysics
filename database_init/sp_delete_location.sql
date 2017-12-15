@@ -1,4 +1,4 @@
-USE physics;
+USE physics_lab;
 -- delete lab request stored procedure
 DELIMITER $$
 CREATE PROCEDURE `sp_delete_location`(

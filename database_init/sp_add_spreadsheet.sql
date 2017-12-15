@@ -1,4 +1,4 @@
-USE physics;
+USE physics_lab;
 -- add spreadsheet stored procedure
 DELIMITER $$
 CREATE PROCEDURE `sp_add_spreadsheet`(

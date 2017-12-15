@@ -1,4 +1,4 @@
-USE physics;
+USE physics_lab_lab;
 -- delete user request stored procedure
 DELIMITER $$
 CREATE PROCEDURE `sp_delete_user_request`(

@@ -1,4 +1,4 @@
-USE physics;
+USE physics_lab;
 
 DELIMITER $$
 CREATE PROCEDURE `sp_get_all_locations_by_type`(

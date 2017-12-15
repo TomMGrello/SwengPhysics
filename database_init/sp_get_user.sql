@@ -1,4 +1,4 @@
-USE physics;
+USE physics_lab;
 DELIMITER $$
 CREATE PROCEDURE `sp_get_user` (
   IN p_banner_id INT(9)

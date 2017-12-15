@@ -1,4 +1,4 @@
-USE physics;
+USE physics_lab_lab;
 -- add lab request stored procedure
 DELIMITER $$
 CREATE PROCEDURE `sp_add_object_request`(

@@ -1,5 +1,5 @@
-USE physics;
--- get all physics stored procedure
+USE physics_lab;
+-- get all physics_lab stored procedure
 DELIMITER $$
 CREATE PROCEDURE `sp_get_all_permissions`()
 

@@ -1,4 +1,4 @@
-USE physics;
+USE physics_lab;
 -- get all lab requests stored procedure
 DELIMITER $$
 CREATE PROCEDURE `sp_create_sample_inventory`(

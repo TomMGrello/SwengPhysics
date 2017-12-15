@@ -1,4 +1,4 @@
-USE physics;
+USE physics_lab;
 -- add user request stored procedure
 DELIMITER $$
 CREATE PROCEDURE `sp_add_inventory_item`(

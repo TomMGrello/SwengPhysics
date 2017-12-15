@@ -1,4 +1,4 @@
-USE physics;
+USE physics_lab;
 -- add concept stored procedure
 DELIMITER $$
 CREATE PROCEDURE `sp_add_concept`(
