@@ -11,7 +11,7 @@
       <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
       <script type=text/javascript>
         $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
-      </script> 
+      </script>
   </head>
    <body>
       <img src="static/images/RULogo.png">
@@ -35,6 +35,7 @@
                               <li role="presentation"><a href="manageUserRequests">User Requests</a></li>
                               <li role="presentation"><a href="manageUserPermissions">User Permissions</a></li>
                               <li role="presentation"><a href="manageLabRequest">Lab/Demo Requests</a></li>
+                              <li role="presentation"><a href="manageConcepts">Manage Concepts</a></li>
                               <li role="presentation"><a href="systemVariables">System Settings</a></li>
                           </ul>
                           <li class="dropdown">
@@ -45,7 +46,7 @@
                           </li>
                   </ul>
                   <ul class="nav navbar-nav navbar-right">
-                      <li><a id="signout" href="/signout">Log out</a></li>
+                      <li><a id="signout" href="signout">Log out</a></li>
                   </ul>
               </div>
           </div>

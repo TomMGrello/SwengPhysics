@@ -81,17 +81,20 @@ def allowed_file(filename):
 def main():
 	return render_template("index.html")
 
-@flask_application.route("/showPermissions",methods=['GET'])
-def showPermissions():
-	if session.has_key('banner_id') == False:
-		return redirect(url_for('main'))
-	return render_template("showPermissions.html");
-
 @flask_application.route("/manageLabRequest",methods=['GET'])
 def manageLabRequest():
+	cursor = get_db().cursor()
 	if session.has_key('banner_id') == False:
 		return redirect(url_for('main'))
-	return render_template("labsDemosRequests.html");
+
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_remove_record = user_permissions[CAN_REMOVE_RECORD_INDEX];
+
+	if int(can_remove_record) == 1:
+		return render_template("labsDemosRequests.html");
 
 @flask_application.route("/requestLab",methods=['GET'])
 def requestLab():
@@ -101,7 +104,29 @@ def requestLab():
 
 @flask_application.route("/systemVariables",methods=['GET'])
 def systemVariables():
-	return render_template("systemVariables.html")
+	cursor = get_db().cursor()
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_modify_record = user_permissions[CAN_MODIFY_RECORD_INDEX];
+
+	if int(can_modify_record) == 1:
+		return render_template("systemVariables.html")
+
+@flask_application.route("/manageConcepts",methods=['GET'])
+def manageConcepts():
+	cursor = get_db().cursor()
+	if session.has_key('banner_id') == False:
+		return redirect(url_for('main'))
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_modify_record = user_permissions[CAN_MODIFY_RECORD_INDEX];
+
+	if int(can_modify_record) == 1:
+		return render_template("manageConcepts.html");
 
 @flask_application.route("/uploadDatabase",methods=['GET'])
 def uploadDatabase():
@@ -178,9 +203,18 @@ def mainInventoryView():
 
 @flask_application.route("/manageUserPermissions",methods=['GET'])
 def manageUserPermissions():
+	cursor = get_db().cursor()
 	if session.has_key('banner_id') == False:
 		return redirect(url_for('main'))
-	return render_template("manageUserPermissions.html");
+
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_modify_permissions = user_permissions[CAN_MODIFY_PERMISSIONS_INDEX];
+
+	if int(can_modify_permissions) == 1:
+		return render_template("manageUserPermissions.html");
 
 @flask_application.route("/labsAndDemos",methods=['GET'])
 def labsAndDemos():
@@ -201,9 +235,18 @@ def labsAndDemos():
 
 @flask_application.route("/manageUserRequests",methods=['GET'])
 def ManageUser():
+	cursor = get_db().cursor()
 	if session.has_key('banner_id') == False:
 		return redirect(url_for('main'))
-	return render_template("manageNewUserRequests.html");
+
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_add_user = user_permissions[CAN_ADD_USER_INDEX];
+
+	if int(can_add_user) == 1:
+		return render_template("manageNewUserRequests.html");
 
 @flask_application.route("/requestAccess",methods=['GET'])
 def RequestAccess():
@@ -254,8 +297,7 @@ def addUserRequest():
 	banner_id = request.args.get('banner_id')
 	role = request.args.get('role')
 	email = request.args.get('email')
-	conn = get_db()
-	print "RUNNING ADD USER REQUEST"
+	cursor = conn.cursor()
 
 	if banner_id and first_name and last_name and role:
 		result = SUCCESS
@@ -418,10 +460,8 @@ def getAllUserRequests():
 	can_add_user = user_permissions[CAN_ADD_USER_INDEX]
 
 	if int(can_add_user) == 1:
-		print "allowed"
 		cursor.callproc('sp_get_all_user_requests',[])
 		requests = cursor.fetchall()
-		print requests
 		result = requests
 
 	cursor.close()
@@ -451,9 +491,16 @@ def getAllUsers():
 	conn = get_db()
 	cursor = conn.cursor()
 	result = NO_USERS
-	cursor.callproc('sp_get_all_users')
-	all_users = cursor.fetchall()
-	result = jsonify(result=all_users)
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_modify_permissions = user_permissions[CAN_MODIFY_PERMISSIONS_INDEX];
+
+	if int(can_modify_permissions) == 1:
+		cursor.callproc('sp_get_all_users')
+		all_users = cursor.fetchall()
+		result = jsonify(result=all_users)
 	cursor.close()
 	return result
 
@@ -618,12 +665,9 @@ def getFilteredInventory():
 	vendor_name = request.args.get('vendor_name')
 	if vendor_name == "":
 		vendor_name = None
-	building = request.args.get('building')
-	if building == "":
-		building = None
-	room_num = request.args.get('room_num')
-	if room_num == "":
-		room_num = None
+	location_id = request.args.get('location_id')
+	if location_id == "":
+		location_id = None
 	shelf = request.args.get('shelf')
 	if shelf == "":
 		shelf = None
@@ -641,7 +685,7 @@ def getFilteredInventory():
 	else:
 		session['prev_sort_field'] = order_by
 	session['asc_or_desc'] = asc_or_desc
-	cursor.callproc('sp_get_filtered_inventory_items',[name,None,vendor_name,building,room_num,shelf,order_by,asc_or_desc])
+	cursor.callproc('sp_get_filtered_inventory_items',[name,None,vendor_name,location_id,shelf,order_by,asc_or_desc])
 
 	result = cursor.fetchall()
 	cursor.close()
@@ -795,11 +839,9 @@ def addLabRequest():
 
 	cursor.callproc('sp_get_all_constants',[])
 	auto_accept = cursor.fetchall()[0][1]
-	print "AUTO ACCEPT: " + str(auto_accept)
 	if can_request_record == 1:
 		cursor.callproc('sp_add_lab_request',[lab_id,dates,time_needed,location_id,banner_id,num_teams,notes])
 		request_id = cursor.fetchall()[0][0]
-		print "REQUEST ID: " + str(request_id)
 		result = SUCCESS
 		if auto_accept == 0:
 			toaddr = session['email']
@@ -840,7 +882,6 @@ def acceptRequest(request_id):
 	if can_remove_record == 1 or auto_accept == 1:
 		cursor.callproc('sp_get_lab_request_by_id',[request_id])
 		request_data = cursor.fetchall()[0]
-		print request_data
 		dates = request_data[2]
 		time_needed = request_data[3]
 		classroom = request_data[15] + " " + request_data[16]
@@ -957,34 +998,46 @@ def getAllLabRequests():
 
 @flask_application.route("/uploadFile",methods=['GET', 'POST'])
 def uploadFile():
-	if request.method == 'POST':
-		f = request.files['file']
+	conn = get_db()
+	cursor = conn.cursor()
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
 
-		name = request.form['name']
-		input_type = request.form['type']
-		topic = request.form['topic']
-		concept = request.form['concept']
-		subconcept = request.form['subconcept']
-		lab_id = request.form['lab_id']
+	user_permissions = cursor.fetchall()[0]
+	can_modify_record = user_permissions[CAN_MODIFY_RECORD_INDEX];
 
-		#The result will be the newly added lab_id
-		addResult = addLab(input_type,name,topic,concept,subconcept,lab_id)
+	if int(can_modify_record) == 1:
+		if request.method == 'POST':
+			f = request.files['file']
 
-		try:
-			int(addResult[0][0])
-		except ValueError:
-			return "Add failed"
+			name = request.form['name']
+			input_type = request.form['type']
+			topic = request.form['topic']
+			concept = request.form['concept']
+			subconcept = request.form['subconcept']
+			lab_id = request.form['lab_id']
+			if lab_id == '':
+				lab_id = None
 
-		filename = str(addResult[0][0]) + ".pdf"
+			#The result will be the newly added lab_id
+			addResult = addLab(input_type,name,topic,concept,subconcept,lab_id)
 
-		if f.filename == '': #no change made to file, don't save any files
-			return redirect(url_for('labsAndDemos'))
+			try:
+				int(addResult[0][0])
+			except ValueError:
+				return "Add failed"
 
-		if f and allowed_file(f.filename):
-			f.save(os.path.join(flask_application.config['UPLOAD_FOLDER'], filename))
-			return redirect(url_for('labsAndDemos'))
-		return 'file type not supported. try again with a PDF'
-	return "<br>".join(os.listdir(flask_application.config['UPLOAD_FOLDER'],))
+			filename = str(addResult[0][0]) + ".pdf"
+
+			if f.filename == '': #no change made to file, don't save any files
+				return redirect(url_for('labsAndDemos'))
+
+			if f and allowed_file(f.filename):
+				f.save(os.path.join(flask_application.config['UPLOAD_FOLDER'], filename))
+				return redirect(url_for('labsAndDemos'))
+			return 'file type not supported. try again with a PDF'
+		return "<br>".join(os.listdir(flask_application.config['UPLOAD_FOLDER'],))
+	return "INCORRECT_PERMISSIONS"
 
 def addLab(input_type,name,topic,concept,subconcept,lab_id):
 	conn = get_db()
@@ -1183,10 +1236,6 @@ def importInventory():
 	cursor.close()
  	return redirect(url_for('mainInventoryView'))
 
-@flask_application.route('/upload')
-def upload():
-   return render_template('upload.html')
-
 @flask_application.route('/addLocation')
 def addLocation():
 	conn = get_db()
@@ -1287,11 +1336,53 @@ def getAllConstants():
 
 @flask_application.route('/populateTestData')
 def testData():
+	cursor = get_db().cursor()
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_modify_record = user_permissions[CAN_ADD_RECORD_INDEX];
+
+	if int(can_modify_record) == 1:
+		conn = get_db()
+		cursor = conn.cursor()
+		for i in range(1,25):
+			cursor.callproc('sp_add_inventory_item',['TEST OBJECT ' + str(i),str(i),hash(str(i)),i,'09/24/1995',50.0+i,'Verilog',(i%4)+1,'A' + str((i%4)+1),i])
+		result = 'FINISHED'
+	cursor.close()
+	return jsonify(result=result)
+
+@flask_application.route('/updateSpreadsheetURL')
+def updateSpreadsheetURL():
 	conn = get_db()
 	cursor = conn.cursor()
-	for i in range(1,25):
-		cursor.callproc('sp_add_inventory_item',['TEST OBJECT ' + str(i),str(i),hash(str(i)),i,'09/24/1995',50.0+i,'Verilog',(i%4)+1,'A' + str((i%4)+1),i])
-	result = 'FINISHED'
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_modify_record = user_permissions[CAN_MODIFY_RECORD_INDEX];
+
+	if int(can_modify_record) == 1:
+		new_url = request.args.get('new_url')
+		sheet_type = request.args.get('sheet_type')
+		cursor.callproc('sp_update_spreadsheet_url',[sheet_type,new_url])
+		result = cursor.fetchall()
+		try:
+			if result[0][0]:
+				cursor.callproc('sp_add_spreadsheet',[sheet_type,new_url])
+		except:
+			result = SUCCESS
+		result = SUCCESS
+	cursor.close()
+	return jsonify(result=result)
+
+@flask_application.route('/getSpreadsheetURL')
+def getSpreadsheetURL():
+	conn = get_db()
+	cursor = conn.cursor()
+	sheet_type = request.args.get('sheet_type')
+	cursor.callproc('sp_get_all_spreadsheets',[sheet_type])
+	result = cursor.fetchall()
 	cursor.close()
 	return jsonify(result=result)
 
@@ -1322,4 +1413,167 @@ def remainingWeeks():
 
 	remaining_weeks = getWeeksBetweenDates(end_date,compare_date)
 	total_weeks = getWeeksBetweenDates(end_date,start_date)
+	cursor.close()
 	return jsonify({'remaining':remaining_weeks,'total':total_weeks})
+
+@flask_application.route('/addTopic')
+def addTopic():
+	conn = get_db()
+	cursor = conn.cursor()
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_add_record = user_permissions[CAN_ADD_RECORD_INDEX];
+
+	if int(can_add_record) == 1:
+		topic_name = request.args.get('name')
+		cursor.callproc('sp_add_topic',[topic_name])
+		cursor.fetchall()
+		result = SUCCESS
+	cursor.close()
+	return jsonify(result=result)
+
+@flask_application.route('/removeTopic')
+def removeTopic():
+	conn = get_db()
+	cursor = conn.cursor()
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_remove_record = user_permissions[CAN_REMOVE_RECORD_INDEX];
+
+	if int(can_remove_record) == 1:
+		topic_id = request.args.get('topic_id')
+		cursor.callproc('sp_delete_topic',[topic_id])
+		cursor.fetchall()
+		result = SUCCESS
+	cursor.close()
+	return jsonify(result=result)
+
+@flask_application.route('/getConcepts')
+def getConcepts():
+	conn = get_db()
+	cursor = conn.cursor()
+	cursor.callproc('sp_get_all_concepts',[])
+	result = cursor.fetchall()
+	cursor.close()
+	return jsonify(result=result)
+
+@flask_application.route('/getTopics')
+def getTopics():
+	conn = get_db()
+	cursor = conn.cursor()
+	cursor.callproc('sp_get_all_topics',[])
+	result = cursor.fetchall()
+	cursor.close()
+	return jsonify(result=result)
+
+@flask_application.route('/getSubconcepts')
+def getSubconcepts():
+	conn = get_db()
+	cursor = conn.cursor()
+	parent_concept_id = request.args.get('concept_id')
+	if parent_concept_id == "":
+		parent_concept_id = None
+	cursor.callproc('sp_get_all_subconcepts',[parent_concept_id])
+	result = cursor.fetchall()
+	cursor.close()
+	return jsonify(result=result)
+
+@flask_application.route('/addConcept')
+def addConcept():
+	conn = get_db()
+	cursor = conn.cursor()
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_add_record = user_permissions[CAN_ADD_RECORD_INDEX];
+
+	if int(can_add_record) == 1:
+		concept_name = request.args.get('name')
+		cursor.callproc('sp_add_concept',[concept_name])
+		cursor.fetchall()
+		result = SUCCESS
+	cursor.close()
+	return jsonify(result=result)
+
+@flask_application.route('/addSubconcept')
+def addSubconcept():
+	conn = get_db()
+	cursor = conn.cursor()
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_add_record = user_permissions[CAN_ADD_RECORD_INDEX];
+
+	if int(can_add_record) == 1:
+		subconcept_name = request.args.get('name')
+		parent_concept_id = request.args.get('concept_id')
+		cursor.callproc('sp_add_subconcept',[subconcept_name,parent_concept_id])
+		cursor.fetchall()
+		result = SUCCESS
+	cursor.close()
+	return jsonify(result=result)
+
+@flask_application.route('/moveSubconcept')
+def moveSubconcept():
+	conn = get_db()
+	cursor = conn.cursor()
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_add_record = user_permissions[CAN_ADD_RECORD_INDEX];
+
+	if int(can_add_record) == 1:
+		subconcept_name = request.args.get('name')
+		subconcept_id = request.args.get('subconcept_id')
+		cursor.callproc('sp_delete_subconcept',[subconcept_id])
+		cursor.callproc('sp_add_concept',[subconcept_name])
+		result = SUCCESS
+	cursor.close()
+	return jsonify(result=result)
+
+@flask_application.route('/removeSubconcept')
+def removeSubconcept():
+	conn = get_db()
+	cursor = conn.cursor()
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_remove_record = user_permissions[CAN_REMOVE_RECORD_INDEX];
+
+	if int(can_remove_record) == 1:
+		subconcept_id = request.args.get('subconcept_id')
+		cursor.callproc('sp_delete_subconcept',[subconcept_id])
+		result = SUCCESS
+	cursor.close()
+	return jsonify(result=result)
+
+@flask_application.route('/removeConcept')
+def removeConcept():
+	conn = get_db()
+	cursor = conn.cursor()
+	banner_id = session['banner_id']
+	cursor.callproc('sp_get_permissions',[banner_id])
+
+	user_permissions = cursor.fetchall()[0]
+	can_remove_record = user_permissions[CAN_REMOVE_RECORD_INDEX];
+
+	if int(can_remove_record) == 1:
+		concept_id = request.args.get('concept_id')
+		cursor.callproc('sp_remove_subconcepts_by_concept',[concept_id])
+		cursor.callproc('sp_delete_concept',[concept_id])
+		result = SUCCESS
+	cursor.close()
+	return jsonify(result=result)
+
+if __name__ == "__main__":
+	flask_application.debug = True
+	flask_application.secret_key = 'rowanphysicssweng'
+	flask_application.run(host=os.getenv('LISTEN', '0.0.0.0'))

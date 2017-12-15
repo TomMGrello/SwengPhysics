@@ -14,63 +14,62 @@
    <body>
       <img src="static/images/RULogo.png">
       <nav class="navbar navbar-default" id="mainnavbar">
-         <div class="container-fluid">
-            <div class="navbar-header"><a class="navbar-brand visible-xs-block navbar-link" href="#">Menu </a>
-               <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
-            </div>
-            <div class="collapse navbar-collapse" id="navcol-1">
-               <ul class="nav navbar-nav">
-                  <li class="dropdown">
-                     <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">View <span class="caret"></span></a>
-                     <ul role="menu" class="dropdown-menu">
-                        <li role="presentation"><a href="inventory">Inventory </a></li>
-                        <li role="presentation"><a href="labsAndDemos">Labs &amp; Demos</a></li>
-                     </ul>
-                  </li>
-                  <li class="dropdown">
-                     <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Manage <span class="caret"></span></a>
-                     <ul role="menu" class="dropdown-menu">
-                        <li role="presentation"><a href="manageUserRequests">User Requests</a></li>
-                        <li role="presentation"><a href="manageUserPermissions">User Permissions</a></li>
-                        <li role="presentation"><a href="manageLabRequest">Lab/Demo Requests</a></li>
-                        <li role="presentation"><a href="systemVariables">System Settings</a></li>
-                     </ul>
-                  <li class="dropdown">
-                     <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Database <span class="caret"></span></a>
-                     <ul role="menu" class="dropdown-menu">
-                        <li role="presentation"><a href="uploadDatabase">Import Database</a></li>
-                     </ul>
-                  </li>
-               </ul>
-               <ul class="nav navbar-nav navbar-right">
-                  <li><a id="signout" href="signout">Log out</a></li>
-               </ul>
-            </div>
-         </div>
+          <div class="container-fluid">
+              <div class="navbar-header"><a class="navbar-brand visible-xs-block navbar-link" href="#">Menu </a>
+                  <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+              </div>
+              <div class="collapse navbar-collapse" id="navcol-1">
+                  <ul class="nav navbar-nav">
+                      <li class="dropdown">
+                          <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">View <span class="caret"></span></a>
+                          <ul role="menu" class="dropdown-menu">
+                              <li role="presentation"><a href="inventory">Inventory </a></li>
+                              <li role="presentation"><a href="labsAndDemos">Labs &amp; Demos</a></li>
+                          </ul>
+                      </li>
+                      <li class="dropdown">
+                          <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Manage <span class="caret"></span></a>
+                          <ul role="menu" class="dropdown-menu">
+                              <li role="presentation"><a href="manageUserRequests">User Requests</a></li>
+                              <li role="presentation"><a href="manageUserPermissions">User Permissions</a></li>
+                              <li role="presentation"><a href="manageLabRequest">Lab/Demo Requests</a></li>
+                              <li role="presentation"><a href="manageConcepts">Manage Concepts</a></li>
+                              <li role="presentation"><a href="systemVariables">System Settings</a></li>
+                          </ul>
+                          <li class="dropdown">
+                              <a data-toggle="dropdown" aria-expanded="false" href="#" class="dropdown-toggle">Database <span class="caret"></span></a>
+                              <ul role="menu" class="dropdown-menu">
+                                  <li role="presentation"><a href="uploadDatabase">Import Database</a></li>
+                              </ul>
+                          </li>
+                  </ul>
+                  <ul class="nav navbar-nav navbar-right">
+                      <li><a id="signout" href="signout">Log out</a></li>
+                  </ul>
+              </div>
+          </div>
       </nav>
       <div class="col-lg-5 col-lg-offset-1 col-md-10 col-md-offset-1 col-sm-4">
          <div class="panel panel-default">
             <div class="panel-heading">
-               <h3 class="text-center text-primary panel-title"><strong>Manage Concept</strong></h3>
+               <h3 class="text-center text-primary panel-title"><strong>Manage Concepts</strong></h3>
             </div>
             <div class="panel-body">
                <form class="form">
-                  <label class="" for="orderBy">Choose the Concept * </label>
+                  <label class="" for="orderBy">Choose a concept </label>
                   <div class="input-group">
-                     <select class="form-control">
-                        <option> </option>
-                        <option>Intro to Mech</option>
+                     <select id="remove_concept_select" class="form-control">
                      </select>
                      <span class="input-group-btn">
-                     <button class="btn btn-danger" type="button">Remove</button>
+                     <button id="remove_concept_btn" class="btn btn-danger" type="button">Remove</button>
                      </span>
                   </div>
                   <hr>
-                  <label class="" for="orderBy">Add Concept </label>
+                  <label class="" for="orderBy">Add Concept</label>
                   <div class="input-group">
-                     <input type="text" class="form-control" placeholder="add concept here">
+                     <input id="add_concept_input" type="text" class="form-control" placeholder="Concept name">
                      <span class="input-group-btn">
-                     <button class="btn btn-success" type="button">Add</button>
+                     <button id="add_concept_btn" class="btn btn-success" type="button">Add</button>
                      </span>
                   </div>
                   <hr>
@@ -81,35 +80,35 @@
       <div class="col-lg-5 col-lg-offset-0 col-md-10 col-md-offset-1 col-sm-4">
          <div class="panel panel-default">
             <div class="panel-heading">
-               <h3 class="text-center text-primary panel-title"><strong>Manage Subconcept</strong></h3>
+               <h3 class="text-center text-primary panel-title"><strong>Manage Subconcepts</strong></h3>
             </div>
             <div class="panel-body">
                <form class="form">
-                  <label class="" for="orderBy">Choose the Subconcept * </label>
+                  <label class="" for="orderBy">Choose a subconcept</label>
                   <div class="input-group">
-                     <select class="form-control">
-                        <option> </option>
-                        <option>Intro to Mech</option>
+                     <select id="remove_subconcept_select" class="form-control">
                      </select>
                      <span class="input-group-btn">
-                     <button class="btn btn-danger" type="button">Remove</button>
+                     <button id="remove_subconcept_btn" class="btn btn-danger" type="button">Remove</button>
                      </span>
                   </div>
+                  <button id="move_subconcept_btn" class="btn btn-primary" type="button">Move to Concept</button>
                   <hr>
                   <label class="" for="orderBy">Add Subconcept </label>
+                  <p><small>Choose the parent concept</small></p>
+                  <select id="add_subconcept_select" class="form-control"></select><br>
                   <div class="input-group">
-                     <input type="text" class="form-control" placeholder="add subconept here">
+                     <input id="add_subconcept_input" type="text" class="form-control" placeholder="Subconcept name">
                      <span class="input-group-btn">
-                     <button class="btn btn-success" type="button">Add</button>
+                     <button id="add_subconcept_btn" class="btn btn-success" type="button">Add</button>
                      </span>
                   </div>
                   <hr>
-                  <button class="btn btn-primary" type="button">Move to Concept</button>
                </form>
             </div>
          </div>
       </div>
-      <div class="col-lg-5 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-4">
+      <div class="col-lg-5 col-lg-offset-1 col-md-10 col-md-offset-1 col-sm-4">
          <div class="panel panel-default">
             <div class="panel-heading">
                <h3 class="text-center text-primary panel-title"><strong>Manage Topics</strong></h3>
@@ -142,6 +141,13 @@
       <script src="static/js/manageConcepts/addTopic.js"></script>
       <script src="static/js/manageConcepts/removeTopic.js"></script>
       <script src="static/js/manageConcepts/getTopics.js"></script>
+      <script src="static/js/manageConcepts/getConcepts.js"></script>
+      <script src="static/js/manageConcepts/getSubconcepts.js"></script>
+      <script src="static/js/manageConcepts/addConcept.js"></script>
+      <script src="static/js/manageConcepts/addSubconcept.js"></script>
+      <script src="static/js/manageConcepts/moveSubconcept.js"></script>
+      <script src="static/js/manageConcepts/removeSubconcept.js"></script>
+      <script src="static/js/manageConcepts/removeConcept.js"></script>
       <script src="static/js/manageConcepts/onPageLoad.js"></script>
 
    </body>

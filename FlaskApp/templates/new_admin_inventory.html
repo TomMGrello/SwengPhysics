@@ -10,19 +10,6 @@
     <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="static/styles/updatedAdminPage.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
-    <script src="static/js/jQuery.js"></script>
-    <script src="static/bootstrap/js/bootstrap.min.js"></script>
-    <script src="static/js/inventory/admin/removeInventoryItem.js"></script>
-    <script src="static/js/inventory/admin/modifyInventoryItem.js"></script>
-    <script src="static/js/inventory/admin/addInventoryItem.js"></script>
-    <script src="static/js/inventory/admin/setSerialNumToRemove.js"></script>
-    <script src="static/js/inventory/normal/populateAssociatedInfoLabs.js"></script>
-    <script src="static/js/inventory/normal/populateInfoModal.js"></script>
-    <script src="static/js/inventory/admin/populateEditModal.js"></script>
-    <script src="static/js/inventory/admin/getFilteredInventoryAdmin.js"></script>
-    <script src="static/js/inventory/admin/populateInventoryLocations.js"></script>
-    <script src="static/js/inventory/admin/onPageLoad.js"></script>
-    <script src="static/js/signout.js"></script>
     <script type=text/javascript>
         $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
       </script>
@@ -50,6 +37,7 @@
                           <li role="presentation"><a href="manageUserRequests">User Requests</a></li>
                           <li role="presentation"><a href="manageUserPermissions">User Permissions</a></li>
                           <li role="presentation"><a href="manageLabRequest">Lab/Demo Requests</a></li>
+                          <li role="presentation"><a href="manageConcepts">Manage Concepts</a></li>
                           <li role="presentation"><a href="systemVariables">System Settings</a></li>
                       </ul>
                       <li class="dropdown">
@@ -94,11 +82,9 @@
                         <div class="row">
                             <form class="form">
                                 <div class="form-group">
-                                    <label class="" for="building_input">Building</label>
-                                    <input type="text" class="form-control" id="building_input" placeholder="Building...">
                                     <div class="form-group">
-                                        <label class="" for="room_num_input">Room Number</label>
-                                        <input type="text" class="form-control" id="room_num_input" placeholder="Room number...">
+                                        <label class="" for="room_num_input">Location</label>
+                                        <select type="text" class="form-control" id="location_select" ></Select>
                                     </div>
                                     <div class="form-group">
                                         <label class="" for="shelf_input">Shelf</label>
@@ -303,6 +289,20 @@
             </div>
         </div>
     </div>
+    <script src="static/js/jQuery.js"></script>
+    <script src="static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="static/js/inventory/admin/removeInventoryItem.js"></script>
+    <script src="static/js/inventory/admin/modifyInventoryItem.js"></script>
+    <script src="static/js/inventory/admin/addInventoryItem.js"></script>
+    <script src="static/js/inventory/admin/setSerialNumToRemove.js"></script>
+    <script src="static/js/inventory/normal/populateAssociatedInfoLabs.js"></script>
+    <script src="static/js/inventory/normal/populateInfoModal.js"></script>
+    <script src="static/js/inventory/admin/populateEditModal.js"></script>
+    <script src="static/js/inventory/populateLocations.js"></script>
+    <script src="static/js/inventory/admin/getFilteredInventoryAdmin.js"></script>
+    <script src="static/js/inventory/admin/populateInventoryLocations.js"></script>
+    <script src="static/js/inventory/admin/onPageLoad.js"></script>
+    <script src="static/js/signout.js"></script>
 </body>
 
 </html>

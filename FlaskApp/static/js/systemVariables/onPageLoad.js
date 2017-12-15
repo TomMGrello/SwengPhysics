@@ -2,6 +2,7 @@ $(function() {
     getAllConstants();
     getRooms();
     getAllCourses();
+    getSpreadsheetURL();
     document.getElementById('btn_auto_accept').onclick = function(){
       updateAutoAccept();
     };
@@ -30,23 +31,35 @@ $(function() {
       var storage_select = document.getElementById('storage_select');
       var location_id = storage_select.options[storage_select.selectedIndex].value;
       removeLocation(location_id);
-    }
+    };
 
     document.getElementById('btn_remove_lab_classroom').onclick = function(){
       var lab_classrooms_select = document.getElementById('lab_classrooms_select');
       var location_id = lab_classrooms_select.options[lab_classrooms_select.selectedIndex].value;
       removeLocation(location_id);
-    }
+    };
 
     document.getElementById('btn_add_lab_classroom').onclick = function(){
       var building = document.getElementById('lab_building_name').value;
       var room_num = document.getElementById('lab_room_number').value;
       addLocation("classroom",building,room_num);
-    }
+    };
 
     document.getElementById('btn_add_storage').onclick = function(){
       var building = document.getElementById('storage_building_name').value;
       var room_num = document.getElementById('storage_room_number').value;
       addLocation("inventory",building,room_num);
-    }
+    };
+
+    document.getElementById('btn_import_spreadsheet').onclick = function(){
+      var new_url = document.getElementById('import_spreadsheet').value;
+      updateSpreadsheetURL(new_url,'import_inventory');
+    };
+
+    document.getElementById('btn_export_spreadsheet').onclick = function(){
+      var new_url = document.getElementById('export_spreadsheet').value;
+      updateSpreadsheetURL(new_url,'export_master');
+    };
+
+
 });

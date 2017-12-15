@@ -1,14 +1,15 @@
 var getFilteredInventoryAdmin = function(order_by) {
     var filter_name = document.getElementById('search_input').value.toLowerCase();
     var filter_vendor = document.getElementById('vendor_input').value.toLowerCase();
-    var filter_building = document.getElementById('building_input').value.toLowerCase();
-    var filter_room_num = document.getElementById('room_num_input').value.toLowerCase();
+    var select_location = document.getElementById('location_select');
+    var location_id;
+    if(select_location.options[select_location.selectedIndex])
+      location_id = select_location.options[select_location.selectedIndex].value;
     var filter_shelf = document.getElementById('shelf_input').value.toLowerCase();
     $.getJSON($SCRIPT_ROOT + '/getFilteredInventory', {
             name: filter_name,
             vendor_name: filter_vendor,
-            building: filter_building,
-            room_num: filter_room_num,
+            location_id:location_id,
             shelf: filter_shelf,
             order_by:order_by
         },

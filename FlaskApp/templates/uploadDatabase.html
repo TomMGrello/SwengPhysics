@@ -36,6 +36,7 @@
                           <li role="presentation"><a href="manageUserRequests">User Requests</a></li>
                           <li role="presentation"><a href="manageUserPermissions">User Permissions</a></li>
                           <li role="presentation"><a href="manageLabRequest">Lab/Demo Requests</a></li>
+                          <li role="presentation"><a href="manageConcepts">Manage Concepts</a></li>
                           <li role="presentation"><a href="systemVariables">System Settings</a></li>
                       </ul>
                       <li class="dropdown">
@@ -69,7 +70,7 @@
 		<div class="input-group input-file" name="Fichier1">
         </div>
         <div id = "uploadbuttons"class="form-group">
-		<a target="_blank" href="https://docs.google.com/a/students.rowan.edu/spreadsheets/d/1I4d5vY20A4lX3UGbamvTNCTdueZVRSBzf2gGb5XVV5A/edit?usp=sharing" class="btn btn-primary ">Open Google Sheets</a>
+		<a id="btn_inventory" target="_blank" href="" class="btn btn-primary ">Open Google Sheets</a>
 		<a href="/importInventory" class="btn btn-danger pull-right">Import</a>
 	</div>
 	</div>
@@ -91,7 +92,7 @@
 		<div class="input-group input-file" name="Fichier1">
         </div>
         <div id = "uploadbuttons"class="form-group">
-		<button type="submit" class="btn btn-primary ">Open Google Sheets</button>
+    <a id="btn_labs" target="_blank" href="" class="btn btn-primary ">Open Google Sheets</a>
 		<button type="reset" class="btn btn-danger pull-right">Import</button>
 	</div>
 	</div>
@@ -110,7 +111,8 @@
     </div>
     <script src="static/js/jQuery.js"></script>
     <script src="static/bootstrap/js/bootstrap.min.js"></script>
-    <script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
+    <script src="static/js/batchImport/getSpreadsheetURL.js"></script>
+    <script src="static/js/batchImport/onPageLoad.js"></script>
     <script src="static/js/signout.js"></script>
 </body>
 
