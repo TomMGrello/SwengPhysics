@@ -50,7 +50,7 @@ flask_application.config['UPLOAD_FOLDER'] = 'G:\Documents\GitHub\Sweng\SwengPhys
 ALLOWED_EXTENSIONS = set(['pdf'])
 flask_application.config['MYSQL_DATABASE_USER'] = 'physics_user'
 flask_application.config['MYSQL_DATABASE_PASSWORD'] = '4GmfPWBC3BA5g7d'
-flask_application.config['MYSQL_DATABASE_DB'] = 'physics'
+flask_application.config['MYSQL_DATABASE_DB'] = 'physicslab'
 flask_application.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(flask_application)
 

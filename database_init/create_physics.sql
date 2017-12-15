@@ -1,5 +1,6 @@
+DROP DATABASE IF EXISTS physicslab;
 CREATE DATABASE physicslab;
-/*source create_database_user.sql;*/
+source create_database_user.sql;
 
 CREATE TABLE `physicslab`.`constants`(
   `constant_id` INT(36) auto_increment,

@@ -8,15 +8,20 @@ CREATE PROCEDURE `sp_add_location`(
 )
 
 BEGIN
-REPLACE into location (
-      building,
-      room_num,
-      type
-) values (
-      p_building,
-      p_room_num,
-      p_type
-);
+if (select exists (select 1 from location where building = p_building and room_num = p_room_num and type = p_type)) THEN
+    select location_id from location where building = p_building and room_num = p_room_num and type = p_type;
+ELSE
+  REPLACE into location (
+        building,
+        room_num,
+        type
+  ) values (
+        p_building,
+        p_room_num,
+        p_type
+  );
+  select LAST_INSERT_ID();
+END IF;
 commit;
 END $$
 
