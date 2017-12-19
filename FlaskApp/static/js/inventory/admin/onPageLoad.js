@@ -46,9 +46,6 @@ $(function() {
         var selected_location = location_select.options[location_select.selectedIndex].value;
         modifyInventoryItem(document.getElementById('modify_name').value, document.getElementById('modify_serial').value, document.getElementById('modify_invoice_id').value, document.getElementById('modify_price').value, selected_location, document.getElementById('modify_shelf').value, document.getElementById('modify_quantity').value);
     });
-    document.getElementById('signout').addEventListener('click', function() {
-        signout();
-    });
     populateInventoryLocations();
     populateLocations();
     return false;

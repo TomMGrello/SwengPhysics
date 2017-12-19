@@ -137,6 +137,9 @@ def manageLabRequest():
 
 	if int(can_remove_record) == 1:
 		return render_template("labsDemosRequests.html");
+	else:
+                cursor.close()
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route("/requestLab",methods=['GET'])
 def requestLab():
@@ -155,6 +158,9 @@ def systemVariables():
 
 	if int(can_modify_record) == 1:
 		return render_template("systemVariables.html")
+	else:
+                cursor.close()
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route("/manageConcepts",methods=['GET'])
 def manageConcepts():
@@ -169,6 +175,9 @@ def manageConcepts():
 
 	if int(can_modify_record) == 1:
 		return render_template("manageConcepts.html");
+	else:
+                cursor.close()
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route("/uploadDatabase",methods=['GET'])
 def uploadDatabase():
@@ -187,6 +196,9 @@ def uploadDatabase():
 
 	if int(can_modify_record) == 1:
 		return render_template("uploadDatabase.html")
+	else:
+                cursor.close()
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route("/manageInventoryRequests",methods=['GET'])
 def manageInventoryRequests():
@@ -203,6 +215,9 @@ def manageInventoryRequests():
 
 	if int(can_modify_record) == 1:
 		return render_template("inventoryRequests.html")
+	else:
+                cursor.close()
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route("/requestInventory",methods=['GET'])
 def requestInventory():
@@ -219,6 +234,8 @@ def requestInventory():
 
 	if int(can_request_record) == 1:
 		return render_template("requestInventory.html")
+	else:
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route("/inventory",methods=['GET'])
 def mainInventoryView():
@@ -257,6 +274,8 @@ def manageUserPermissions():
 
 	if int(can_modify_permissions) == 1:
 		return render_template("manageUserPermissions.html");
+	else:
+		return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route("/labsAndDemos",methods=['GET'])
 def labsAndDemos():
@@ -289,6 +308,8 @@ def ManageUser():
 
 	if int(can_add_user) == 1:
 		return render_template("manageNewUserRequests.html");
+	else:
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route("/requestAccess",methods=['GET'])
 def RequestAccess():
@@ -369,8 +390,11 @@ def deleteUserRequest():
 			result = SUCCESS
 			cursor.callproc('sp_delete_user_request',[banner_id, role])
 
-	cursor.close()
-	return jsonify(result=result)
+		cursor.close()
+		return jsonify(result=result)
+	else:
+                cursor.close()
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route("/acceptUserRequest",methods=['GET'])
 def acceptUserRequest():
@@ -405,7 +429,9 @@ def acceptUserRequest():
 		cursor.callproc('sp_change_permissions',[banner_id,perms[0],perms[1],perms[2],perms[3],perms[4],perms[5],perms[6],perms[7],perms[8]])
 		cursor.callproc('sp_delete_user_request',[banner_id,role])
 		result = SUCCESS
-	return jsonify(result=result)
+		return jsonify(result=result)
+	else:
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route("/addUser",methods=['GET','POST'])
 def addUser():
@@ -432,8 +458,11 @@ def addUser():
 		result = SUCCESS
 		cursor.callproc('sp_add_user',[banner_id, first_name, middle_name, last_name, username, role, email])
 		result = cursor.fetchall()
-	cursor.close()
-	return jsonify(result=result)
+		cursor.close()
+		return jsonify(result=result)
+	else:
+		cursor.close()
+                return redirect(url_for('insufficientPermissions'))	
 
 @flask_application.route("/changePermissions",methods=['GET'])
 def changePermissions():
@@ -458,11 +487,12 @@ def changePermissions():
 		can_remove_record = request.args.get('can_remove_record')
 		can_backup_database = request.args.get('can_backup_database')
 		can_restore_database = request.args.get('can_restore_database')
+	else:
+                return redirect(url_for('insufficientPermissions'))
 
 	if banner_id and can_add_user and can_remove_user and can_modify_permissions and can_request_record and can_add_record and can_modify_record and can_remove_record and can_backup_database and can_restore_database:
 		result = SUCCESS
 		cursor.callproc('sp_change_permissions',[banner_id, can_add_user, can_remove_user, can_modify_permissions, can_request_record, can_add_record, can_modify_record, can_remove_record, can_backup_database, can_restore_database])
-
 	cursor.close()
 	return jsonify(result=result)
 
@@ -472,8 +502,6 @@ def permissions():
 	cursor = conn.cursor()
 	result = NO_BANNER_ID_ERROR
 	banner_id = session['banner_id']
-
-	print 'BANNER FOR RETREIVAL: ' + str(banner_id)
 
 	if banner_id:
 		cursor.callproc('sp_get_permissions',[banner_id])
@@ -509,8 +537,11 @@ def getAllUserRequests():
 		requests = cursor.fetchall()
 		result = requests
 
-	cursor.close()
-	return jsonify(result=result)
+		cursor.close()
+		return jsonify(result=result)
+	else:
+		cursor.close()
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route("/allUserPermissions",methods=['GET'])
 def allUserPermissions():
@@ -527,9 +558,11 @@ def allUserPermissions():
 		cursor.callproc('sp_get_all_permissions')
 		all_permissions = cursor.fetchall()
 		result = jsonify(result=all_permissions)
-	print(result)
-	cursor.close()
-	return result
+		cursor.close()
+		return result
+	else:	
+		cursor.close()
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route("/getAllUsers",methods=['GET'])
 def getAllUsers():
@@ -546,8 +579,11 @@ def getAllUsers():
 		cursor.callproc('sp_get_all_users')
 		all_users = cursor.fetchall()
 		result = jsonify(result=all_users)
-	cursor.close()
-	return result
+		cursor.close()
+		return result
+	else:
+		cursor.close()
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route("/addInventoryItem",methods=['GET'])
 def addInventoryItem():
@@ -574,8 +610,10 @@ def addInventoryItem():
 		cursor.fetchall()
 		result = SUCCESS
 
-	cursor.close()
-	return jsonify(result=result)
+		cursor.close()
+		return jsonify(result=result)
+	else:
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route("/getLab",methods=['GET'])
 def getLab():
@@ -640,8 +678,10 @@ def modifyInventoryItem():
 
 		cursor.callproc('sp_add_inventory_item',[name, serial, int(hashed_serial), int(invoice_id), None, float(price), None, location_id, shelf, int(quantity)])
 		result = SUCCESS
-	cursor.close()
-	return jsonify(result=result)
+		cursor.close()
+		return jsonify(result=result)
+	else:
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route("/removeInventoryItem",methods=['GET'])
 def removeInventoryItem():
@@ -659,8 +699,10 @@ def removeInventoryItem():
 		hashed_serial = hash(serial)
 		cursor.callproc('sp_remove_inventory_item', [int(hashed_serial)])
 		result = SUCCESS
-	cursor.close()
-	return jsonify(result=result)
+		cursor.close()
+		return jsonify(result=result)
+	else:
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route("/getUser",methods=['GET'])
 def getUser():
@@ -677,8 +719,10 @@ def getUser():
 		cursor.callproc('sp_get_permissions', [int(userBanner)])
 		user_permissions = cursor.fetchall()
 		result = jsonify(result=user_permissions)
-	cursor.close()
-	return result
+		cursor.close()
+		return result
+	else:
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route("/removeUser",methods=['GET'])
 def removeUser():
@@ -695,8 +739,10 @@ def removeUser():
 		banner_id = request.args.get('banner_id')
 		cursor.callproc('sp_remove_user', [int(banner_id)])
 		result = SUCCESS
-	cursor.close()
-	return jsonify(result=result)
+		cursor.close()
+		return jsonify(result=result)
+	else:
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route("/getFilteredInventory",methods=['GET'])
 def getFilteredInventory():
@@ -798,8 +844,10 @@ def updateConstants():
 		end_date = request.args.get('semester_end_date')
 		cursor.callproc('sp_update_constants', [auto_accept,required_num_teams,start_date,end_date])
 		result = SUCCESS
-	cursor.close()
-	return jsonify(result=result)
+		cursor.close()
+		return jsonify(result=result)
+	else:
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route("/addItemToLab",methods=['GET'])
 def addItemToLab():
@@ -821,8 +869,9 @@ def addItemToLab():
 		cursor.fetchall()
 		result = SUCCESS
 
-	return jsonify(result=result)
-
+		return jsonify(result=result)
+	else:
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route("/removeLab",methods=['GET'])
 def removeLab():
@@ -842,7 +891,9 @@ def removeLab():
 		cursor.callproc('sp_remove_lab',[lab_id])
 		cursor.fetchall()
 
-	return jsonify(result=result)
+		return jsonify(result=result)
+	else:
+                return redirect(url_for('insufficientPermissions'))
 
 	#Using Google's SMTP server. This requires a "no-reply" account to be created on GMail for our
 	#application to work correctly.
@@ -906,8 +957,11 @@ def addLabRequest():
 			sendEmail(toaddr,body,subject)
 		else:
 			acceptRequest(request_id)
-	cursor.close()
-	return jsonify(result=result)
+		cursor.close()
+		return jsonify(result=result)
+
+	else:
+                return redirect(url_for('insufficientPermissions'))
 
 def acceptRequest(request_id):
 	conn = get_db()
@@ -981,7 +1035,7 @@ def acceptLabRequest():
 	if permission == 1:
 		return acceptRequest(request.args.get('request_id'))
 	else:
-		return jsonify(result=result)
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route("/rejectLabRequest",methods=['GET'])
 def rejectLabRequest():
@@ -1026,8 +1080,10 @@ def rejectLabRequest():
 
 		result = SUCCESS
 
-	cursor.close()
-	return jsonify(result=result)
+		cursor.close()
+		return jsonify(result=result)
+	else:
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route("/getAllLabRequests",methods=['GET'])
 def getAllLabRequests():
@@ -1045,8 +1101,10 @@ def getAllLabRequests():
 		cursor.callproc('sp_get_all_lab_requests',[])
 		result = cursor.fetchall()
 
-	cursor.close()
-	return jsonify(result=result)
+		cursor.close()
+		return jsonify(result=result)
+	else:
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route("/uploadFile",methods=['GET', 'POST'])
 def uploadFile():
@@ -1286,10 +1344,11 @@ def importInventory():
 			importedEntry = importedData[entry]
 			
 			cursor.callproc('sp_add_inventory_item',[importedEntry[0],importedEntry[1],int(importedEntry[2]),int(importedEntry[3]),importedEntry[4], float(importedEntry[5]),importedEntry[6],importedEntry[7],importedEntry[8],int(importedEntry[9])])
+	
+		cursor.close()
+ 		return redirect(url_for('mainInventoryView'))
 	else:
-		print("INSUFFICIENT PERMISSIONS")
-	cursor.close()
- 	return redirect(url_for('mainInventoryView'))
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route("/importLabs",methods=['GET'])
 def importLabs():
@@ -1310,10 +1369,11 @@ def importLabs():
 			cursor.callproc('sp_add_lab', [importedEntry[0],importedEntry[1],importedEntry[2],importedEntry[3],importedEntry[4],None])
 			lab_id = cursor.fetchall()[0][0]
 			spreadsheet.getPDFs(importedEntry[5],lab_id)
-        else:
-                print("INSUFFICIENT PERMISSIONS")
-        cursor.close()
-        return redirect(url_for('labsAndDemos'))
+        	cursor.close()
+        	return redirect(url_for('labsAndDemos'))
+	else:
+		cursor.close()
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route("/importDemos",methods=['GET'])
 def importDemos():
@@ -1334,10 +1394,11 @@ def importDemos():
                         cursor.callproc('sp_add_lab', [importedEntry[0],importedEntry[1],importedEntry[2],importedEntry[3],importedEntry[4],None])
                         lab_id = cursor.fetchall()[0][0]
                         #spreadsheet.getPDFs(importedEntry[5],lab_id)
-        else:
-                print("INSUFFICIENT PERMISSIONS")
-        cursor.close()
-        return redirect(url_for('labsAndDemos'))
+        	cursor.close()
+        	return redirect(url_for('labsAndDemos'))
+	else:
+		cursor.close()
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route('/addLocation')
 def addLocation():
@@ -1355,8 +1416,11 @@ def addLocation():
 		input_type = request.args.get('type')
 		cursor.callproc('sp_add_location',[building,room_num,input_type])
 		result = cursor.fetchall()
-	cursor.close()
-	return jsonify(result = result)
+		cursor.close()
+		return jsonify(result = result)
+	else:
+		cursor.close()
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route('/removeLocation')
 def removeLocation():
@@ -1372,8 +1436,11 @@ def removeLocation():
 		location_id = request.args.get('location_id')
 		cursor.callproc('sp_delete_location',[location_id])
 		result = cursor.fetchall()
-	cursor.close()
-	return jsonify(result = result)
+		cursor.close()
+		return jsonify(result = result)
+	else:
+		cursor.close()
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route('/getLocations')
 def getLocations():
@@ -1408,8 +1475,10 @@ def addCourse():
 		name = request.args.get('name')
 		cursor.callproc('sp_add_course',[name])
 		result = cursor.fetchall()
-	cursor.close()
-	return jsonify(result = result)
+		cursor.close()
+		return jsonify(result = result)
+	else:
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route('/removeCourse')
 def removeCourse():
@@ -1425,8 +1494,11 @@ def removeCourse():
 	course_id = request.args.get('course_id')
 	cursor.callproc('sp_delete_course',[course_id])
 	result = cursor.fetchall()
-    cursor.close()
-    return jsonify(result = result)
+    	cursor.close()
+    	return jsonify(result = result)
+    else:
+	cursor.close()	
+        return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route('/getAllConstants')
 def getAllConstants():
@@ -1476,8 +1548,11 @@ def updateSpreadsheetURL():
 		except:
 			result = SUCCESS
 		result = SUCCESS
-	cursor.close()
-	return jsonify(result=result)
+		cursor.close()
+		return jsonify(result=result)
+	else:
+		cursor.close()
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route('/getSpreadsheetURL')
 def getSpreadsheetURL():
@@ -1534,8 +1609,10 @@ def addTopic():
 		cursor.callproc('sp_add_topic',[topic_name])
 		cursor.fetchall()
 		result = SUCCESS
-	cursor.close()
-	return jsonify(result=result)
+		cursor.close()
+		return jsonify(result=result)
+	else:
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route('/removeTopic')
 def removeTopic():
@@ -1552,8 +1629,11 @@ def removeTopic():
 		cursor.callproc('sp_delete_topic',[topic_id])
 		cursor.fetchall()
 		result = SUCCESS
-	cursor.close()
-	return jsonify(result=result)
+		cursor.close()
+		return jsonify(result=result)
+	else:
+		cursor.close()
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route('/getConcepts')
 def getConcepts():
@@ -1600,8 +1680,11 @@ def addConcept():
 		cursor.callproc('sp_add_concept',[concept_name])
 		cursor.fetchall()
 		result = SUCCESS
-	cursor.close()
-	return jsonify(result=result)
+		cursor.close()
+		return jsonify(result=result)
+	else:
+		cursor.close()
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route('/addSubconcept')
 def addSubconcept():
@@ -1619,8 +1702,11 @@ def addSubconcept():
 		cursor.callproc('sp_add_subconcept',[subconcept_name,parent_concept_id])
 		cursor.fetchall()
 		result = SUCCESS
-	cursor.close()
-	return jsonify(result=result)
+		cursor.close()
+		return jsonify(result=result)
+	else:
+		cursor.close()
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route('/moveSubconcept')
 def moveSubconcept():
@@ -1638,8 +1724,11 @@ def moveSubconcept():
 		cursor.callproc('sp_delete_subconcept',[subconcept_id])
 		cursor.callproc('sp_add_concept',[subconcept_name])
 		result = SUCCESS
-	cursor.close()
-	return jsonify(result=result)
+		cursor.close()
+		return jsonify(result=result)
+	else:
+		cursor.close()
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route('/removeSubconcept')
 def removeSubconcept():
@@ -1655,8 +1744,11 @@ def removeSubconcept():
 		subconcept_id = request.args.get('subconcept_id')
 		cursor.callproc('sp_delete_subconcept',[subconcept_id])
 		result = SUCCESS
-	cursor.close()
-	return jsonify(result=result)
+		cursor.close()
+		return jsonify(result=result)
+	else:
+		cursor.close()
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route('/removeConcept')
 def removeConcept():
@@ -1673,13 +1765,20 @@ def removeConcept():
 		cursor.callproc('sp_remove_subconcepts_by_concept',[concept_id])
 		cursor.callproc('sp_delete_concept',[concept_id])
 		result = SUCCESS
-	cursor.close()
-	return jsonify(result=result)
+		cursor.close()
+		return jsonify(result=result)
+	else:
+		cursor.close()
+                return redirect(url_for('insufficientPermissions'))
 
 @flask_application.route('/getStoredUsername')
 def getStoredUsername():
         return jsonify(username=session['username_to_add'])
 
+@flask_application.route('/insufficientPermissions')
+def insufficientPermissions():
+	return render_template("insufficientPermissions.html");
+	
 
 if __name__ == "__main__":
 	flask_application.debug = True
