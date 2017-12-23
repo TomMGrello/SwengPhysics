@@ -78,6 +78,18 @@ app_login_url = 'https://rucsm.org/physics/lab'
 cas_url = 'https://login.rowan.edu/cas'
 cas_client = CASClient(cas_url, auth_prefix='')
 
+def getSpreadsheetURLs():
+	with flask_application.app_context():
+	        cursor = get_db().cursor()
+        	cursor.callproc('sp_get_all_spreadsheets',['import_inventory'])
+        	importURL = cursor.fetchall()[0][2]
+        	cursor.callproc('sp_get_all_spreadsheets',['export_master'])
+        	exportURL = cursor.fetchall()[0][2]
+       		return importURL, exportURL
+
+global importURL, exportURL
+importURL = getSpreadsheetURLs()[0]
+exportURL = getSpreadsheetURLs()[1]
 
 ###########################################################################################
 ############################   WEBPAGE ENDPOINTS   ########################################
@@ -1335,9 +1347,9 @@ def importInventory():
 	cursor.callproc('sp_get_permissions',[banner_id])
 	user_permissions = cursor.fetchall()[0]
 	permission = user_permissions[CAN_ADD_RECORD_INDEX]
-
+	
 	if permission == 1:
-		importedData = spreadsheet.importInventorySheet()
+		importedData = spreadsheet.importInventorySheet(url)
 	 	numData = len(importedData)
 
 		for entry in range(0, numData):

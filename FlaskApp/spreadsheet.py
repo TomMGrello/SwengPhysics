@@ -5,20 +5,21 @@ import socket
 os.environ['http_proxy']=''
 import urllib
 
-scope = ['https://spreadsheets.google.com/feeds']
-creds = ServiceAccountCredentials.from_json_keyfile_name('/var/www/html/physics/lab/client_secret.json', scope)
-client = gspread.authorize(creds)
-importSheet = client.open("Physics Inventory Import Sheet")
-exportSheet = client.open("Physics Inventory Testing")
+#scope = ['https://spreadsheets.google.com/feeds']
+#creds = ServiceAccountCredentials.from_json_keyfile_name('/var/www/html/physics/lab/client_secret.json', scope)
+#client = gspread.authorize(creds)
+#importSheet = client.open_by_url(importURL)
+#exportSheet = client.open_by_url(exportURL)
 
 def gspreadUpdater():
-	global scope,client,importSheet
+	from flask_application import importURL, exportURL
+	global scope,client,importSheet,exportSheet
 	# use creds to create a client to interact with the Google Drive API
 	scope = ['https://spreadsheets.google.com/feeds']
 	creds = ServiceAccountCredentials.from_json_keyfile_name('/var/www/html/physics/lab/client_secret.json', scope)
 	client = gspread.authorize(creds)
-	importSheet = client.open_by_url("https://docs.google.com/spreadsheets/d/1I4d5vY20A4lX3UGbamvTNCTdueZVRSBzf2gGb5XVV5A")
-	exportSheet = client.open_by_url("https://docs.google.com/spreadsheets/d/1QEMbfTEIuOuY1J-LW-EqhfuY5T4a3m9KG0WhRZDkDs0")
+	importSheet = client.open_by_url(importURL)
+	exportSheet = client.open_by_url(exportURL)
 	time.sleep(3590)
 
 gsUpdateThread = threading.Thread(target=gspreadUpdater)
