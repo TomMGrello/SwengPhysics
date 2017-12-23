@@ -96,7 +96,7 @@ var getFilteredLabsDemos = function(order_by) {
                 var moreinfo_btn = document.createElement('button');
                 moreinfo_btn.setAttribute('class', 'btn btn-info btn-xs');
                 var moreinfo_span = document.createElement('span');
-                moreinfo_span.setAttribute('class', 'glyphicon glyphicon-info-sign');
+                moreinfo_span.setAttribute('class', 'glyphicon glyphicon-file');
                 moreinfo_btn.appendChild(moreinfo_span);
                 moreinfo_p.appendChild(moreinfo_btn);
                 moreinfo_td.appendChild(moreinfo_p);
