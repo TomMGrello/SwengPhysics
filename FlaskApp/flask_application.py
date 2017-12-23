@@ -2,7 +2,7 @@
 ########################################  IMPORTS  ########################################
 ###########################################################################################
 
-from flask import Flask, render_template, json, request, session, redirect, url_for, jsonify, g
+from flask import Flask, render_template, json, request, session, redirect, url_for, jsonify, g, send_from_directory
 from flaskext.mysql import MySQL
 import os
 import platform
@@ -48,7 +48,7 @@ CAN_RESTORE_DATABASE_INDEX = CAN_BACKUP_DATABASE_INDEX + 1
 
 flask_application = Flask(__name__)
 mysql = MySQL()
-flask_application.config['UPLOAD_FOLDER'] = '/var/www/html/physics/lab/static/lab_pdfs'
+flask_application.config['UPLOAD_FOLDER'] = '/var/www/html/physics/lab/protected/lab_pdfs'
 ALLOWED_EXTENSIONS = set(['pdf'])
 flask_application.config['MYSQL_DATABASE_USER'] = 'physics_user'
 flask_application.config['MYSQL_DATABASE_PASSWORD'] = 'rowanphysics2017'
@@ -1790,9 +1790,15 @@ def getStoredUsername():
 @flask_application.route('/insufficientPermissions')
 def insufficientPermissions():
 	return render_template("insufficientPermissions.html");
-	
 
-if __name__ == "__main__":
-	flask_application.debug = True
-	flask_application.secret_key = 'rowanphysicssweng'
-	flask_application.run(host=os.getenv('LISTEN', '0.0.0.0'))
+@flask_application.route('/protected/<path:filename>')
+def protected(filename):
+	if session.has_key('banner_id'):
+		try:
+	   	   return send_from_directory(os.path.join(flask_application.config['UPLOAD_FOLDER'], ''), filename)
+		except:
+	   	   return "Error returning requested file"
+	else:
+		return redirect(url_for('insufficientPermissions'))
+
+	
